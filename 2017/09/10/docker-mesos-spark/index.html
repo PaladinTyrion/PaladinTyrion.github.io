@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="mesos," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="DockerDocker machineDocker machine负责docker在本地或远程机及虚拟云上的安装，可在自己的Mac或Linux机上负责远程活本地的虚拟机上的docker安装。 安装Docker machine:1234$ curl -L https://github.com/docker/machine/releases/download/v0.8.2/docker-machin">
+<meta name="keywords" content="mesos">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker-mesos-spark">
+<meta property="og:url" content="https://paladintyrion.github.io/2017/09/10/docker-mesos-spark/index.html">
+<meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
+<meta property="og:description" content="DockerDocker machineDocker machine负责docker在本地或远程机及虚拟云上的安装，可在自己的Mac或Linux机上负责远程活本地的虚拟机上的docker安装。 安装Docker machine:1234$ curl -L https://github.com/docker/machine/releases/download/v0.8.2/docker-machin">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://paladintyrion.github.io/2017/09/10/docker-mesos-spark/docker_machine.png">
+<meta property="og:image" content="https://paladintyrion.github.io/2017/09/10/docker-mesos-spark/docker_swarm.jpg">
+<meta property="og:image" content="https://paladintyrion.github.io/2017/09/10/docker-mesos-spark/mesos_cluster.jpg">
+<meta property="og:image" content="https://paladintyrion.github.io/2017/09/10/docker-mesos-spark/mesos_job.jpg">
+<meta property="og:image" content="https://paladintyrion.github.io/2017/09/10/docker-mesos-spark/spark.jpg">
+<meta property="og:image" content="https://paladintyrion.github.io/2017/09/10/docker-mesos-spark/spark_run.png">
+<meta property="og:updated_time" content="2017-09-10T10:57:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="docker-mesos-spark">
+<meta name="twitter:description" content="DockerDocker machineDocker machine负责docker在本地或远程机及虚拟云上的安装，可在自己的Mac或Linux机上负责远程活本地的虚拟机上的docker安装。 安装Docker machine:1234$ curl -L https://github.com/docker/machine/releases/download/v0.8.2/docker-machin">
+<meta name="twitter:image" content="https://paladintyrion.github.io/2017/09/10/docker-mesos-spark/docker_machine.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://paladintyrion.github.io/2017/09/10/docker-mesos-spark/"/>
+
+
+
+
+
+  <title>docker-mesos-spark | PaladinTyrion's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">PaladinTyrion's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">小恶魔提利昂</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://paladintyrion.github.io/2017/09/10/docker-mesos-spark/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="paladintyrion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PaladinTyrion's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">docker-mesos-spark</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-10T18:36:18+08:00">
+                2017-09-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h4><h5 id="Docker-machine"><a href="#Docker-machine" class="headerlink" title="Docker machine"></a>Docker machine</h5><p>Docker machine负责docker在本地或远程机及虚拟云上的安装，可在自己的Mac或Linux机上负责远程活本地的虚拟机上的docker安装。</p>
+<h6 id="安装Docker-machine"><a href="#安装Docker-machine" class="headerlink" title="安装Docker machine:"></a>安装Docker machine:</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ curl -L https://github.com/docker/machine/releases/download/v0.8.2/docker-machine-`uname -s`-`uname -m` &gt;/usr/local/bin/docker-machine &amp;&amp; \</div><div class="line">chmod +x /usr/local/bin/docker-machine</div><div class="line"></div><div class="line">$ docker-machine version</div></pre></td></tr></table></figure>
+<p>注意安装远程机之前一定确保运行机可ssh登录远程机。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ docker-machine create --driver generic \</div><div class="line">--generic-ip-address=10.236.24.179 \</div><div class="line">--generic-ssh-user=vagrant \</div><div class="line">--generic-ssh-key ~/.ssh/id_rsa \</div><div class="line">vagrant             #this means hostname</div></pre></td></tr></table></figure>
+<p>安装docker之后确保每台安装机运行:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo groupadd docker</div><div class="line">$ sudo usermod -aG docker $USER</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ docker-machine env default  #&quot;default为远程安装机的hostname&quot;</div><div class="line"> export DOCKER_TLS_VERIFY=&quot;1&quot;</div><div class="line"> export DOCKER_HOST=&quot;tcp://172.16.62.130:2376&quot;</div><div class="line"> export DOCKER_CERT_PATH=&quot;/Users/&lt;yourusername&gt;/.docker/machine/machines/default&quot;</div><div class="line"> export DOCKER_MACHINE_NAME=&quot;default&quot;</div><div class="line"> # Run this command to configure your shell:</div><div class="line"> # eval &quot;$(docker-machine env default)&quot;</div></pre></td></tr></table></figure>
+<p>不使用docker-machine安装docker:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># Ubuntu机</div><div class="line">$ echo &quot;deb https://apt.dockerproject.org/repo ubuntu-trusty main&quot; | sudo tee /etc/apt/sources.list.d/docker.list</div><div class="line">$ sudo apt-get update</div><div class="line">$ apt-cache policy docker-engine</div><div class="line">$ sudo apt-get install docker-engine</div><div class="line">$ sudo groupadd docker</div><div class="line">$ sudo usermod -aG docker $USER</div></pre></td></tr></table></figure>
+<h6 id="docker-machine的运行机制"><a href="#docker-machine的运行机制" class="headerlink" title="docker machine的运行机制:"></a>docker machine的运行机制:</h6><p><img src="/2017/09/10/docker-mesos-spark/docker_machine.png" alt="docker machine"></p>
+<hr>
+<h5 id="Docker-swarm"><a href="#Docker-swarm" class="headerlink" title="Docker swarm"></a>Docker swarm</h5><p>Swarm中提供了6种不同的发现（discovery）机制：token(默认) Discovery、Node Discovery、File Discovery、Consul Discovery、EtcD Discovery和Zookeeper Discovery。</p>
+<h6 id="token发现："><a href="#token发现：" class="headerlink" title="token发现："></a>token发现：</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#生成全球唯一的token作为docker cluster的全球唯一id号</div><div class="line">$ docker run swarm create</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker run -d swarm join --advertise=&lt;node_ip:2375&gt; token://&lt;cluster_id&gt;</div></pre></td></tr></table></figure>
+<h6 id="zk发现："><a href="#zk发现：" class="headerlink" title="zk发现："></a>zk发现：</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker run -d swarm join --advertise=&lt;node_ip:2375&gt; zk://&lt;zk1:2181&gt;,&lt;zk2:2181&gt;,&lt;zk3:2181&gt;,.../swarm</div></pre></td></tr></table></figure>
+<h6 id="swarm-manage"><a href="#swarm-manage" class="headerlink" title="swarm manage"></a>swarm manage</h6><p>在需要作为manager机上运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker run -d -p 2376:2375 --name swarm_manage swarm manage zk://&lt;zk1:2181&gt;,&lt;zk2:2181&gt;,&lt;zk3:2181&gt;,.../swarm</div></pre></td></tr></table></figure>
+<h6 id="使用swarm管理和启动docker"><a href="#使用swarm管理和启动docker" class="headerlink" title="使用swarm管理和启动docker"></a>使用swarm管理和启动docker</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ docker -H tcp://&lt;swarm_ip:2376&gt; &lt;command&gt;</div><div class="line">#example</div><div class="line">$ docker -H tcp://&lt;swarm_ip:2376&gt; info</div></pre></td></tr></table></figure>
+<h6 id="Note"><a href="#Note" class="headerlink" title="Note:"></a>Note:</h6><p>为了保证swarm manage管理的节点正常通信，需要每个节点做如下2点修改：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ sudo vim /etc/default/docker</div><div class="line">#添加如下内容</div><div class="line">DOCKER_OPTS=&quot;-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock&quot;</div><div class="line"></div><div class="line">#每机重启docker</div><div class="line">$ sudo restart docker</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">需要对每台机器添加各自的hosts</div><div class="line">$sudo vim /etc/hosts</div><div class="line">#添加如下内容</div><div class="line">$&#123;local_ip&#125;  $&#123;hostname&#125;</div></pre></td></tr></table></figure>
+<h6 id="swarm的框架"><a href="#swarm的框架" class="headerlink" title="swarm的框架:"></a>swarm的框架:</h6><p><img src="/2017/09/10/docker-mesos-spark/docker_swarm.jpg" alt="docker swarm"></p>
+<hr>
+<h4 id="docker-Zookeeper"><a href="#docker-Zookeeper" class="headerlink" title="docker-Zookeeper"></a>docker-Zookeeper</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#或者mesoscloud/zookeeper:3.4.8-centos</div><div class="line">$ docker pull mesoscloud/zookeeper:3.4.8-ubuntu-14.04</div><div class="line"></div><div class="line">#在每台zk节点机上运行, MYID需要不同</div><div class="line">#Ubuntu</div><div class="line">$ docker run -d \</div><div class="line"> -e MYID=1 \</div><div class="line"> -e SERVERS=node-1,node-2,node-3 \</div><div class="line"> --name=zookeeper --net=host --restart=always mesoscloud/zookeeper:3.4.8-ubuntu-14.04</div><div class="line"> </div><div class="line">#CentOS</div><div class="line">$ docker run -d \</div><div class="line">-e MYID=1 \</div><div class="line">-e SERVERS=node-1,node-2,node-3 \</div><div class="line">--name=zookeeper --net=host --restart=always mesoscloud/zookeeper:3.4.8-centos-7</div></pre></td></tr></table></figure>
+<hr>
+<h4 id="docker-Mesos"><a href="#docker-Mesos" class="headerlink" title="docker-Mesos"></a>docker-Mesos</h4><p>Mesos同样通过zk服务发现保证HA。<br>Mesos HA模式参考<a href="http://mesos.apache.org/documentation/latest/high-availability/" target="_blank" rel="external">这里</a></p>
+<ul>
+<li>3个mesos master</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">docker run -d \</div><div class="line"> -e MESOS_QUORUM=2 \</div><div class="line"> -e MESOS_ZK=zk://node1-ip:2181,node2-ip:2181,node3-ip:2181/mesos \</div><div class="line"> --name=mesos-master \</div><div class="line"> --net=host \</div><div class="line"> mesoscloud/mesos-master:0.28.1-ubuntu</div></pre></td></tr></table></figure>
+<ul>
+<li>每台node的mesos slave</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">docker run -d \</div><div class="line"> -e MESOS_MASTER=zk://node1-ip:2181,node2-ip:2181,node3-ip:2181/mesos \</div><div class="line"> -v /sys/fs/cgroup:/sys/fs/cgroup \</div><div class="line"> -v /var/run/docker.sock:/var/run/docker.sock \</div><div class="line"> --net host \</div><div class="line"> --privileged \</div><div class="line"> --restart always \</div><div class="line"> mesoscloud/mesos-slave:0.28.1-ubuntu</div></pre></td></tr></table></figure>
+<ul>
+<li><p>mesos cluster框架<br><img src="/2017/09/10/docker-mesos-spark/mesos_cluster.jpg" alt="mesos cluster"></p>
+</li>
+<li><p>mesos job<br><img src="/2017/09/10/docker-mesos-spark/mesos_job.jpg" alt="mesos job"></p>
+</li>
+</ul>
+<hr>
+<h4 id="docker-marathon"><a href="#docker-marathon" class="headerlink" title="docker-marathon"></a>docker-marathon</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">#这个docker-marathon没有expose 8080端口,如果需要，则制作继承镜像</div><div class="line">$ docker run -d --name marathon --net host \</div><div class="line"> -e MARATHON_HOSTNAME=ip.address \</div><div class="line"> -e MARATHON_HTTPS_ADDRESS=ip.address \</div><div class="line"> -e MARATHON_HTTP_ADDRESS=ip.address \</div><div class="line"> -e MARATHON_MASTER=zk://node-1:2181,node-2:2181,node-3:2181/mesos \</div><div class="line"> -e MARATHON_ZK=zk://node-1:2181,node-2:2181,node-3:2181/marathon \</div><div class="line"> --restart always mesoscloud/marathon:1.1.1-ubuntu</div><div class="line"> </div><div class="line">#marathon开启应用，需要写json启动文件</div><div class="line">如nginx.json:</div><div class="line">&#123;</div><div class="line">  &quot;id&quot;:&quot;nginx&quot;,</div><div class="line">  &quot;cpus&quot;:0.4,</div><div class="line">  &quot;mem&quot;:200.0,</div><div class="line">  &quot;instances&quot;: 1,</div><div class="line">  &quot;container&quot;: &#123;</div><div class="line">    &quot;type&quot;:&quot;DOCKER&quot;,</div><div class="line">    &quot;docker&quot;: &#123;</div><div class="line">      &quot;parameters&quot;: [</div><div class="line">        &#123;</div><div class="line">          &quot;key&quot;: &quot;name&quot;,</div><div class="line">          &quot;value&quot;: &quot;nginxx&quot;</div><div class="line">        &#125;</div><div class="line">      ],</div><div class="line">      &quot;image&quot;: &quot;nginx&quot;,</div><div class="line">      &quot;network&quot;: &quot;BRIDGE&quot;,</div><div class="line">      &quot;portMappings&quot;: [&#123;</div><div class="line">         &quot;containerPort&quot;: 80, </div><div class="line">         &quot;hostPort&quot;: 0,&quot;servicePort&quot;: 0, </div><div class="line">         &quot;protocol&quot;: &quot;tcp&quot;</div><div class="line">      &#125;]</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">#启动命令:</div><div class="line">curl -X POST http://10.236.24.140:8080/v2/apps -d @/Users/paladintyrion/nginx.json -H &quot;Content-type: application/json&quot;</div></pre></td></tr></table></figure>
+<hr>
+<h4 id="Mesos-Chronos"><a href="#Mesos-Chronos" class="headerlink" title="Mesos-Chronos"></a>Mesos-Chronos</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">docker run -d --net=host \</div><div class="line"> -e CHRONOS_HTTP_PORT=4400 \</div><div class="line"> -e CHRONOS_MASTER=zk://node-1:2181,node-2:2181,node-3:2181/mesos \</div><div class="line"> -e CHRONOS_ZK_HOSTS=node-1:2181,node-2:2181,node-3:2181 \</div><div class="line"> --name chronos --restart always mesoscloud/chronos:2.4.0-ubuntu-14.04</div></pre></td></tr></table></figure>
+<hr>
+<h4 id="mesos-spark"><a href="#mesos-spark" class="headerlink" title="mesos-spark"></a>mesos-spark</h4><ul>
+<li><p>spark框架<br><img src="/2017/09/10/docker-mesos-spark/spark.jpg" alt="spark struct"></p>
+</li>
+<li><p>spark-mesos run<br><img src="/2017/09/10/docker-mesos-spark/spark_run.png" alt="spark-mesos run"></p>
+</li>
+<li><p>spark-mesos demo</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">$ docker run --net=host \</div><div class="line"> --name spark-demo \</div><div class="line"> -v /vagrant/vagrant/examples:/example \</div><div class="line"> paladintyrion/mesos1.0.2-spark2.0.0:latest \</div><div class="line"> spark-submit --master=mesos://zk://node1:2181,node2:2181,node3:2181/mesos \</div><div class="line"> --deploy-mode=client \</div><div class="line"> --conf spark.mesos.coarse=true \</div><div class="line"> --conf spark.mesos.executor.docker.image=paladintyrion/mesos1.0.2-spark2.0.0:latest \</div><div class="line"> --conf spark.executor.memory=768m \</div><div class="line"> /example/src/main/python/pi.py \</div><div class="line"> 200</div><div class="line"> </div><div class="line"> #或者非镜像运行spark</div><div class="line">$ docker run --net=host \</div><div class="line"> --name spark-demo1 \</div><div class="line"> -v /vagrant/vagrant/examples:/example \</div><div class="line"> -v /vagrant/vagrant:/sparkhome \</div><div class="line"> paladintyrion/mesos1.0.2-spark2.0.0:latest \</div><div class="line"> spark-submit --master=mesos://zk://node1:2181,node2:2181,node3:2181/mesos \</div><div class="line"> --deploy-mode=client \</div><div class="line"> --conf spark.mesos.coarse=true \</div><div class="line"> --conf spark.executor.memory=768m \</div><div class="line"> --conf spark.executor.uri=/sparkhome/spark-2.0.1-bin-hadoop2.7.tgz \</div><div class="line"> /example/src/main/python/pi.py \</div><div class="line"> 200</div></pre></td></tr></table></figure>
+<hr>
+<h4 id="待补充"><a href="#待补充" class="headerlink" title="待补充"></a>待补充</h4><p>Compose<br>Jekins</p>
+<hr>
+<h4 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料:"></a>参考资料:</h4><p><a href="https://docs.docker.com/machine/reference/" target="_blank" rel="external">docker-machine的命令文档</a><br><a href="https://docs.docker.com/swarm/discovery/" target="_blank" rel="external">swarm discovery</a><br><a href="https://github.com/mesosphere/docker-containers/tree/master/mesos" target="_blank" rel="external">mesos cluster</a></p>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例:"></a>示例:</h4><p><a href="demo.md">demo</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mesos/" rel="tag"># mesos</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/10/grpc/" rel="next" title="grpc">
+                <i class="fa fa-chevron-left"></i> grpc
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/10/docker-mesos-demo/" rel="prev" title="docker-mesos-demo">
+                docker-mesos-demo <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="paladintyrion" />
+          <p class="site-author-name" itemprop="name">paladintyrion</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Docker"><span class="nav-number">1.</span> <span class="nav-text">Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Docker-machine"><span class="nav-number">1.1.</span> <span class="nav-text">Docker machine</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#安装Docker-machine"><span class="nav-number">1.1.1.</span> <span class="nav-text">安装Docker machine:</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#docker-machine的运行机制"><span class="nav-number">1.1.2.</span> <span class="nav-text">docker machine的运行机制:</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Docker-swarm"><span class="nav-number">1.2.</span> <span class="nav-text">Docker swarm</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#token发现："><span class="nav-number">1.2.1.</span> <span class="nav-text">token发现：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#zk发现："><span class="nav-number">1.2.2.</span> <span class="nav-text">zk发现：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#swarm-manage"><span class="nav-number">1.2.3.</span> <span class="nav-text">swarm manage</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#使用swarm管理和启动docker"><span class="nav-number">1.2.4.</span> <span class="nav-text">使用swarm管理和启动docker</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Note"><span class="nav-number">1.2.5.</span> <span class="nav-text">Note:</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#swarm的框架"><span class="nav-number">1.2.6.</span> <span class="nav-text">swarm的框架:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#docker-Zookeeper"><span class="nav-number">2.</span> <span class="nav-text">docker-Zookeeper</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#docker-Mesos"><span class="nav-number">3.</span> <span class="nav-text">docker-Mesos</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#docker-marathon"><span class="nav-number">4.</span> <span class="nav-text">docker-marathon</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mesos-Chronos"><span class="nav-number">5.</span> <span class="nav-text">Mesos-Chronos</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mesos-spark"><span class="nav-number">6.</span> <span class="nav-text">mesos-spark</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#待补充"><span class="nav-number">7.</span> <span class="nav-text">待补充</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考资料"><span class="nav-number">8.</span> <span class="nav-text">参考资料:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#示例"><span class="nav-number">9.</span> <span class="nav-text">示例:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">paladintyrion</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

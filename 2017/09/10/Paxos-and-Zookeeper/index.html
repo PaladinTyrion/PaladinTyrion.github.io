@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="一致性," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="（一）散点： 三态：成功、失败、超时。 ACID/CAP/BASE Lamppost论文： The Part-Time Parliament Time, Clocks, and the Ordering of Events in a Distributed System    （二）Chubby： 编号：实例编号、文件内容编号、锁编号、ACL编号。 Chubby的Paxos实现： 最底层容错日志系">
+<meta name="keywords" content="一致性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Paxos_and_Zookeeper">
+<meta property="og:url" content="https://paladintyrion.github.io/2017/09/10/Paxos-and-Zookeeper/index.html">
+<meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
+<meta property="og:description" content="（一）散点： 三态：成功、失败、超时。 ACID/CAP/BASE Lamppost论文： The Part-Time Parliament Time, Clocks, and the Ordering of Events in a Distributed System    （二）Chubby： 编号：实例编号、文件内容编号、锁编号、ACL编号。 Chubby的Paxos实现： 最底层容错日志系">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-10T10:58:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Paxos_and_Zookeeper">
+<meta name="twitter:description" content="（一）散点： 三态：成功、失败、超时。 ACID/CAP/BASE Lamppost论文： The Part-Time Parliament Time, Clocks, and the Ordering of Events in a Distributed System    （二）Chubby： 编号：实例编号、文件内容编号、锁编号、ACL编号。 Chubby的Paxos实现： 最底层容错日志系">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://paladintyrion.github.io/2017/09/10/Paxos-and-Zookeeper/"/>
+
+
+
+
+
+  <title>Paxos_and_Zookeeper | PaladinTyrion's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">PaladinTyrion's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">小恶魔提利昂</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://paladintyrion.github.io/2017/09/10/Paxos-and-Zookeeper/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="paladintyrion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PaladinTyrion's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Paxos_and_Zookeeper</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-10T18:20:23+08:00">
+                2017-09-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="（一）散点："><a href="#（一）散点：" class="headerlink" title="（一）散点："></a>（一）散点：</h4><ul>
+<li>三态：成功、失败、超时。</li>
+<li>ACID/CAP/BASE</li>
+<li>Lamppost论文：<ul>
+<li>The Part-Time Parliament</li>
+<li>Time, Clocks, and the Ordering of Events in a Distributed System</li>
+</ul>
+</li>
+</ul>
+<h4 id="（二）Chubby："><a href="#（二）Chubby：" class="headerlink" title="（二）Chubby："></a>（二）Chubby：</h4><ul>
+<li>编号：实例编号、文件内容编号、锁编号、ACL编号。</li>
+<li>Chubby的Paxos实现：<ul>
+<li>最底层容错日志系统</li>
+<li>日志层之上是Key-Value类型的容错数据库</li>
+<li>存储层之上是Chubby对外提供的分布式LockService和小文件存储服务</li>
+</ul>
+</li>
+<li>优化：<ul>
+<li>Prepare—&gt;Promise—&gt;Propose—&gt;Accept过程中选举得到Master后转态为Propose—&gt;Accept。失去Master再转换为PPPA。</li>
+</ul>
+</li>
+</ul>
+<h4 id="（三）Zookeeper基础："><a href="#（三）Zookeeper基础：" class="headerlink" title="（三）Zookeeper基础："></a>（三）Zookeeper基础：</h4><ul>
+<li>版本：<ul>
+<li>version：当前ZNode的版本</li>
+<li>version：当前ZNode的子节点版本</li>
+<li>aversion：当前ZNode的ACL版本</li>
+</ul>
+</li>
+<li>ACL权限：见(五)-2-3.Permission权限</li>
+<li>ZAB(Zookeeper Atomic Broadcast) 原子广播协议<ul>
+<li>ZAB协议选举Leader</li>
+<li>Leader持续工作：决定事务PC结果，Follower与Learner同步结果</li>
+</ul>
+</li>
+<li>ZXID：事务编号，共64位的数字<ul>
+<li>高32位代表leader的周期epoch</li>
+<li>低32位为一计数累加数</li>
+</ul>
+</li>
+</ul>
+<h4 id="（四）Zookeeper使用："><a href="#（四）Zookeeper使用：" class="headerlink" title="（四）Zookeeper使用："></a>（四）Zookeeper使用：</h4><ul>
+<li>%ZK_HOME%/conf下由zoo.cfg配置文件生效配置<ul>
+<li>dataDir（&amp;&amp; dataLogDir）</li>
+<li>clientPort</li>
+<li>server.x=IPn:Port1:Port2   (Port1为消息交换端口，Port2为选举端口)</li>
+</ul>
+</li>
+<li>dataDir目录下myid与server.id中的id一致</li>
+<li>两款开源客户端：<ul>
+<li>ZkClient</li>
+<li>Curator（Fluent 风格）</li>
+</ul>
+</li>
+<li>分布式锁的改进<ul>
+<li>读请求：向比自己序号小的最后一个写请求节点注册Watcher监听</li>
+<li>写请求：向比自己小的最后一个阶段注册Watcher监听</li>
+<li>细粒度锁提高可用性，粗粒度锁降低系统复杂性，需要折中。当然细粒度是好事</li>
+</ul>
+</li>
+<li>常见应用：发布/订阅、负载均衡、日志收集器、分布式锁</li>
+<li>Kafka：大规模分布式消息中间件<ul>
+<li>消息生产者</li>
+<li>消息消费者</li>
+<li>Topic：建立订阅关系，同一Topic会进行消息分区并分布在多个Broker上</li>
+<li>消息分区：用于负载均衡</li>
+<li>Broker：存储消息</li>
+<li>Group：消费者分组</li>
+<li>OffSet：消费者消费数据在文件中的偏移量</li>
+</ul>
+</li>
+<li>SEDA(Staged Event-Driven Architecture)</li>
+</ul>
+<h4 id="（五）Zookeeper细节"><a href="#（五）Zookeeper细节" class="headerlink" title="（五）Zookeeper细节"></a>（五）Zookeeper细节</h4><ul>
+<li><p>Watcher：</p>
+<ul>
+<li>Watcher对象存储在客户端WatchManager中</li>
+<li>Watcher接口需实现process函数，入参为WatchedEvent对象</li>
+<li><p>WatchedEvent：有三个属性</p>
+<ul>
+<li>通知状态keeperState</li>
+<li>事件类型eventType</li>
+<li>节点路径path</li>
+</ul>
+</li>
+<li>WatcherEvent：WatchedEvent三属性+序列化接口</li>
+</ul>
+</li>
+<li>ACL控制：<ul>
+<li>Scheme权限模式：<ul>
+<li>IP</li>
+<li>Digest</li>
+<li>World</li>
+<li>Super</li>
+</ul>
+</li>
+<li>ID授权对象：如username/ip:password</li>
+<li>Permission权限：<ul>
+<li>CREATE</li>
+<li>DELETE</li>
+<li>READ：获取节点数据与子节点列表的权限</li>
+<li>WRITE</li>
+<li>ADMIN：设置节点ACL权限</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>序列化：<ul>
+<li>Jute：实现Record接口，方法有serialize和deserialize</li>
+<li>Avro</li>
+</ul>
+</li>
+<li>通信协议：自制协议</li>
+<li>客户端<ul>
+<li>核心组件：<ul>
+<li>Zookeeper实例</li>
+<li>ClientWatchManager</li>
+<li>HostProvider</li>
+<li>ClientCnxn：客户端核心线程，内部有两个线程<ul>
+<li>SendThread：I/O线程，负责与服务器的通信</li>
+<li>EventThread：事件线程，负责对服务端事件处理</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>会话创建过程：<ul>
+<li>初始化Zookeeper对象，创建ClientWatchManager</li>
+<li>设置默认Watcher</li>
+<li>构造方法中传入服务器地址列表，构造HostProvider</li>
+<li>创建ClientCnxn：负责与服务端的网络交互，底层I/O处理器是ClientCnxnSocket，客户端初始化两个核心队列<ul>
+<li>outgoingQueue：客户端请求发送队列</li>
+<li>pendingQueue：服务端响应等待队列</li>
+</ul>
+</li>
+<li>创建两个核心线程：<ul>
+<li>SendThread：ClientCnxnSocket——&gt;SendThread</li>
+<li>EventThread：待处理事件队列waitingEvents</li>
+</ul>
+</li>
+<li>启动SendThread与EventThread</li>
+<li>在HostProvider获取一个服务器地址，由ClientCnxnSocket创建TCP长连接</li>
+<li>构造ConnectRequest请求，包装为Packet对象，放入outgoingQueue发送至服务端</li>
+<li>SendThread线程中ClientCnxnSocket接收服务端响应<ul>
+<li>会话创建请求的响应，交由readConnectResult处理</li>
+<li>ClientCnxnSocket反序列化响应，得到ConnectResponse，并得到sessionId</li>
+</ul>
+</li>
+<li>连接成功，更新SendThread线程会话参数设置，readTimeout、connectTimeout等，更新客户端状态</li>
+<li>SendThread生成SyncConnected-None事件，通知EventThread</li>
+<li>查询ClientWatchManager中的Watcher，先将事件放入waitingEvents队列，然后调用Watcher的process进行处理</li>
+</ul>
+</li>
+<li>ClientCnxn：<ul>
+<li>Packet：属性<ul>
+<li>requestHeader、replyHeader、request、response</li>
+<li>节点路径</li>
+<li>watchRegistration</li>
+</ul>
+</li>
+<li>网络传输时，只有少量属性被序列化，参见Packet的createBB()等方法</li>
+<li>请求发送：在outgoingQueue中取出可发送Packet，写入XID至Packet请求头，序列化后发送。发送后会将Packet保存至pendingQueue等待响应</li>
+<li>响应接收：三种情况<ul>
+<li>会话创建时，ByteBuffer序列化为ConnectResponse对象</li>
+<li>正常会话周期时，收到一个事件，ByteBuffer序列化为WatcherEvent对象，放入waitingEvents队列</li>
+<li>正常请求响应，pendingQueue中取出一个Packet，ByteBuffer序列化为Response对象</li>
+</ul>
+</li>
+<li>SendThread维护客户端与服务端的会话生命周期，想服务端发送PING包实现心跳检测</li>
+</ul>
+</li>
+<li>会话<ul>
+<li>会话状态：CONNECTING、CONNECTED、RECONNECTING、RECONNECTED、CLOSE</li>
+<li>session属性：sessionID、TimeOut、TickTime、isClosing</li>
+<li>sessionID生成：<ul>
+<li>当前时间的毫秒表示</li>
+<li>左移24位</li>
+<li>右移8位</li>
+<li>添加机器标识SID，SID即myid中的内容<ul>
+<li>64位表示SID</li>
+<li>左移56位，即把最低8位移至64位最高8位</li>
+<li>将sessionID第三步与上步得到64位SID进行位或操作</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>sessionTracker（session管理）：存在三份session存储<ul>
+<li>sessionById：HashMap<long, sessionimpl="">，由sessionID进行管理</long,></li>
+<li>sessionWithTimeout：ConcurrentHashMap<long, integer="">，由sessionID管理会话超时。定期持久化至快照</long,></li>
+<li>sessionSets：HashMap<long, sessionset="">，由下次会话超时时间归档会话，分桶策略进行管理</long,></li>
+</ul>
+</li>
+<li>会话清理：<ul>
+<li>isClonsing标记为true</li>
+<li>发起关闭会话请求，交给PreRequestProcessor</li>
+<li>收集需要清理的相关临时节点</li>
+<li>添加节点删除事务变更，放入事务变更队列outstandingChanges</li>
+<li>删除临时节点</li>
+<li>删除会话，在sessionTracker中移除会话</li>
+<li>关闭NIOServerCnxn</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>集群启动<ul>
+<li>QuorumPeerMain启动</li>
+<li>解析zoo.cfg</li>
+<li>创建并启动历史文件清理器DatadirCleanupManager</li>
+<li>判断模式选择集群模式启动Zookeeper</li>
+<li>创建并初始化ServerCnxnFactory</li>
+<li>创建Zookeeper数据管理器FileTxnSnapLog</li>
+<li>创建QuorumPeer实例：QuorumPeer会根据检测服务器实例运行状态来发起Leader选举</li>
+<li>创建内存数据库ZKDatabase</li>
+<li>初始化QuorumPeer，将FileTxnSnapLog、ServerCnxnFactory、ZKDatabase等核心组件注册到QuorumPeer。配置QuorumPeer参数，包括服务器地址列表、选举算法（现在只剩下FastLeaderElection算法）、会话超时时间等。<ul>
+<li>每机初始化一个Vote，由SID、lastLoggedZxid、epoch等生成。</li>
+<li>注册JMX服务</li>
+<li>检测服务器状态，QuorumPeer是Zookeeper服务器实例的托管者，检测LOOKING、LEADING、FOLLOWING/OBSERVING状态</li>
+<li>Leader选举<ul>
+<li>Zxid最大的一般做Leader，若Zxid都一致，一般选SID最大者</li>
+<li>FastLeaderElection算法相比Paxos超级简单。不论故障恢复还是第一次投票均适用。先比Zxid，自身的Zxid小则更变投票重投，否则再比SID，SID小则重投，再否则就维持投票</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>恢复本地数据</li>
+<li>启动ServerCnxnFactory主线程</li>
+</ul>
+</li>
+<li>选举细节：<ul>
+<li>I/O：<ul>
+<li>ClientCnxn是ZK客户端负责与服务端的网络I/O</li>
+<li>QuorumCnxManager负责选举时的网络I/O</li>
+</ul>
+</li>
+<li>QuorumCnxManager维护一系列队列：<ul>
+<li>recvQueue：消息接收队列，1个（后续统计Vote）：WorkerReceiver 1个，从QuorumCnxManager中取出其他服务器发来的消息，放入recvQueue（WorkerReceiver处理Vote PK过程）</li>
+<li>queueSendMap：消息发送队列，数据结构为Map，由SID分组（即每台其他服务器对应一个单独队列）</li>
+<li>senderWorkerMap：发送器集合，由SID分组，每个发送器对应一台单独的服务器（与queueSendMap相当于Key-Key的对应关系）</li>
+<li>lastMesageSent：为每个SID保留最近发送过的消息</li>
+</ul>
+</li>
+<li>QuorumCnxManager创建ServerSocket监听选举端口。TCP连接规则是只允许SID大的服务器连接SID小的</li>
+<li>FastLeaderElection算法<ul>
+<li>服务器状态变为LOOKING时，选举开始</li>
+<li>自增选举轮次：logicalclock+1</li>
+<li>初始化自票、发送自票、接收外部投票</li>
+<li>PK Vote：<ul>
+<li>自票选举轮次小于外票，logicalclock+1，清空收集的投票，重新发起自票</li>
+<li>忽略logicalclock小的外票</li>
+<li>选举轮次logicalclock一致，Zxid PK，决定是否更变自票票重新投票</li>
+<li>logical clock、Zxid均一致，SID PK，决定是否更变自票票重新投票</li>
+</ul>
+</li>
+<li>选票归档、选票统计</li>
+<li>选票过半后，更新服务器状态</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Leader请求处理责任链：<ul>
+<li>PreRequestProcessor：预处理，如创建请求事务头、事务体、会话检查、ACL检查、版本检查。</li>
+<li>ProposalRequestProcessor：投票处理器。对于非事务请求，直接交给CommitProcessor。对于事务请求则创建Proposal提议，发起事务投票。ProposalRequestProcessor还将事务请求交给SyncRequestProcessor进行事务日志记录。</li>
+<li>SyncRequestProcessor：事务日志记录。也负责触发ZK数据快照。</li>
+<li>AckRequestProcessor：事务日志记录完成后，向Proposal投票收集器发送ACK反馈通知。</li>
+<li>CommitProcessor：非事务请求直接交给ToBeAppliedRequestProcessor。事务请求待收集投票达到可被提交，再交给ToBeAppliedRequestProcessor。</li>
+<li>ToBeAppliedRequestProcessor：将CommitProcessor放入到toBeApplied队列的可提交Proposal逐个交给FinalRequestProcessor，处理完成后从toBeApplied中移除。</li>
+<li>FinalRequestProcessor：为客户端请求返回响应。对事务，还负责将事务应用到内存数据库中。</li>
+<li>——其中，LearnerHandler：Leader服务器为每一个Follower/Observer服务器创建LearnerHandler实例，负责网络通信、数据同步、请求转发、Proposal提议的投票</li>
+</ul>
+</li>
+<li>Follower请求处理链：<ul>
+<li>FollowerRequestProcessor：识别事务请求，转发给Leader。</li>
+<li>SendAckRequestProcessor：承担事务日志记录反馈，向Leader服务器发送ACK消息。</li>
+<li>SyncRequestProcessor、CommitProcessor、FinalRequestProcessor与Leader上的相同。</li>
+</ul>
+</li>
+<li>Observer请求处理链：除了不参与投票，其他均与Follower相同。</li>
+<li>事务处理均由ProposalRequestProcessor发起，都需要经过Sync、Proposal与Commit三个子流程协作完成。</li>
+</ul>
+<h4 id="（六）Zookeeper数据与存储"><a href="#（六）Zookeeper数据与存储" class="headerlink" title="（六）Zookeeper数据与存储"></a>（六）Zookeeper数据与存储</h4><ul>
+<li>DataTree：Zookeeper整棵树的数据结构，完整数据</li>
+<li>DataNode：数据存储的最小单元。包括了数据内容、ACL列表、节点状态、父节点的引用、子节点列表。</li>
+<li>nodes：DataTree内部存储实际节点的ConcurrentHashMap键值对结构。定义：private final ConcurrentHashMap<string, datanode=""> nodes. 另外，临时节点为便于实施访问和清理，有单独的定义：private final Map<long, hashset<string="">&gt; ephemerals.  其中，nodes中key为path；ephemerals中Key为sessionID</long,></string,></li>
+<li>ZKDatabase：内存数据库，负责管理Zookeeper的所有会话，DataTree存储和事务日志。ZKDatabase定时向磁盘dump快照数据。</li>
+</ul>
+<h4 id="（七）日志"><a href="#（七）日志" class="headerlink" title="（七）日志"></a>（七）日志</h4><p>FileTxnLog负责维护事务日志，主要方法append(TxnHeader hdr, Record txn)</p>
+<ul>
+<li>日志写入<ul>
+<li>确定是否有日志可写：先检查FlieTxnLog是否已经关联上一个可写的事务日志，若没有则建立一个事务日志，由Zxid作后缀，并构建事务日志文件头信息（magic、version、dbid），写入日志文件。将该日志的文件流交给streamsToFlush。</li>
+<li>确定日志文件是否需要扩容：预分配64MB，当日志文件剩余空间不足4K，则扩容64MB。</li>
+<li>事务序列化。</li>
+<li>生成Checksum。</li>
+<li>写入事务日志文件流：将事务头、事务体、Checksum值写入文件流（BufferedOutputStream）中。</li>
+<li>streamsToFlush提取文件流将数据输入磁盘。</li>
+</ul>
+</li>
+<li>日志截断：非Leader机器上事务ID比Leader服务器大，则由Leader发送TRUNC命令进行日志截断。</li>
+</ul>
+<h4 id="（八）SnapShot"><a href="#（八）SnapShot" class="headerlink" title="（八）SnapShot"></a>（八）SnapShot</h4><ul>
+<li>格式：与日志一样，后缀为首条记录的Zxid</li>
+<li>快照存储触发：snapCount次事务日志后，进行内存数据库的全量数据Dump至本地文件</li>
+<li>过程流程：<ul>
+<li>确实是否需要进行快照：logCount &gt; （snapCount/2 + randRoll），过半触发策略</li>
+<li>切换事务日志文件</li>
+<li>创建快照异步线程</li>
+<li>获取全量数据与会话信息，生成快照文件名</li>
+<li>数据序列化（同日志一样，先文件头信息、再会话信息和DataTree，最后Checksum），写入快照文件</li>
+</ul>
+</li>
+</ul>
+<h4 id="（九）初始化"><a href="#（九）初始化" class="headerlink" title="（九）初始化"></a>（九）初始化</h4><ul>
+<li>FileTxnSnopLog：FileTxnLog、FileSnap</li>
+<li>ZKDatabase：初始化DataTree，把FileTxnSnopLog交给ZKDatabase，创建sessionWithTimeouts</li>
+<li>创建PlayBackListener监听器：接收事务应用过程中的回调</li>
+<li>从快照文件恢复数据：获取最新的100（或不足100个）snapfile，从最新的file解析并校验，如校验通知则用此文件恢复</li>
+<li>使用事务日志+快照恢复数据</li>
+<li>获取最新的Zxid，校验epoch</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/一致性/" rel="tag"># 一致性</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/10/Spark-issues/" rel="next" title="Spark_issues">
+                <i class="fa fa-chevron-left"></i> Spark_issues
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/10/Raft/" rel="prev" title="Raft">
+                Raft <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="paladintyrion" />
+          <p class="site-author-name" itemprop="name">paladintyrion</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#（一）散点："><span class="nav-number">1.</span> <span class="nav-text">（一）散点：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（二）Chubby："><span class="nav-number">2.</span> <span class="nav-text">（二）Chubby：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（三）Zookeeper基础："><span class="nav-number">3.</span> <span class="nav-text">（三）Zookeeper基础：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（四）Zookeeper使用："><span class="nav-number">4.</span> <span class="nav-text">（四）Zookeeper使用：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（五）Zookeeper细节"><span class="nav-number">5.</span> <span class="nav-text">（五）Zookeeper细节</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（六）Zookeeper数据与存储"><span class="nav-number">6.</span> <span class="nav-text">（六）Zookeeper数据与存储</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（七）日志"><span class="nav-number">7.</span> <span class="nav-text">（七）日志</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（八）SnapShot"><span class="nav-number">8.</span> <span class="nav-text">（八）SnapShot</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（九）初始化"><span class="nav-number">9.</span> <span class="nav-text">（九）初始化</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">paladintyrion</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
