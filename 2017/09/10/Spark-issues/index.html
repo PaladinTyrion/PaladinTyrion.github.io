@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="大数据," />
+  <meta name="keywords" content="spark," />
 
 
 
@@ -95,14 +95,14 @@
 
 
 <meta name="description" content="Issue1: 代码中spark报序列化问题。原因: spark是需要通过master分发计算的，序列化问题是因为代码中还有不能序列化的变量或函数。解决方案: 变量需要能够序列化，像pool等不可序列化的对象，可建立类去专门包装，实现Serializable接口，在分发后分别worker运行任务时再完成构造对象。尽量少使用transient等关键字。 Issue2: 代码运行时，提交spark:/">
-<meta name="keywords" content="大数据">
+<meta name="keywords" content="spark">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark_issues">
 <meta property="og:url" content="https://paladintyrion.github.io/2017/09/10/Spark-issues/index.html">
 <meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
 <meta property="og:description" content="Issue1: 代码中spark报序列化问题。原因: spark是需要通过master分发计算的，序列化问题是因为代码中还有不能序列化的变量或函数。解决方案: 变量需要能够序列化，像pool等不可序列化的对象，可建立类去专门包装，实现Serializable接口，在分发后分别worker运行任务时再完成构造对象。尽量少使用transient等关键字。 Issue2: 代码运行时，提交spark:/">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-10T10:58:11.000Z">
+<meta property="og:updated_time" content="2017-09-10T11:44:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark_issues">
 <meta name="twitter:description" content="Issue1: 代码中spark报序列化问题。原因: spark是需要通过master分发计算的，序列化问题是因为代码中还有不能序列化的变量或函数。解决方案: 变量需要能够序列化，像pool等不可序列化的对象，可建立类去专门包装，实现Serializable接口，在分发后分别worker运行任务时再完成构造对象。尽量少使用transient等关键字。 Issue2: 代码运行时，提交spark:/">
@@ -351,7 +351,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+            <a href="/tags/spark/" rel="tag"># spark</a>
           
         </div>
       
@@ -466,7 +466,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
