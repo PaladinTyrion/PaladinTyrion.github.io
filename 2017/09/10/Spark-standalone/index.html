@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -55,7 +55,11 @@
   
 
   
+    
+      
+    
 
+    
   
 
   
@@ -64,8 +68,16 @@
 
   
     
+      
     
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
   
 
 
@@ -102,7 +114,7 @@
 <meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
 <meta property="og:description" content="Spark环境搭建文档（可不依赖hadoop，1.6.2版本Spark）:Spark环境依赖于Java和Scala。其中Java安装不再赘述，需要JRE 1.7+。 Scala下载：Spark需要scala环境，http://www.scala-lang.org/download/2.10.6.html选择2.10.6版本安装。Spark 1.6.2需要Scala 2.10版本的支持，不兼容2.1">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-10T11:44:54.000Z">
+<meta property="og:updated_time" content="2017-09-12T19:03:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark_standalone">
 <meta name="twitter:description" content="Spark环境搭建文档（可不依赖hadoop，1.6.2版本Spark）:Spark环境依赖于Java和Scala。其中Java安装不再赘述，需要JRE 1.7+。 Scala下载：Spark需要scala环境，http://www.scala-lang.org/download/2.10.6.html选择2.10.6版本安装。Spark 1.6.2需要Scala 2.10版本的支持，不兼容2.1">
@@ -113,7 +125,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
+    scheme: 'Mist',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
@@ -211,6 +223,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -258,7 +280,7 @@
   
   
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-tags" itemscope itemtype="http://schema.org/Article">
   
   
   
@@ -268,7 +290,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="paladintyrion">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/4528356?v=4&s=230">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -333,6 +355,7 @@
         <h4 id="Spark环境搭建文档（可不依赖hadoop，1-6-2版本Spark）"><a href="#Spark环境搭建文档（可不依赖hadoop，1-6-2版本Spark）" class="headerlink" title="Spark环境搭建文档（可不依赖hadoop，1.6.2版本Spark）:"></a>Spark环境搭建文档（可不依赖hadoop，1.6.2版本Spark）:</h4><p>Spark环境依赖于Java和Scala。其中Java安装不再赘述，需要JRE 1.7+。</p>
 <h5 id="Scala下载："><a href="#Scala下载：" class="headerlink" title="Scala下载："></a>Scala下载：</h5><p>Spark需要scala环境，<a href="http://www.scala-lang.org/download/2.10.6.html" target="_blank" rel="external">http://www.scala-lang.org/download/2.10.6.html</a><br>选择2.10.6版本安装。Spark 1.6.2需要Scala 2.10版本的支持，不兼容2.11+。<br>解压下载包到指定路径:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ tar -zxvf scala-2.10.6.tgz /to/the/scala_path</div></pre></td></tr></table></figure>
+<a id="more"></a>
 <h5 id="Spark-下载："><a href="#Spark-下载：" class="headerlink" title="Spark 下载："></a>Spark 下载：</h5><p>进入<a href="http://spark.apache.org/downloads.html" target="_blank" rel="external">http://spark.apache.org/downloads.html</a> 官网，Spark release选择1.6.2，package type选择Pre-built for Hadoop 2.6, 下载spark-1.6.2-bin-hadoop2.6.tgz。<br>解压spark-1.6.2-bin-hadoop2.6.tgz至指定路径:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ tar -zxvf spark-1.6.2-bin-hadoop2.6.tgz /to/the/spark_path</div></pre></td></tr></table></figure>
 <h5 id="环境变量："><a href="#环境变量：" class="headerlink" title="环境变量："></a>环境变量：</h5><p>环境变量可写在/etc/profile中，也可以写在/.bashrc等配置文件中,写好后使用source命令使其生效。</p>
@@ -473,7 +496,7 @@
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/images/avatar.gif"
+               src="https://avatars0.githubusercontent.com/u/4528356?v=4&s=230"
                alt="paladintyrion" />
           <p class="site-author-name" itemprop="name">paladintyrion</p>
            
@@ -571,7 +594,7 @@
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Pisces
+    NexT.Mist
   </a>
 </div>
 
@@ -650,13 +673,6 @@
 
   
   
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
-
-
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>

@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -55,7 +55,11 @@
   
 
   
+    
+      
+    
 
+    
   
 
   
@@ -64,8 +68,16 @@
 
   
     
+      
     
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
   
 
 
@@ -108,7 +120,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
+    scheme: 'Mist',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
@@ -208,6 +220,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -255,7 +277,7 @@
   
   
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-tags" itemscope itemtype="http://schema.org/Article">
   
   
   
@@ -265,7 +287,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="paladintyrion">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/4528356?v=4&s=230">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -330,8 +352,7 @@
 
       
         
-          
-            <h3 id="Raft"><a href="#Raft" class="headerlink" title="Raft"></a>Raft</h3><hr>
+          <h3 id="Raft"><a href="#Raft" class="headerlink" title="Raft"></a>Raft</h3><hr>
 <h4 id="1-基本介绍"><a href="#1-基本介绍" class="headerlink" title="1. 基本介绍"></a>1. 基本介绍</h4><ul>
 <li>Raft算法解决Log Duplicate问题。</li>
 <li>Raft选举使用随机时间等待来防止进入多候选人选票瓜分的情况。</li>
@@ -342,54 +363,13 @@
 <li>Election 正确性的保证？时间要求</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">广播时间（broadcastTime） &lt;&lt; 选举超时时间（electionTimeout） &lt;&lt; 平均故障间隔时间（MTBF）</div></pre></td></tr></table></figure>
-<ul>
-<li><p>关于日志复制：正确性如何保证？</p>
-<ol>
-<li><p>Raft一致性算法原则的总结：选举安全、Leader只附加、日志匹配、Leader完全特性、状态机安全。其中Leader完全特性和日志匹配是保证正确性的关键原则。</p>
-<p><img src="/2017/09/10/Raft/Raft_Properties.png" alt="Raft特性"> </p>
-</li>
-<li><p>Raft永远不会提交一个之前任期内的日志条目。通过选举出具有正确性的最超前状态Node作为Leader，只有Leadr当前任期里的日志条目可以被提交；一旦当前任期的日志条目以这种方式被提交，那么由于日志匹配特性，之前的日志条目也都会被间接的提交。</p>
-</li>
-<li><p>宕机之后再选举的数据安全性保证：保证具有最前沿状态的server被选为Leader：<br> 检查term ——&gt; 检查nextIndex/prevLogIndex ——&gt; 检查commitIndex</p>
-</li>
-</ol>
-</li>
-<li><p>集群成员变化: 如何自动化过渡?</p>
-<ol>
-<li><p>成员变化时，Leader要使用C-old,new的规则来决定日志条目C-old,new什么时候需要被提交。即，既满足C-old的提交条件，亦满足C-new的提交条件。假设现在是增加成员变量，C-old的提交状态肯定是C-new提交状态的一个包含集。</p>
-</li>
-<li><p>一旦C-old,new被提交，无论是C-old还是C-new，都不可能单独做出决定，并且Leader完全特性保证了只有拥有C-old,new日志条目的服务器才有可能被选举为Leader。</p>
-<p>状态参考：</p>
-<p><img src="/2017/09/10/Raft/Cluster_membership_changes.png" alt="Timeline for a configuration change"></p>
-</li>
-</ol>
-</li>
-<li><p>日志快照</p>
-<ol>
-<li><p>每个服务器==独立的==创建快照，只包括已经被提交的日志。主要的工作包括将状态机的状态写入到快照中。</p>
-</li>
-<li><p>Raft包含一些少量的元数据到快照中：last included index指是被快照取代的最后的条目在日志中的索引值(状态机最后应用的日志)， last included term指该条目的任期号。</p>
-</li>
-</ol>
-</li>
-<li><p>客户端交互：保证不可读出脏数据？</p>
-<ol>
-<li><p>Leader必须有关于被提交日志的最新信息。Raft通过Leader在任期开始时提交一个空白的没有任何操作的日志条目到日志中去来实现。</p>
-</li>
-<li><p>Leader在处理只读请求前必须检查自己是否已经被废止。Raft通过让领导人在响应只读请求之前，先和集群中的大多数Node交换一次心跳来处理这个问题。</p>
-</li>
-</ol>
-</li>
-</ul>
-<hr>
-<h3 id="Referance："><a href="#Referance：" class="headerlink" title="Referance："></a>Referance：</h3><ul>
-<li><a href="https://ramcloud.atlassian.net/wiki/download/attachments/6586375/raft.pdf" target="_blank" rel="external">Raft论文 英文版</a></li>
-<li><a href="https://github.com/maemual/raft-zh_cn/blob/master/raft-zh_cn.md" target="_blank" rel="external">Raft论文 中文翻译</a> ：此翻译不精确，推荐参照英文原文对比理解</li>
-<li><a href="https://raft.github.io/" target="_blank" rel="external">Raft官网</a></li>
-<li><a href="http://thesecretlivesofdata.com/raft/" target="_blank" rel="external">Raft动画演示</a></li>
-</ul>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/09/10/Raft/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -431,7 +411,7 @@
   
   
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-tags" itemscope itemtype="http://schema.org/Article">
   
   
   
@@ -441,7 +421,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="paladintyrion">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/4528356?v=4&s=230">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -506,8 +486,7 @@
 
       
         
-          
-            <h4 id="（一）散点："><a href="#（一）散点：" class="headerlink" title="（一）散点："></a>（一）散点：</h4><ul>
+          <h4 id="（一）散点："><a href="#（一）散点：" class="headerlink" title="（一）散点："></a>（一）散点：</h4><ul>
 <li>三态：成功、失败、超时。</li>
 <li>ACID/CAP/BASE</li>
 <li>Lamppost论文：<ul>
@@ -529,305 +508,13 @@
 </ul>
 </li>
 </ul>
-<h4 id="（三）Zookeeper基础："><a href="#（三）Zookeeper基础：" class="headerlink" title="（三）Zookeeper基础："></a>（三）Zookeeper基础：</h4><ul>
-<li>版本：<ul>
-<li>version：当前ZNode的版本</li>
-<li>version：当前ZNode的子节点版本</li>
-<li>aversion：当前ZNode的ACL版本</li>
-</ul>
-</li>
-<li>ACL权限：见(五)-2-3.Permission权限</li>
-<li>ZAB(Zookeeper Atomic Broadcast) 原子广播协议<ul>
-<li>ZAB协议选举Leader</li>
-<li>Leader持续工作：决定事务PC结果，Follower与Learner同步结果</li>
-</ul>
-</li>
-<li>ZXID：事务编号，共64位的数字<ul>
-<li>高32位代表leader的周期epoch</li>
-<li>低32位为一计数累加数</li>
-</ul>
-</li>
-</ul>
-<h4 id="（四）Zookeeper使用："><a href="#（四）Zookeeper使用：" class="headerlink" title="（四）Zookeeper使用："></a>（四）Zookeeper使用：</h4><ul>
-<li>%ZK_HOME%/conf下由zoo.cfg配置文件生效配置<ul>
-<li>dataDir（&amp;&amp; dataLogDir）</li>
-<li>clientPort</li>
-<li>server.x=IPn:Port1:Port2   (Port1为消息交换端口，Port2为选举端口)</li>
-</ul>
-</li>
-<li>dataDir目录下myid与server.id中的id一致</li>
-<li>两款开源客户端：<ul>
-<li>ZkClient</li>
-<li>Curator（Fluent 风格）</li>
-</ul>
-</li>
-<li>分布式锁的改进<ul>
-<li>读请求：向比自己序号小的最后一个写请求节点注册Watcher监听</li>
-<li>写请求：向比自己小的最后一个阶段注册Watcher监听</li>
-<li>细粒度锁提高可用性，粗粒度锁降低系统复杂性，需要折中。当然细粒度是好事</li>
-</ul>
-</li>
-<li>常见应用：发布/订阅、负载均衡、日志收集器、分布式锁</li>
-<li>Kafka：大规模分布式消息中间件<ul>
-<li>消息生产者</li>
-<li>消息消费者</li>
-<li>Topic：建立订阅关系，同一Topic会进行消息分区并分布在多个Broker上</li>
-<li>消息分区：用于负载均衡</li>
-<li>Broker：存储消息</li>
-<li>Group：消费者分组</li>
-<li>OffSet：消费者消费数据在文件中的偏移量</li>
-</ul>
-</li>
-<li>SEDA(Staged Event-Driven Architecture)</li>
-</ul>
-<h4 id="（五）Zookeeper细节"><a href="#（五）Zookeeper细节" class="headerlink" title="（五）Zookeeper细节"></a>（五）Zookeeper细节</h4><ul>
-<li><p>Watcher：</p>
-<ul>
-<li>Watcher对象存储在客户端WatchManager中</li>
-<li>Watcher接口需实现process函数，入参为WatchedEvent对象</li>
-<li><p>WatchedEvent：有三个属性</p>
-<ul>
-<li>通知状态keeperState</li>
-<li>事件类型eventType</li>
-<li>节点路径path</li>
-</ul>
-</li>
-<li>WatcherEvent：WatchedEvent三属性+序列化接口</li>
-</ul>
-</li>
-<li>ACL控制：<ul>
-<li>Scheme权限模式：<ul>
-<li>IP</li>
-<li>Digest</li>
-<li>World</li>
-<li>Super</li>
-</ul>
-</li>
-<li>ID授权对象：如username/ip:password</li>
-<li>Permission权限：<ul>
-<li>CREATE</li>
-<li>DELETE</li>
-<li>READ：获取节点数据与子节点列表的权限</li>
-<li>WRITE</li>
-<li>ADMIN：设置节点ACL权限</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>序列化：<ul>
-<li>Jute：实现Record接口，方法有serialize和deserialize</li>
-<li>Avro</li>
-</ul>
-</li>
-<li>通信协议：自制协议</li>
-<li>客户端<ul>
-<li>核心组件：<ul>
-<li>Zookeeper实例</li>
-<li>ClientWatchManager</li>
-<li>HostProvider</li>
-<li>ClientCnxn：客户端核心线程，内部有两个线程<ul>
-<li>SendThread：I/O线程，负责与服务器的通信</li>
-<li>EventThread：事件线程，负责对服务端事件处理</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>会话创建过程：<ul>
-<li>初始化Zookeeper对象，创建ClientWatchManager</li>
-<li>设置默认Watcher</li>
-<li>构造方法中传入服务器地址列表，构造HostProvider</li>
-<li>创建ClientCnxn：负责与服务端的网络交互，底层I/O处理器是ClientCnxnSocket，客户端初始化两个核心队列<ul>
-<li>outgoingQueue：客户端请求发送队列</li>
-<li>pendingQueue：服务端响应等待队列</li>
-</ul>
-</li>
-<li>创建两个核心线程：<ul>
-<li>SendThread：ClientCnxnSocket——&gt;SendThread</li>
-<li>EventThread：待处理事件队列waitingEvents</li>
-</ul>
-</li>
-<li>启动SendThread与EventThread</li>
-<li>在HostProvider获取一个服务器地址，由ClientCnxnSocket创建TCP长连接</li>
-<li>构造ConnectRequest请求，包装为Packet对象，放入outgoingQueue发送至服务端</li>
-<li>SendThread线程中ClientCnxnSocket接收服务端响应<ul>
-<li>会话创建请求的响应，交由readConnectResult处理</li>
-<li>ClientCnxnSocket反序列化响应，得到ConnectResponse，并得到sessionId</li>
-</ul>
-</li>
-<li>连接成功，更新SendThread线程会话参数设置，readTimeout、connectTimeout等，更新客户端状态</li>
-<li>SendThread生成SyncConnected-None事件，通知EventThread</li>
-<li>查询ClientWatchManager中的Watcher，先将事件放入waitingEvents队列，然后调用Watcher的process进行处理</li>
-</ul>
-</li>
-<li>ClientCnxn：<ul>
-<li>Packet：属性<ul>
-<li>requestHeader、replyHeader、request、response</li>
-<li>节点路径</li>
-<li>watchRegistration</li>
-</ul>
-</li>
-<li>网络传输时，只有少量属性被序列化，参见Packet的createBB()等方法</li>
-<li>请求发送：在outgoingQueue中取出可发送Packet，写入XID至Packet请求头，序列化后发送。发送后会将Packet保存至pendingQueue等待响应</li>
-<li>响应接收：三种情况<ul>
-<li>会话创建时，ByteBuffer序列化为ConnectResponse对象</li>
-<li>正常会话周期时，收到一个事件，ByteBuffer序列化为WatcherEvent对象，放入waitingEvents队列</li>
-<li>正常请求响应，pendingQueue中取出一个Packet，ByteBuffer序列化为Response对象</li>
-</ul>
-</li>
-<li>SendThread维护客户端与服务端的会话生命周期，想服务端发送PING包实现心跳检测</li>
-</ul>
-</li>
-<li>会话<ul>
-<li>会话状态：CONNECTING、CONNECTED、RECONNECTING、RECONNECTED、CLOSE</li>
-<li>session属性：sessionID、TimeOut、TickTime、isClosing</li>
-<li>sessionID生成：<ul>
-<li>当前时间的毫秒表示</li>
-<li>左移24位</li>
-<li>右移8位</li>
-<li>添加机器标识SID，SID即myid中的内容<ul>
-<li>64位表示SID</li>
-<li>左移56位，即把最低8位移至64位最高8位</li>
-<li>将sessionID第三步与上步得到64位SID进行位或操作</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>sessionTracker（session管理）：存在三份session存储<ul>
-<li>sessionById：HashMap<long, sessionimpl="">，由sessionID进行管理</long,></li>
-<li>sessionWithTimeout：ConcurrentHashMap<long, integer="">，由sessionID管理会话超时。定期持久化至快照</long,></li>
-<li>sessionSets：HashMap<long, sessionset="">，由下次会话超时时间归档会话，分桶策略进行管理</long,></li>
-</ul>
-</li>
-<li>会话清理：<ul>
-<li>isClonsing标记为true</li>
-<li>发起关闭会话请求，交给PreRequestProcessor</li>
-<li>收集需要清理的相关临时节点</li>
-<li>添加节点删除事务变更，放入事务变更队列outstandingChanges</li>
-<li>删除临时节点</li>
-<li>删除会话，在sessionTracker中移除会话</li>
-<li>关闭NIOServerCnxn</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>集群启动<ul>
-<li>QuorumPeerMain启动</li>
-<li>解析zoo.cfg</li>
-<li>创建并启动历史文件清理器DatadirCleanupManager</li>
-<li>判断模式选择集群模式启动Zookeeper</li>
-<li>创建并初始化ServerCnxnFactory</li>
-<li>创建Zookeeper数据管理器FileTxnSnapLog</li>
-<li>创建QuorumPeer实例：QuorumPeer会根据检测服务器实例运行状态来发起Leader选举</li>
-<li>创建内存数据库ZKDatabase</li>
-<li>初始化QuorumPeer，将FileTxnSnapLog、ServerCnxnFactory、ZKDatabase等核心组件注册到QuorumPeer。配置QuorumPeer参数，包括服务器地址列表、选举算法（现在只剩下FastLeaderElection算法）、会话超时时间等。<ul>
-<li>每机初始化一个Vote，由SID、lastLoggedZxid、epoch等生成。</li>
-<li>注册JMX服务</li>
-<li>检测服务器状态，QuorumPeer是Zookeeper服务器实例的托管者，检测LOOKING、LEADING、FOLLOWING/OBSERVING状态</li>
-<li>Leader选举<ul>
-<li>Zxid最大的一般做Leader，若Zxid都一致，一般选SID最大者</li>
-<li>FastLeaderElection算法相比Paxos超级简单。不论故障恢复还是第一次投票均适用。先比Zxid，自身的Zxid小则更变投票重投，否则再比SID，SID小则重投，再否则就维持投票</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>恢复本地数据</li>
-<li>启动ServerCnxnFactory主线程</li>
-</ul>
-</li>
-<li>选举细节：<ul>
-<li>I/O：<ul>
-<li>ClientCnxn是ZK客户端负责与服务端的网络I/O</li>
-<li>QuorumCnxManager负责选举时的网络I/O</li>
-</ul>
-</li>
-<li>QuorumCnxManager维护一系列队列：<ul>
-<li>recvQueue：消息接收队列，1个（后续统计Vote）：WorkerReceiver 1个，从QuorumCnxManager中取出其他服务器发来的消息，放入recvQueue（WorkerReceiver处理Vote PK过程）</li>
-<li>queueSendMap：消息发送队列，数据结构为Map，由SID分组（即每台其他服务器对应一个单独队列）</li>
-<li>senderWorkerMap：发送器集合，由SID分组，每个发送器对应一台单独的服务器（与queueSendMap相当于Key-Key的对应关系）</li>
-<li>lastMesageSent：为每个SID保留最近发送过的消息</li>
-</ul>
-</li>
-<li>QuorumCnxManager创建ServerSocket监听选举端口。TCP连接规则是只允许SID大的服务器连接SID小的</li>
-<li>FastLeaderElection算法<ul>
-<li>服务器状态变为LOOKING时，选举开始</li>
-<li>自增选举轮次：logicalclock+1</li>
-<li>初始化自票、发送自票、接收外部投票</li>
-<li>PK Vote：<ul>
-<li>自票选举轮次小于外票，logicalclock+1，清空收集的投票，重新发起自票</li>
-<li>忽略logicalclock小的外票</li>
-<li>选举轮次logicalclock一致，Zxid PK，决定是否更变自票票重新投票</li>
-<li>logical clock、Zxid均一致，SID PK，决定是否更变自票票重新投票</li>
-</ul>
-</li>
-<li>选票归档、选票统计</li>
-<li>选票过半后，更新服务器状态</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Leader请求处理责任链：<ul>
-<li>PreRequestProcessor：预处理，如创建请求事务头、事务体、会话检查、ACL检查、版本检查。</li>
-<li>ProposalRequestProcessor：投票处理器。对于非事务请求，直接交给CommitProcessor。对于事务请求则创建Proposal提议，发起事务投票。ProposalRequestProcessor还将事务请求交给SyncRequestProcessor进行事务日志记录。</li>
-<li>SyncRequestProcessor：事务日志记录。也负责触发ZK数据快照。</li>
-<li>AckRequestProcessor：事务日志记录完成后，向Proposal投票收集器发送ACK反馈通知。</li>
-<li>CommitProcessor：非事务请求直接交给ToBeAppliedRequestProcessor。事务请求待收集投票达到可被提交，再交给ToBeAppliedRequestProcessor。</li>
-<li>ToBeAppliedRequestProcessor：将CommitProcessor放入到toBeApplied队列的可提交Proposal逐个交给FinalRequestProcessor，处理完成后从toBeApplied中移除。</li>
-<li>FinalRequestProcessor：为客户端请求返回响应。对事务，还负责将事务应用到内存数据库中。</li>
-<li>——其中，LearnerHandler：Leader服务器为每一个Follower/Observer服务器创建LearnerHandler实例，负责网络通信、数据同步、请求转发、Proposal提议的投票</li>
-</ul>
-</li>
-<li>Follower请求处理链：<ul>
-<li>FollowerRequestProcessor：识别事务请求，转发给Leader。</li>
-<li>SendAckRequestProcessor：承担事务日志记录反馈，向Leader服务器发送ACK消息。</li>
-<li>SyncRequestProcessor、CommitProcessor、FinalRequestProcessor与Leader上的相同。</li>
-</ul>
-</li>
-<li>Observer请求处理链：除了不参与投票，其他均与Follower相同。</li>
-<li>事务处理均由ProposalRequestProcessor发起，都需要经过Sync、Proposal与Commit三个子流程协作完成。</li>
-</ul>
-<h4 id="（六）Zookeeper数据与存储"><a href="#（六）Zookeeper数据与存储" class="headerlink" title="（六）Zookeeper数据与存储"></a>（六）Zookeeper数据与存储</h4><ul>
-<li>DataTree：Zookeeper整棵树的数据结构，完整数据</li>
-<li>DataNode：数据存储的最小单元。包括了数据内容、ACL列表、节点状态、父节点的引用、子节点列表。</li>
-<li>nodes：DataTree内部存储实际节点的ConcurrentHashMap键值对结构。定义：private final ConcurrentHashMap<string, datanode=""> nodes. 另外，临时节点为便于实施访问和清理，有单独的定义：private final Map<long, hashset<string="">&gt; ephemerals.  其中，nodes中key为path；ephemerals中Key为sessionID</long,></string,></li>
-<li>ZKDatabase：内存数据库，负责管理Zookeeper的所有会话，DataTree存储和事务日志。ZKDatabase定时向磁盘dump快照数据。</li>
-</ul>
-<h4 id="（七）日志"><a href="#（七）日志" class="headerlink" title="（七）日志"></a>（七）日志</h4><p>FileTxnLog负责维护事务日志，主要方法append(TxnHeader hdr, Record txn)</p>
-<ul>
-<li>日志写入<ul>
-<li>确定是否有日志可写：先检查FlieTxnLog是否已经关联上一个可写的事务日志，若没有则建立一个事务日志，由Zxid作后缀，并构建事务日志文件头信息（magic、version、dbid），写入日志文件。将该日志的文件流交给streamsToFlush。</li>
-<li>确定日志文件是否需要扩容：预分配64MB，当日志文件剩余空间不足4K，则扩容64MB。</li>
-<li>事务序列化。</li>
-<li>生成Checksum。</li>
-<li>写入事务日志文件流：将事务头、事务体、Checksum值写入文件流（BufferedOutputStream）中。</li>
-<li>streamsToFlush提取文件流将数据输入磁盘。</li>
-</ul>
-</li>
-<li>日志截断：非Leader机器上事务ID比Leader服务器大，则由Leader发送TRUNC命令进行日志截断。</li>
-</ul>
-<h4 id="（八）SnapShot"><a href="#（八）SnapShot" class="headerlink" title="（八）SnapShot"></a>（八）SnapShot</h4><ul>
-<li>格式：与日志一样，后缀为首条记录的Zxid</li>
-<li>快照存储触发：snapCount次事务日志后，进行内存数据库的全量数据Dump至本地文件</li>
-<li>过程流程：<ul>
-<li>确实是否需要进行快照：logCount &gt; （snapCount/2 + randRoll），过半触发策略</li>
-<li>切换事务日志文件</li>
-<li>创建快照异步线程</li>
-<li>获取全量数据与会话信息，生成快照文件名</li>
-<li>数据序列化（同日志一样，先文件头信息、再会话信息和DataTree，最后Checksum），写入快照文件</li>
-</ul>
-</li>
-</ul>
-<h4 id="（九）初始化"><a href="#（九）初始化" class="headerlink" title="（九）初始化"></a>（九）初始化</h4><ul>
-<li>FileTxnSnopLog：FileTxnLog、FileSnap</li>
-<li>ZKDatabase：初始化DataTree，把FileTxnSnopLog交给ZKDatabase，创建sessionWithTimeouts</li>
-<li>创建PlayBackListener监听器：接收事务应用过程中的回调</li>
-<li>从快照文件恢复数据：获取最新的100（或不足100个）snapfile，从最新的file解析并校验，如校验通知则用此文件恢复</li>
-<li>使用事务日志+快照恢复数据</li>
-<li>获取最新的Zxid，校验epoch</li>
-</ul>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/09/10/Paxos-and-Zookeeper/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -869,7 +556,7 @@
   
   
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-tags" itemscope itemtype="http://schema.org/Article">
   
   
   
@@ -879,7 +566,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="paladintyrion">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/4528356?v=4&s=230">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -944,13 +631,15 @@
 
       
         
-          
-            <h4 id="Issue1-代码中spark报序列化问题。"><a href="#Issue1-代码中spark报序列化问题。" class="headerlink" title="Issue1: 代码中spark报序列化问题。"></a>Issue1: 代码中spark报序列化问题。</h4><p><strong>原因</strong>: spark是需要通过master分发计算的，序列化问题是因为代码中还有不能序列化的变量或函数。<br><strong>解决方案</strong>: 变量需要能够序列化，像pool等不可序列化的对象，可建立类去专门包装，实现Serializable接口，在分发后分别worker运行任务时再完成构造对象。尽量少使用transient等关键字。</p>
+          <h4 id="Issue1-代码中spark报序列化问题。"><a href="#Issue1-代码中spark报序列化问题。" class="headerlink" title="Issue1: 代码中spark报序列化问题。"></a>Issue1: 代码中spark报序列化问题。</h4><p><strong>原因</strong>: spark是需要通过master分发计算的，序列化问题是因为代码中还有不能序列化的变量或函数。<br><strong>解决方案</strong>: 变量需要能够序列化，像pool等不可序列化的对象，可建立类去专门包装，实现Serializable接口，在分发后分别worker运行任务时再完成构造对象。尽量少使用transient等关键字。</p>
 <h4 id="Issue2-代码运行时，提交spark-master-7077，报类找不到类的问题。"><a href="#Issue2-代码运行时，提交spark-master-7077，报类找不到类的问题。" class="headerlink" title="Issue2: 代码运行时，提交spark://master:7077，报类找不到类的问题。"></a>Issue2: 代码运行时，提交spark://master:7077，报类找不到类的问题。</h4><p><strong>原因</strong>: spark是需要通过master分发计算的,如果是spark-submit提交任务，只要jar包代码序列化正确则没什么问题，但IDE执行，需要sparkContext启动前调用setJar()设置任务jar包。<br><strong>解决方案</strong>: 程序测试用，可以把mvn生成的jar设置到程序中运行。一般都会使用spark-submit去提交任务。</p>
-<h4 id="Issue3-运行jar正常，但运行依赖不能分发执行的问题。"><a href="#Issue3-运行jar正常，但运行依赖不能分发执行的问题。" class="headerlink" title="Issue3: 运行jar正常，但运行依赖不能分发执行的问题。"></a>Issue3: 运行jar正常，但运行依赖不能分发执行的问题。</h4><p><strong>原因</strong>: 原因如问题。<br><strong>解决方案</strong>: mvn打包时把依赖jar使用shade方式打包，不要把依赖的资源文件打在外面。</p>
-<p>未完待续……</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/09/10/Spark-issues/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -992,7 +681,7 @@
   
   
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-tags" itemscope itemtype="http://schema.org/Article">
   
   
   
@@ -1002,7 +691,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="paladintyrion">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/4528356?v=4&s=230">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1067,45 +756,16 @@
 
       
         
-          
-            <h4 id="Spark环境搭建文档（可不依赖hadoop，1-6-2版本Spark）"><a href="#Spark环境搭建文档（可不依赖hadoop，1-6-2版本Spark）" class="headerlink" title="Spark环境搭建文档（可不依赖hadoop，1.6.2版本Spark）:"></a>Spark环境搭建文档（可不依赖hadoop，1.6.2版本Spark）:</h4><p>Spark环境依赖于Java和Scala。其中Java安装不再赘述，需要JRE 1.7+。</p>
+          <h4 id="Spark环境搭建文档（可不依赖hadoop，1-6-2版本Spark）"><a href="#Spark环境搭建文档（可不依赖hadoop，1-6-2版本Spark）" class="headerlink" title="Spark环境搭建文档（可不依赖hadoop，1.6.2版本Spark）:"></a>Spark环境搭建文档（可不依赖hadoop，1.6.2版本Spark）:</h4><p>Spark环境依赖于Java和Scala。其中Java安装不再赘述，需要JRE 1.7+。</p>
 <h5 id="Scala下载："><a href="#Scala下载：" class="headerlink" title="Scala下载："></a>Scala下载：</h5><p>Spark需要scala环境，<a href="http://www.scala-lang.org/download/2.10.6.html" target="_blank" rel="external">http://www.scala-lang.org/download/2.10.6.html</a><br>选择2.10.6版本安装。Spark 1.6.2需要Scala 2.10版本的支持，不兼容2.11+。<br>解压下载包到指定路径:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ tar -zxvf scala-2.10.6.tgz /to/the/scala_path</div></pre></td></tr></table></figure>
-<h5 id="Spark-下载："><a href="#Spark-下载：" class="headerlink" title="Spark 下载："></a>Spark 下载：</h5><p>进入<a href="http://spark.apache.org/downloads.html" target="_blank" rel="external">http://spark.apache.org/downloads.html</a> 官网，Spark release选择1.6.2，package type选择Pre-built for Hadoop 2.6, 下载spark-1.6.2-bin-hadoop2.6.tgz。<br>解压spark-1.6.2-bin-hadoop2.6.tgz至指定路径:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ tar -zxvf spark-1.6.2-bin-hadoop2.6.tgz /to/the/spark_path</div></pre></td></tr></table></figure>
-<h5 id="环境变量："><a href="#环境变量：" class="headerlink" title="环境变量："></a>环境变量：</h5><p>环境变量可写在/etc/profile中，也可以写在/.bashrc等配置文件中,写好后使用source命令使其生效。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim /etc/profile  #或者 vim ~/.bashrc</div></pre></td></tr></table></figure>
-<p>环境变量中的添加内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#Scala Config</div><div class="line">export SCALA_HOME=/to/the/scala_path   #scala解压目录</div><div class="line">export PATH=$PATH:$SCALA_HOME/bin</div><div class="line"></div><div class="line">#Spark Config</div><div class="line">#export MAVEN_OPTS=&quot;-Xmx3g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g&quot; #可选的maven开发选项</div><div class="line">export SPARK_HOME=/to/the/spark_path  #Spark解压目录</div><div class="line">export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin</div></pre></td></tr></table></figure>
-<p>环境变量添加完毕后，使其生效。注意，/etc/profile中的环境变量需要重启机器才能每次启动终端都生效，/.bashrc环境变量每次启动终端都直接生效。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ source /etc/profile  #或者 source ~/.bashrc</div></pre></td></tr></table></figure>
-<p>最后需要注意，需要在每台机器的/etc/hosts里面写入一份所有机器的hostname ip映射关系。以方便所有机器都可用hostname去定位ip。</p>
-<h5 id="Spark配置"><a href="#Spark配置" class="headerlink" title="Spark配置"></a>Spark配置</h5><p>Spark的配置文件在${SPARK_HOME}/conf目录下。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ cd $SPARK_HOME</div><div class="line">$ cp spark-env.sh.template spark-env.sh  </div><div class="line">$ cp log4j.properties.template log4j.properties  </div><div class="line">$ cp spark-defaults.conf.template spark-defaults.conf</div><div class="line">$ cp slaves.template slaves</div></pre></td></tr></table></figure>
-<ul>
-<li>spark-env.sh配置需添加: </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">export JAVA_HOME=$&#123;JAVA_HOME&#125;</div><div class="line">export SPARK_MASTER_IP=$&#123;your_master_ip&#125;  # master ip</div><div class="line">export SPARK_MASTER_PORT=7077</div><div class="line">export SPARK_WORKER_CORES=1     #worker占用核数</div><div class="line">export SPARK_WORKER_INSTANCES=2 #worker启动实例个数</div><div class="line">export SPARK_WORKER_MEMORY=2g   #worker运行内存</div><div class="line">export SPARK_WORKER_WEBUI_PORT=8081</div><div class="line">export SPARK_EXECUTOR_CORES=1   #master调度器核数</div><div class="line">export SPARK_EXECUTOR_MEMORY=1g   #master调度器内存</div><div class="line">export SPARK_LOCAL_IP=$&#123;your_local_ip&#125;  # work运行机 ip</div><div class="line">export SPARK_SCALA_VERSION=&quot;2.10.6&quot;</div></pre></td></tr></table></figure>
-<ul>
-<li>spark-defaults.conf配置需添加:</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">spark.master                     spark://$&#123;master_hostname&#125;:7077</div><div class="line">spark.eventLog.enabled           true</div><div class="line">spark.eventLog.dir               file:///to/the/spark/eventLogs/</div><div class="line">#spark.eventLog.dir              hdfs://hostname:9000/spark-events</div><div class="line">spark.serializer                 org.apache.spark.serializer.KryoSerializer  #默认序列化</div><div class="line">spark.driver.memory              1g   #调度器驱动</div><div class="line">spark.executor.memory            1g   #调度器运行内存</div></pre></td></tr></table></figure>
-<ul>
-<li>log4j.properties默认配置就好，需要记录在文件里再改</li>
-<li>slaves文件: slaves 跟hadoop启动一致，集群中每个worker机节点hostname都需要保存在slaves文件中。<br>注意，<strong>不包括</strong>master的hostname，如果master机也需要启动worker，则master的hostname也可写入slaves文件中。</li>
-</ul>
-<h5 id="Spark集群启动方式-在此只介绍不依赖于hadoop的集群的standalone启动方式"><a href="#Spark集群启动方式-在此只介绍不依赖于hadoop的集群的standalone启动方式" class="headerlink" title="Spark集群启动方式(在此只介绍不依赖于hadoop的集群的standalone启动方式):"></a>Spark集群启动方式(在此只介绍不依赖于hadoop的集群的standalone启动方式):</h5><ul>
-<li style="list-style: none"><input type="checkbox" checked> 在master机:  </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ start-master.sh</div></pre></td></tr></table></figure>
-<p>即可启动。  </p>
-<ul>
-<li style="list-style: none"><input type="checkbox" checked> 在slave机:  </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># start-slave.sh &lt;master-spark-URL&gt;</div><div class="line"># 如下，这里假设master机的hostname为master</div><div class="line">$ start-slave.sh spark://master:7077</div></pre></td></tr></table></figure>
-<p>另注，在master机也可以启动slave，slave中是worker的工作环境。所有spark任务均执行在work中。<br>仅供参考。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/09/10/Spark-standalone/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1147,7 +807,7 @@
   
   
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-tags" itemscope itemtype="http://schema.org/Article">
   
   
   
@@ -1157,7 +817,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="paladintyrion">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/4528356?v=4&s=230">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1222,71 +882,22 @@
 
       
         
-          
-            <h3 id="MacOS-Linux下的小知识"><a href="#MacOS-Linux下的小知识" class="headerlink" title="MacOS/Linux下的小知识"></a>MacOS/Linux下的小知识</h3><hr>
+          <h3 id="MacOS-Linux下的小知识"><a href="#MacOS-Linux下的小知识" class="headerlink" title="MacOS/Linux下的小知识"></a>MacOS/Linux下的小知识</h3><hr>
 <ul>
 <li>Tip.1 更新Locate的数据库  </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo /usr/libexec/locate.updatedb    #MacOS</div><div class="line">$ sudo updatedb    #Linux</div></pre></td></tr></table></figure>
 <ul>
-<li>Tip.2 当使用源文件编译安装，configure默认–prefix=/Applications/Xcode.app/**下面时，make失败大部分因为没有安装command line tools造成的</li>
+<li>Tip.2 当使用源文件编译安装，configure默认–prefix=/Applications/Xcode.app/**下面时，make失败大部分因为没有安装command line tools造成的 </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ xcode-select --install    #MocOS</div></pre></td></tr></table></figure>
-<ul>
-<li>Tip.3 MacOX修改HostName  </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo scutil --set HostName yourhostname       #MacOS</div><div class="line">$ hostname      #查看输出是否生效</div></pre></td></tr></table></figure>
-<ul>
-<li>Tip.4 MocOX启动ssh服务</li>
-</ul>
-<p>修改/etc/ssh/sshd_config, 打开RSAAuthentication &amp; PubkeyAuthentication &amp; AuthorizedKeysFile等项</p>
-<p>~/.ssh中生成rsa key-pair, 然后启动ssh服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist</div></pre></td></tr></table></figure>
-<ul>
-<li>Tip.5 MocOX zsh环境变量加载顺序</li>
-</ul>
-<p>特别注意，/etc/zprofile中只是调用了/usr/libexec/path_helper -s, 而path_helper会生成主要的PATH部分，path_helper主要工作是读取/etc/paths以及/etc/paths.d/目录下的文件的内容以生成PATH环境变量，如果需要修改顺序，则需要修改这两项的内容。</p>
-<p>Global Order: etc/ ——&gt; ~/. : zshenv, zprofile, zshrc, zlogin</p>
-<p><img src="/2017/09/10/MacOS-Tips/zsh-env-order.jpeg" alt="zsh环境变量加载顺序"></p>
-<ul>
-<li>Tip.6 Linux下docker非sudo下运行：将用户加入docker工作组  </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo usermod -aG docker &lt;username&gt;			#Linux</div></pre></td></tr></table></figure>
-<ul>
-<li><p>Tip.7 chmod命令改变文件权限是有限制的,只对linux分区有效,如果是挂在目录,则命令失效</p>
-</li>
-<li><p>Tip.8 git vi报错：原因是vim版本的问题，并且git支持的是vi，更换为最高版本的vim即可正常  </p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git config --global core.editor vim</div></pre></td></tr></table></figure>
-<ul>
-<li>Tip.9 查看Ubuntu版本号</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo lsb_release -a</div></pre></td></tr></table></figure>
-<ul>
-<li>Tip.10 更改时区</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</div><div class="line">$ sudo hwclock -w</div></pre></td></tr></table></figure>
-<ul>
-<li>Tip.11 更新pip</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo python -m pip install --upgrade --force pip</div><div class="line">$ python -m pip install -U --force-reinstall pip</div><div class="line">$ sudo pip install setuptools==33.1.1</div></pre></td></tr></table></figure>
-<ul>
-<li>Tip.12 经常出现的路径权限问题</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo chown -R `whoami` /to/your/path</div></pre></td></tr></table></figure>
-<ul>
-<li>Tip.13 Python’s Error – TypeError: <strong>cal</strong>() takes exactly 2 arguments (1 given)</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo vim ~*/Python/2.7/site-packages/packaging/requirements.py</div></pre></td></tr></table></figure>
-<p>And</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">MARKER_EXPR = originalTextFor(MARKER_EXPR())(&quot;marker&quot;)</div></pre></td></tr></table></figure>
-<p>Change it to</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">MARKER_EXPR = originalTextFor(MARKER_EXPR(&quot;&quot;))(&quot;marker&quot;)</div></pre></td></tr></table></figure>
-<p>-Tip.14 Mac安装软件出现”应用已损坏”的解决办法</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo spctl --master-disale</div><div class="line"># 完事之后再切回来</div><div class="line">$ sudo spctl --master-enable</div></pre></td></tr></table></figure>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/09/10/MacOS-Tips/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1358,7 +969,7 @@
       <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/images/avatar.gif"
+               src="https://avatars0.githubusercontent.com/u/4528356?v=4&s=230"
                alt="paladintyrion" />
           <p class="site-author-name" itemprop="name">paladintyrion</p>
            
@@ -1440,7 +1051,7 @@
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Pisces
+    NexT.Mist
   </a>
 </div>
 
@@ -1519,13 +1130,6 @@
 
   
   
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
-
-
 
   
     <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>

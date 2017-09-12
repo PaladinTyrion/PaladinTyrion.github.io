@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -55,7 +55,11 @@
   
 
   
+    
+      
+    
 
+    
   
 
   
@@ -64,8 +68,16 @@
 
   
     
+      
     
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
   
 
 
@@ -94,18 +106,18 @@
 
 
 
-<meta name="description" content="主要参考运行示例：1234567891011121314151617181920212223242526272829303132333435#每台安装过docker的node运行$ docker run -d swarm join --advertise=10.236.24.156:2375 zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.">
+<meta name="description" content="主要参考运行示例：">
 <meta name="keywords" content="mesos">
 <meta property="og:type" content="article">
 <meta property="og:title" content="docker-mesos-demo">
 <meta property="og:url" content="https://paladintyrion.github.io/2017/09/10/docker-mesos-demo/index.html">
 <meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
-<meta property="og:description" content="主要参考运行示例：1234567891011121314151617181920212223242526272829303132333435#每台安装过docker的node运行$ docker run -d swarm join --advertise=10.236.24.156:2375 zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.">
+<meta property="og:description" content="主要参考运行示例：">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-10T11:44:22.000Z">
+<meta property="og:updated_time" content="2017-09-12T19:04:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="docker-mesos-demo">
-<meta name="twitter:description" content="主要参考运行示例：1234567891011121314151617181920212223242526272829303132333435#每台安装过docker的node运行$ docker run -d swarm join --advertise=10.236.24.156:2375 zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.">
+<meta name="twitter:description" content="主要参考运行示例：">
 
 
 
@@ -113,7 +125,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
+    scheme: 'Mist',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
@@ -211,6 +223,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -258,7 +280,7 @@
   
   
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-tags" itemscope itemtype="http://schema.org/Article">
   
   
   
@@ -268,7 +290,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="paladintyrion">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/4528356?v=4&s=230">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -330,7 +352,8 @@
       
 
       
-        <h4 id="主要参考运行示例："><a href="#主要参考运行示例：" class="headerlink" title="主要参考运行示例："></a>主要参考运行示例：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">#每台安装过docker的node运行</div><div class="line">$ docker run -d swarm join --advertise=10.236.24.156:2375 zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.138:2181/swarm</div><div class="line"></div><div class="line">#其中任何一台node运行</div><div class="line">$ docker run -d -p 2376:2375 --name swarm_manage swarm manage zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.138:2181/swarm</div><div class="line"></div><div class="line">#选三台node运行docker-zk，每台MYID需要不同</div><div class="line">docker run -d \</div><div class="line"> -e MYID=3 \</div><div class="line"> -e SERVERS=10.236.24.143,10.236.24.140,10.236.24.138 \</div><div class="line"> --name=zookeeper --net=host --restart=always mesoscloud/zookeeper:3.4.8-ubuntu-14.04</div><div class="line"></div><div class="line">#3个mesos-master运行</div><div class="line">$ docker run -d -e MESOS_QUORUM=2 \</div><div class="line"> -e MESOS_ZK=zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.138:2181/mesos \</div><div class="line"> --name=mesos-master \</div><div class="line"> --net=host \</div><div class="line"> mesoscloud/mesos-master:0.28.1-ubuntu</div><div class="line"></div><div class="line">#每个mesos-slave运行</div><div class="line">$ docker run -d -p 80:80 -e MESOS_MASTER=zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.138:2181/mesos -v /sys/fs/cgroup:/sys/fs/cgroup  -v /var/run/docker.sock:/var/run/docker.sock  -v /vagrant/vagrant:/vagrant/vagrant  --net=host  --privileged  --restart always mesoscloud/mesos-slave:0.28.1-ubuntu </div><div class="line"></div><div class="line">#任何一台node运行marathon</div><div class="line">$ docker run -d -p 8089:8080 \</div><div class="line"> --name marathon --net host \</div><div class="line"> -e MARATHON_MASTER=zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.138:2181/mesos \</div><div class="line"> -e MARATHON_ZK=zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.138:2181/marathon \</div><div class="line"> --restart always mesoscloud/marathon:1.1.1-ubuntu</div><div class="line"> </div><div class="line">#任何一台node运行chronos</div><div class="line">$ docker run -d --net=host \</div><div class="line"> -e CHRONOS_HTTP_PORT=4400 \</div><div class="line"> -e CHRONOS_MASTER=zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.138:2181/mesos \</div><div class="line"> -e CHRONOS_ZK_HOSTS=10.236.24.143:2181,10.236.24.140:2181,10.236.24.138:2181 \</div><div class="line"> --name chronos --restart always mesoscloud/chronos:2.4.0-ubuntu-14.04</div></pre></td></tr></table></figure>
+        <h4 id="主要参考运行示例："><a href="#主要参考运行示例：" class="headerlink" title="主要参考运行示例："></a>主要参考运行示例：</h4><a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">#每台安装过docker的node运行</div><div class="line">$ docker run -d swarm join --advertise=10.236.24.156:2375 zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.138:2181/swarm</div><div class="line"></div><div class="line">#其中任何一台node运行</div><div class="line">$ docker run -d -p 2376:2375 --name swarm_manage swarm manage zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.138:2181/swarm</div><div class="line"></div><div class="line">#选三台node运行docker-zk，每台MYID需要不同</div><div class="line">docker run -d \</div><div class="line"> -e MYID=3 \</div><div class="line"> -e SERVERS=10.236.24.143,10.236.24.140,10.236.24.138 \</div><div class="line"> --name=zookeeper --net=host --restart=always mesoscloud/zookeeper:3.4.8-ubuntu-14.04</div><div class="line"></div><div class="line">#3个mesos-master运行</div><div class="line">$ docker run -d -e MESOS_QUORUM=2 \</div><div class="line"> -e MESOS_ZK=zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.138:2181/mesos \</div><div class="line"> --name=mesos-master \</div><div class="line"> --net=host \</div><div class="line"> mesoscloud/mesos-master:0.28.1-ubuntu</div><div class="line"></div><div class="line">#每个mesos-slave运行</div><div class="line">$ docker run -d -p 80:80 -e MESOS_MASTER=zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.138:2181/mesos -v /sys/fs/cgroup:/sys/fs/cgroup  -v /var/run/docker.sock:/var/run/docker.sock  -v /vagrant/vagrant:/vagrant/vagrant  --net=host  --privileged  --restart always mesoscloud/mesos-slave:0.28.1-ubuntu </div><div class="line"></div><div class="line">#任何一台node运行marathon</div><div class="line">$ docker run -d -p 8089:8080 \</div><div class="line"> --name marathon --net host \</div><div class="line"> -e MARATHON_MASTER=zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.138:2181/mesos \</div><div class="line"> -e MARATHON_ZK=zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.138:2181/marathon \</div><div class="line"> --restart always mesoscloud/marathon:1.1.1-ubuntu</div><div class="line"> </div><div class="line">#任何一台node运行chronos</div><div class="line">$ docker run -d --net=host \</div><div class="line"> -e CHRONOS_HTTP_PORT=4400 \</div><div class="line"> -e CHRONOS_MASTER=zk://10.236.24.143:2181,10.236.24.140:2181,10.236.24.138:2181/mesos \</div><div class="line"> -e CHRONOS_ZK_HOSTS=10.236.24.143:2181,10.236.24.140:2181,10.236.24.138:2181 \</div><div class="line"> --name chronos --restart always mesoscloud/chronos:2.4.0-ubuntu-14.04</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">#spark测试demo,这里是我自己上传的应用</div><div class="line">docker run --rm --net=host \</div><div class="line"> -p 4040:4040 \</div><div class="line"> -p 8080:8080 \</div><div class="line"> --name spark-demo \</div><div class="line"> -v /vagrant/vagrant/examples:/example \</div><div class="line"> paladintyrion/mesos1.0.2-spark2.0.0:latest \</div><div class="line"> spark-submit --master=mesos://zk://10.236.23.65:2181,10.236.23.31:2181,10.236.23.67:2181/mesos \</div><div class="line"> --deploy-mode=client \</div><div class="line"> --conf spark.mesos.coarse=true \</div><div class="line"> --conf spark.mesos.executor.docker.image=paladintyrion/mesos1.0.2-spark2.0.0:latest \</div><div class="line"> --conf spark.executor.memory=768m \</div><div class="line"> --class Main \</div><div class="line"> /example/hello-1.0-SNAPSHOT.jar \</div><div class="line"> 200</div><div class="line"> </div><div class="line"> #spark测试demo</div><div class="line"> docker run --net=host \</div><div class="line"> --name spark-demo1 \</div><div class="line"> -v /vagrant/vagrant/examples:/example \</div><div class="line"> paladintyrion/mesos1.0.2-spark2.0.0:latest \</div><div class="line"> spark-submit --master=mesos://zk://10.236.23.65:2181,10.236.23.31:2181,10.236.23.67:2181/mesos \</div><div class="line"> --deploy-mode=client \</div><div class="line"> --conf spark.mesos.coarse=true \</div><div class="line"> --conf spark.mesos.executor.docker.image=paladintyrion/mesos1.0.2-spark2.0.0:latest \</div><div class="line"> --conf spark.executor.memory=768m \</div><div class="line"> /example/src/main/python/pi.py \</div><div class="line"> 200</div><div class="line"> </div><div class="line"> #spark测试demo，去掉image运行</div><div class="line"> docker run --net=host \</div><div class="line"> --name spark-demo1 \</div><div class="line"> -v /vagrant/vagrant/examples:/example \</div><div class="line"> -v /vagrant/vagrant:/sparkhome \</div><div class="line"> paladintyrion/mesos1.0.2-spark2.0.0:latest \</div><div class="line"> spark-submit --master=mesos://zk://10.236.23.65:2181,10.236.23.31:2181,10.236.23.67:2181/mesos \</div><div class="line"> --deploy-mode=client \</div><div class="line"> --conf spark.mesos.coarse=true \</div><div class="line"> --conf spark.executor.memory=768m \</div><div class="line"> --conf spark.executor.uri=/sparkhome/spark-2.0.1-bin-hadoop2.7.tgz \</div><div class="line"> --class Main \</div><div class="line"> /example/hello-1.0-SNAPSHOT.jar \</div><div class="line"> 150</div><div class="line"> </div><div class="line"> docker run --net=host \</div><div class="line"> --name spark-demo1 \</div><div class="line"> -v /vagrant/vagrant/examples:/example \</div><div class="line"> -v /vagrant/vagrant:/sparkhome \</div><div class="line"> paladintyrion/mesos1.0.2-spark2.0.0:latest \</div><div class="line"> spark-submit --master=mesos://zk://10.236.23.65:2181,10.236.23.31:2181,10.236.23.67:2181/mesos \</div><div class="line"> --deploy-mode=client \</div><div class="line"> --conf spark.mesos.coarse=true \</div><div class="line"> --conf spark.executor.memory=1g \</div><div class="line"> --conf spark.executor.uri=/sparkhome/spark-2.0.1-bin-hadoop2.7.tgz \</div><div class="line"> /example/src/main/python/pi.py \</div><div class="line"> 100</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">docker run --net=host  --name spark-demo1  -v /vagrant/vagrant/examples:/example  -v /vagrant/vagrant:/sparkhome  paladintyrion/mesos1.0.2-spark2.0.0:latest  spark-submit --master=mesos://zk://10.236.23.65:2181,10.236.23.31:2181,10.236.23.67:2181/mesos  --deploy-mode=client  --conf spark.mesos.coarse=true  --conf spark.executor.memory=768m  --conf spark.executor.uri=/sparkhome/spark-2.0.1-bin-hadoop2.7.tgz  --class JavaWordCount /example/jwc-1.0-SNAPSHOT.jar file:///sparkhome/Vagrantfile</div><div class="line"></div><div class="line">docker run --net=host  --name spark-demo  -v /vagrant/vagrant/examples:/example  -v /vagrant/vagrant:/sparkhome  paladintyrion/mesos1.0.2-spark2.0.0:latest  spark-submit --master=mesos://zk://10.236.23.65:2181,10.236.23.31:2181,10.236.23.67:2181/mesos  --deploy-mode=client  --conf spark.mesos.coarse=true  --conf spark.executor.memory=1g --conf spark.eventLog.dir=file:///vagrant/vagrant/eventLogs/ --conf spark.sql.warehouse.dir=file:/// --conf spark.executor.uri=/sparkhome/spark-2.0.1-bin-hadoop2.7.tgz  --class org.apache.spark.examples.JavaWordCount /sparkhome/spark-2.0.1-bin-hadoop2.7/examples/jars/spark-examples_2.11-2.0.1.jar file:///sparkhome/Vagrantfile</div><div class="line"></div><div class="line">spark-submit --master=spark://paladin:7077 --deploy-mode=client --conf spark.mesos.coarse=true --conf spark.driver.memory=1g --class org.apache.spark.examples.JavaWordCount /Users/paladintyrion/src/src/Spark/spark-2.0.1-bin-hadoop2.7/examples/jars/spark-examples_2.11-2.0.1.jar file:///Users/paladintyrion/derby.log</div></pre></td></tr></table></figure>
 
@@ -436,7 +459,7 @@
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/images/avatar.gif"
+               src="https://avatars0.githubusercontent.com/u/4528356?v=4&s=230"
                alt="paladintyrion" />
           <p class="site-author-name" itemprop="name">paladintyrion</p>
            
@@ -534,7 +557,7 @@
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Pisces
+    NexT.Mist
   </a>
 </div>
 
@@ -613,13 +636,6 @@
 
   
   
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
-
-
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
