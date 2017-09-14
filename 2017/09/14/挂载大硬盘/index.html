@@ -90,7 +90,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Linux,Centos," />
+  <meta name="keywords" content="Linux," />
 
 
 
@@ -106,18 +106,18 @@
 
 
 
-<meta name="description" content="yum源更换yum的配置路径123456# yum的配置路径如下:/etc/yum.conf/etc/yum.repos.d/# 其中,xxx.repo中配置下载url/etc/yum.repos.d/CentOS-Base.repo">
-<meta name="keywords" content="Linux,Centos">
+<meta name="description" content="挂载大硬盘步骤 需要先对可以用硬盘分区 分区后对每个区进行格式化 格式化后即可用mount命令挂载  查看磁盘1$ fdisk -l 分区分区时，小硬盘和大硬盘的分区方法有所区别">
+<meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="yum小记">
-<meta property="og:url" content="https://paladintyrion.github.io/2017/09/14/yum小记/index.html">
+<meta property="og:title" content="挂载大硬盘">
+<meta property="og:url" content="https://paladintyrion.github.io/2017/09/14/挂载大硬盘/index.html">
 <meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
-<meta property="og:description" content="yum源更换yum的配置路径123456# yum的配置路径如下:/etc/yum.conf/etc/yum.repos.d/# 其中,xxx.repo中配置下载url/etc/yum.repos.d/CentOS-Base.repo">
+<meta property="og:description" content="挂载大硬盘步骤 需要先对可以用硬盘分区 分区后对每个区进行格式化 格式化后即可用mount命令挂载  查看磁盘1$ fdisk -l 分区分区时，小硬盘和大硬盘的分区方法有所区别">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-14T12:26:00.000Z">
+<meta property="og:updated_time" content="2017-09-14T13:00:35.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="yum小记">
-<meta name="twitter:description" content="yum源更换yum的配置路径123456# yum的配置路径如下:/etc/yum.conf/etc/yum.repos.d/# 其中,xxx.repo中配置下载url/etc/yum.repos.d/CentOS-Base.repo">
+<meta name="twitter:title" content="挂载大硬盘">
+<meta name="twitter:description" content="挂载大硬盘步骤 需要先对可以用硬盘分区 分区后对每个区进行格式化 格式化后即可用mount命令挂载  查看磁盘1$ fdisk -l 分区分区时，小硬盘和大硬盘的分区方法有所区别">
 
 
 
@@ -146,13 +146,13 @@
 
 
 
-  <link rel="canonical" href="https://paladintyrion.github.io/2017/09/14/yum小记/"/>
+  <link rel="canonical" href="https://paladintyrion.github.io/2017/09/14/挂载大硬盘/"/>
 
 
 
 
 
-  <title>yum小记 | PaladinTyrion's Blog</title>
+  <title>挂载大硬盘 | PaladinTyrion's Blog</title>
   
 
 
@@ -295,7 +295,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://paladintyrion.github.io/2017/09/14/yum小记/">
+    <link itemprop="mainEntityOfPage" href="https://paladintyrion.github.io/2017/09/14/挂载大硬盘/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="paladintyrion">
@@ -312,7 +312,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">yum小记</h1>
+          <h1 class="post-title" itemprop="name headline">挂载大硬盘</h1>
         
 
         <div class="post-meta">
@@ -324,7 +324,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T19:42:53+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T20:22:51+08:00">
                 2017-09-14
               </time>
             
@@ -384,17 +384,52 @@
       
 
       
-        <h4 id="yum源更换"><a href="#yum源更换" class="headerlink" title="yum源更换"></a>yum源更换</h4><h5 id="yum的配置路径"><a href="#yum的配置路径" class="headerlink" title="yum的配置路径"></a>yum的配置路径</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># yum的配置路径如下:</div><div class="line">/etc/yum.conf</div><div class="line">/etc/yum.repos.d/</div><div class="line"></div><div class="line"># 其中,xxx.repo中配置下载url</div><div class="line">/etc/yum.repos.d/CentOS-Base.repo</div></pre></td></tr></table></figure>
+        <h4 id="挂载大硬盘步骤"><a href="#挂载大硬盘步骤" class="headerlink" title="挂载大硬盘步骤"></a>挂载大硬盘步骤</h4><ul>
+<li>需要先对可以用硬盘分区</li>
+<li>分区后对每个区进行格式化</li>
+<li>格式化后即可用mount命令挂载</li>
+</ul>
+<h4 id="查看磁盘"><a href="#查看磁盘" class="headerlink" title="查看磁盘"></a>查看磁盘</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ fdisk -l</div></pre></td></tr></table></figure>
+<h4 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h4><p>分区时，小硬盘和大硬盘的分区方法有所区别</p>
 <a id="more"></a>
-<p>xxx.repo配置格式如下, 其中[]中的内容必须唯一，可设置多个不同的[]，源地址，baseurl即为源：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[base]</div><div class="line">name=CentOS-$releasever-Base</div><div class="line">failovermethod=priority</div><div class="line">baseurl=http://mirrors.cloud.aliyuncs.com/centos/$releasever/os/$basearch/</div><div class="line">        http://mirrors.aliyun.com/centos/$releasever/os/$basearch/</div><div class="line">gpgcheck=1</div><div class="line">gpgkey=http://mirrors.cloud.aliyuncs.com/centos/RPM-GPG-KEY-CentOS-7</div><div class="line">http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-7</div></pre></td></tr></table></figure>
-<h5 id="重建yum源信息"><a href="#重建yum源信息" class="headerlink" title="重建yum源信息"></a>重建yum源信息</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ yum clean all</div><div class="line">$ yum makecache</div></pre></td></tr></table></figure>
-<p>可以通过下面命令查看可下载的包，如要下载policycoreutils：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yum list --showduplicates | grep policycoreutils.x86_64 | sort</div></pre></td></tr></table></figure>
-<p>如返回结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">policycoreutils.x86_64                   2.2.5-15.el7               base-vault</div><div class="line">policycoreutils.x86_64                   2.5-11.el7_3               @updates</div><div class="line">policycoreutils.x86_64                   2.5-11.el7_3               updates</div><div class="line">policycoreutils.x86_64                   2.5-8.el7                  base</div><div class="line">policycoreutils.x86_64                   2.5-9.el7                  updates</div></pre></td></tr></table></figure>
-<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>下载指定版本的包通过如下命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ yum install policycoreutils-2.5-11.el7_3.x86_64</div><div class="line">或者</div><div class="line">$ yum update &amp;&amp; yum install/upgrade policycoreutils</div></pre></td></tr></table></figure>
+<h5 id="大硬盘分区"><a href="#大硬盘分区" class="headerlink" title="大硬盘分区"></a>大硬盘分区</h5><p>大数据盘的分区和文件系统格式化和小盘都存在差异。大盘必须采用 GPT 分区格式， 不能再采用小盘使用的 MBR 分区格式。</p>
+<ul>
+<li>MBR 分区格式：最大支持 2 TB 的磁盘。</li>
+<li>GPT 分区格式：最大支持 18 EB。</li>
+</ul>
+<p>大盘支持的文件系统如下:</p>
+<table>
+<thead>
+<tr>
+<th>操作系统</th>
+<th>分区工具</th>
+<th>文件系统</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linux</td>
+<td>parted</td>
+<td>ext4/xfs</td>
+</tr>
+<tr>
+<td>Windows</td>
+<td>Windows磁盘管理</td>
+<td>NTFS</td>
+</tr>
+</tbody>
+</table>
+<h5 id="小硬盘分区示例"><a href="#小硬盘分区示例" class="headerlink" title="小硬盘分区示例"></a>小硬盘分区示例</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ fdisk /dev/vdc   # 根据填写相应内容，分区完毕</div></pre></td></tr></table></figure>
+<h5 id="大硬盘分区示例"><a href="#大硬盘分区示例" class="headerlink" title="大硬盘分区示例"></a>大硬盘分区示例</h5><p>假设/dev/vdc需要新挂载的5T硬盘</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ parted /dev/vdc</div><div class="line">$(parted) mklabel     </div><div class="line">          gpt  # 使用gpt方式分区</div><div class="line">$(parted) p  # 查看设备状态</div><div class="line">$(parted) mkpart  # 填写相应信息</div><div class="line">$(parted) quit  #p查看分区信息正常后退出</div></pre></td></tr></table></figure>
+<p>分区之后，fdisk -l可看到创建好的分区盘/dev/vdc1</p>
+<h4 id="格式化"><a href="#格式化" class="headerlink" title="格式化"></a>格式化</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ mkfs.ext4 /dev/vdc1</div><div class="line">或者</div><div class="line">$ mkfs -t ext4 /dev/vdc1</div></pre></td></tr></table></figure>
+<h4 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ mount -t ext4 -o rw,sync,iocharset=utf8 /dev/vdc1 /data</div><div class="line">或者</div><div class="line">$ echo &quot;/dev/vdc1 /data ext4 defaults 0 0&quot; &gt;&gt; /etc/fstab</div><div class="line">$ mount -a</div></pre></td></tr></table></figure>
+<h4 id="查看文件系统状态"><a href="#查看文件系统状态" class="headerlink" title="查看文件系统状态"></a>查看文件系统状态</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ df -h</div></pre></td></tr></table></figure>
+<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><ul>
+<li><a href="https://help.aliyun.com/document_detail/34377.html" target="_blank" rel="external">阿里云大硬盘分区</a></li>
+<li><a href="https://help.aliyun.com/document_detail/25426.html" target="_blank" rel="external">格式化和挂载</a></li>
+</ul>
 
       
     </div>
@@ -414,8 +449,6 @@
           
             <a href="/tags/Linux/" rel="tag"># Linux</a>
           
-            <a href="/tags/Centos/" rel="tag"># Centos</a>
-          
         </div>
       
 
@@ -427,8 +460,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/10/docker-mesos-demo/" rel="next" title="docker-mesos-demo">
-                <i class="fa fa-chevron-left"></i> docker-mesos-demo
+              <a href="/2017/09/14/yum小记/" rel="next" title="yum小记">
+                <i class="fa fa-chevron-left"></i> yum小记
               </a>
             
           </div>
@@ -436,10 +469,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/14/挂载大硬盘/" rel="prev" title="挂载大硬盘">
-                挂载大硬盘 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -608,7 +637,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#yum源更换"><span class="nav-number">1.</span> <span class="nav-text">yum源更换</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#yum的配置路径"><span class="nav-number">1.1.</span> <span class="nav-text">yum的配置路径</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#重建yum源信息"><span class="nav-number">1.2.</span> <span class="nav-text">重建yum源信息</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#挂载大硬盘步骤"><span class="nav-number">1.</span> <span class="nav-text">挂载大硬盘步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看磁盘"><span class="nav-number">2.</span> <span class="nav-text">查看磁盘</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分区"><span class="nav-number">3.</span> <span class="nav-text">分区</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#大硬盘分区"><span class="nav-number">3.1.</span> <span class="nav-text">大硬盘分区</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#小硬盘分区示例"><span class="nav-number">3.2.</span> <span class="nav-text">小硬盘分区示例</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#大硬盘分区示例"><span class="nav-number">3.3.</span> <span class="nav-text">大硬盘分区示例</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#格式化"><span class="nav-number">4.</span> <span class="nav-text">格式化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#挂载"><span class="nav-number">5.</span> <span class="nav-text">挂载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看文件系统状态"><span class="nav-number">6.</span> <span class="nav-text">查看文件系统状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考文献"><span class="nav-number">7.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
             
 
           </div>
