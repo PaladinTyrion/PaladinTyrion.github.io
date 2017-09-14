@@ -120,7 +120,7 @@
 <meta property="og:image" content="https://paladintyrion.github.io/2017/09/10/docker-mesos-spark/mesos_job.jpg">
 <meta property="og:image" content="https://paladintyrion.github.io/2017/09/10/docker-mesos-spark/spark.jpg">
 <meta property="og:image" content="https://paladintyrion.github.io/2017/09/10/docker-mesos-spark/spark_run.png">
-<meta property="og:updated_time" content="2017-09-12T21:11:55.000Z">
+<meta property="og:updated_time" content="2017-09-14T12:17:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="docker-mesos-spark">
 <meta name="twitter:description" content="DockerDocker machineDocker machine负责docker在本地或远程机及虚拟云上的安装，可在自己的Mac或Linux机上负责远程活本地的虚拟机上的docker安装。">
@@ -412,6 +412,8 @@
 <h6 id="使用swarm管理和启动docker"><a href="#使用swarm管理和启动docker" class="headerlink" title="使用swarm管理和启动docker"></a>使用swarm管理和启动docker</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ docker -H tcp://&lt;swarm_ip:2376&gt; &lt;command&gt;</div><div class="line">#example</div><div class="line">$ docker -H tcp://&lt;swarm_ip:2376&gt; info</div></pre></td></tr></table></figure>
 <h6 id="Note"><a href="#Note" class="headerlink" title="Note:"></a>Note:</h6><p>为了保证swarm manage管理的节点正常通信，需要每个节点做如下2点修改：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ sudo vim /etc/default/docker</div><div class="line">#添加如下内容</div><div class="line">DOCKER_OPTS=&quot;-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock&quot;</div><div class="line"></div><div class="line">#每机重启docker</div><div class="line">$ sudo restart docker</div></pre></td></tr></table></figure>
+<p>对于Centos，docker的配置文件如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ sudo vim /etc/sysconfig/docker</div><div class="line"></div><div class="line">#最后可添加</div><div class="line">OPTIONS=&quot;-H tcp://0.0.0.0:2376 -H unix:///var/run/docker.sock -s=devicemapper --ip-forward=true --bridge=none --iptables=false  --label ip=10.91.55.22 --label idc=aliyun --graph=/data0/docker/images&quot;</div><div class="line">INSECURE_REGISTRY=&quot;--insecure-registry registry.abc.xyz.com --insecure-registry registry.api.opq.com&quot;</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">需要对每台机器添加各自的hosts</div><div class="line">$sudo vim /etc/hosts</div><div class="line">#添加如下内容</div><div class="line">$&#123;local_ip&#125;  $&#123;hostname&#125;</div></pre></td></tr></table></figure>
 <h6 id="swarm的框架"><a href="#swarm的框架" class="headerlink" title="swarm的框架:"></a>swarm的框架:</h6><p><img src="/2017/09/10/docker-mesos-spark/docker_swarm.jpg" alt="docker swarm"></p>
 <hr>
@@ -570,7 +572,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -581,7 +583,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -592,7 +594,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
