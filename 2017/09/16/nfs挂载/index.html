@@ -90,7 +90,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Linux," />
+  <meta name="keywords" content="Centos,Nfs," />
 
 
 
@@ -106,18 +106,18 @@
 
 
 
-<meta name="description" content="挂载大硬盘步骤 需要先对可以用硬盘分区 分区后对每个区进行格式化 格式化后即可用mount命令挂载  查看磁盘1$ fdisk -l 分区分区时，小硬盘和大硬盘的分区方法有所区别">
-<meta name="keywords" content="Linux">
+<meta name="description" content="假设三台机器10.3.92.1，10.3.92.2，10.3.92.1，其中10.3.92.1是nfs的server，另外两台机来挂载 安装nfs12# 三台机子分别安装，挂载机如果不做nfs server服务，可只安装rpcbind$ yum install rpcbind nfs-utils">
+<meta name="keywords" content="Centos,Nfs">
 <meta property="og:type" content="article">
-<meta property="og:title" content="挂载大硬盘">
-<meta property="og:url" content="https://paladintyrion.github.io/2017/09/14/挂载大硬盘/index.html">
+<meta property="og:title" content="nfs挂载">
+<meta property="og:url" content="https://paladintyrion.github.io/2017/09/16/nfs挂载/index.html">
 <meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
-<meta property="og:description" content="挂载大硬盘步骤 需要先对可以用硬盘分区 分区后对每个区进行格式化 格式化后即可用mount命令挂载  查看磁盘1$ fdisk -l 分区分区时，小硬盘和大硬盘的分区方法有所区别">
+<meta property="og:description" content="假设三台机器10.3.92.1，10.3.92.2，10.3.92.1，其中10.3.92.1是nfs的server，另外两台机来挂载 安装nfs12# 三台机子分别安装，挂载机如果不做nfs server服务，可只安装rpcbind$ yum install rpcbind nfs-utils">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-16T09:46:50.000Z">
+<meta property="og:updated_time" content="2017-09-16T09:50:01.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="挂载大硬盘">
-<meta name="twitter:description" content="挂载大硬盘步骤 需要先对可以用硬盘分区 分区后对每个区进行格式化 格式化后即可用mount命令挂载  查看磁盘1$ fdisk -l 分区分区时，小硬盘和大硬盘的分区方法有所区别">
+<meta name="twitter:title" content="nfs挂载">
+<meta name="twitter:description" content="假设三台机器10.3.92.1，10.3.92.2，10.3.92.1，其中10.3.92.1是nfs的server，另外两台机来挂载 安装nfs12# 三台机子分别安装，挂载机如果不做nfs server服务，可只安装rpcbind$ yum install rpcbind nfs-utils">
 
 
 
@@ -146,13 +146,13 @@
 
 
 
-  <link rel="canonical" href="https://paladintyrion.github.io/2017/09/14/挂载大硬盘/"/>
+  <link rel="canonical" href="https://paladintyrion.github.io/2017/09/16/nfs挂载/"/>
 
 
 
 
 
-  <title>挂载大硬盘 | PaladinTyrion's Blog</title>
+  <title>nfs挂载 | PaladinTyrion's Blog</title>
   
 
 
@@ -295,7 +295,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://paladintyrion.github.io/2017/09/14/挂载大硬盘/">
+    <link itemprop="mainEntityOfPage" href="https://paladintyrion.github.io/2017/09/16/nfs挂载/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="paladintyrion">
@@ -312,7 +312,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">挂载大硬盘</h1>
+          <h1 class="post-title" itemprop="name headline">nfs挂载</h1>
         
 
         <div class="post-meta">
@@ -324,8 +324,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T20:22:51+08:00">
-                2017-09-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-16T16:21:29+08:00">
+                2017-09-16
               </time>
             
 
@@ -384,51 +384,138 @@
       
 
       
-        <h4 id="挂载大硬盘步骤"><a href="#挂载大硬盘步骤" class="headerlink" title="挂载大硬盘步骤"></a>挂载大硬盘步骤</h4><ul>
-<li>需要先对可以用硬盘分区</li>
-<li>分区后对每个区进行格式化</li>
-<li>格式化后即可用mount命令挂载</li>
-</ul>
-<h4 id="查看磁盘"><a href="#查看磁盘" class="headerlink" title="查看磁盘"></a>查看磁盘</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ fdisk -l</div></pre></td></tr></table></figure>
-<h4 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h4><p>分区时，小硬盘和大硬盘的分区方法有所区别</p>
+        <p>假设三台机器10.3.92.1，10.3.92.2，10.3.92.1，其中10.3.92.1是nfs的server，另外两台机来挂载</p>
+<h4 id="安装nfs"><a href="#安装nfs" class="headerlink" title="安装nfs"></a>安装nfs</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># 三台机子分别安装，挂载机如果不做nfs server服务，可只安装rpcbind</div><div class="line">$ yum install rpcbind nfs-utils</div></pre></td></tr></table></figure>
 <a id="more"></a>
-<h5 id="大硬盘分区"><a href="#大硬盘分区" class="headerlink" title="大硬盘分区"></a>大硬盘分区</h5><p>大数据盘的分区和文件系统格式化和小盘都存在差异。大盘必须采用 GPT 分区格式， 不能再采用小盘使用的 MBR 分区格式。</p>
+<h4 id="开启nfs服务端"><a href="#开启nfs服务端" class="headerlink" title="开启nfs服务端"></a>开启nfs服务端</h4><p>启动对应的nfs服务，rpcbind是用来做服务通信，nfs-utils包含nfs服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"># 设置开机启动</div><div class="line">$ chkconfig rpcbind on</div><div class="line">$ chkconfig nfs on</div><div class="line"># 启动相关服务</div><div class="line">$ service rpcbind start</div><div class="line">$ service nfs start</div><div class="line"></div><div class="line"># 如果上面的chkconfig命令如果失败，用下面条命令替代，</div><div class="line"># chkconfig命令命令失败，则service也不能开启服务，需用systemctl,</div><div class="line"># 在client端，只开启rpcbind服务即可</div><div class="line">$ systemctl enable rpcbind</div><div class="line">$ systemctl enable nfs 或者 systemctl enable nfs-server</div><div class="line">$ systemctl start rpcbind</div><div class="line">$ systemctl start nfs 或者 systemctl start nfs-server</div></pre></td></tr></table></figure>
+<h5 id="nfs-server设置nfs卷输出"><a href="#nfs-server设置nfs卷输出" class="headerlink" title="nfs server设置nfs卷输出"></a>nfs server设置nfs卷输出</h5><p>提前创建好目录/data0/dir1，/data0/dir2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># 编辑/etc/exports，内容如下:</div><div class="line"># /data0/dir1目录只允许10.3.92.2读写,</div><div class="line"># /data0/dir2目录允许任何ip读写</div><div class="line">/data0/dir1	10.3.92.2(rw,sync,no_root_squash,no_subtree_check)</div><div class="line">/data0/dir2	*(rw,sync,no_root_squash,no_subtree_check)</div></pre></td></tr></table></figure>
+<p>说明:</p>
 <ul>
-<li>MBR 分区格式：最大支持 2 TB 的磁盘。</li>
-<li>GPT 分区格式：最大支持 18 EB。</li>
+<li>rw – 允许对共享目录进行读写</li>
+<li>ro — 只读</li>
+<li>sync – 同步模式，内存中数据时时写入磁盘</li>
+<li>async — 不同步，把内存中数据定期写入磁盘中</li>
+<li>no_root_squash – 允许root访问</li>
+<li>no_all_squash – 允许用户授权</li>
+<li>all_squash – 不管使用NFS的用户是谁，他的身份都会被限定成为一个指定的普通匿名用户</li>
+<li>no_subtree_check – 如果卷的一部分被输出，从客户端发出请求文件的一个常规的调用子目录检查验证卷的相应部分。如果是整个卷输出，禁止这个检查可以加速传输</li>
+<li>anonuid/anongid – 要和root_squash 以及 all_squash一同使用，用于指定使用NFS的用户限定后的uid和gid，前提是本机的/etc/passwd中存在这个uid和gid</li>
 </ul>
-<p>大盘支持的文件系统如下:</p>
+<h5 id="生效配置"><a href="#生效配置" class="headerlink" title="生效配置"></a>生效配置</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ exportfs -arv    # a表示all,r表示重新加载,v表示打印输出</div></pre></td></tr></table></figure>
+<p>说明:</p>
+<ul>
+<li>a ：全部挂载或者卸载；</li>
+<li>r ：重新挂载；</li>
+<li>u ：卸载某一个目录；</li>
+<li>v ：显示共享的目录；</li>
+</ul>
+<h4 id="nfs-client配置nfs挂载"><a href="#nfs-client配置nfs挂载" class="headerlink" title="nfs client配置nfs挂载"></a>nfs client配置nfs挂载</h4><h5 id="查看可挂载的server目录"><a href="#查看可挂载的server目录" class="headerlink" title="查看可挂载的server目录"></a>查看可挂载的server目录</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ showmount -e 10.3.92.1</div></pre></td></tr></table></figure>
+<h5 id="挂载nfs目录"><a href="#挂载nfs目录" class="headerlink" title="挂载nfs目录"></a>挂载nfs目录</h5><p>/etc/fstab格式:</p>
 <table>
 <thead>
 <tr>
-<th>操作系统</th>
-<th>分区工具</th>
-<th>文件系统</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Linux</td>
-<td>parted</td>
-<td>ext4/xfs</td>
-</tr>
-<tr>
-<td>Windows</td>
-<td>Windows磁盘管理</td>
-<td>NTFS</td>
+<td>fs_spec</td>
+<td>fs_file</td>
+<td>fs_type</td>
+<td>fs_options</td>
+<td>fs_dump</td>
+<td>fs_pass</td>
 </tr>
 </tbody>
 </table>
-<h5 id="小硬盘分区示例"><a href="#小硬盘分区示例" class="headerlink" title="小硬盘分区示例"></a>小硬盘分区示例</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ fdisk /dev/vdc   # 根据填写相应内容，分区完毕</div></pre></td></tr></table></figure>
-<h5 id="大硬盘分区示例"><a href="#大硬盘分区示例" class="headerlink" title="大硬盘分区示例"></a>大硬盘分区示例</h5><p>假设/dev/vdc需要新挂载的5T硬盘</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ parted /dev/vdc</div><div class="line">$(parted) mklabel     </div><div class="line">          gpt  # 使用gpt方式分区</div><div class="line">$(parted) p  # 查看设备状态</div><div class="line">$(parted) mkpart  # 填写相应信息</div><div class="line">$(parted) quit  #p查看分区信息正常后退出</div></pre></td></tr></table></figure>
-<p>分区之后，fdisk -l可看到创建好的分区盘/dev/vdc1</p>
-<h4 id="格式化"><a href="#格式化" class="headerlink" title="格式化"></a>格式化</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ mkfs.ext4 /dev/vdc1</div><div class="line">或者</div><div class="line">$ mkfs -t ext4 /dev/vdc1</div></pre></td></tr></table></figure>
-<h4 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ mount -t ext4 -o rw,sync,iocharset=utf8 /dev/vdc1 /data</div><div class="line">或者</div><div class="line">$ echo &quot;/dev/vdc1 /data ext4 defaults 0 0&quot; &gt;&gt; /etc/fstab</div><div class="line">$ mount -a</div></pre></td></tr></table></figure>
-<h4 id="查看文件系统状态"><a href="#查看文件系统状态" class="headerlink" title="查看文件系统状态"></a>查看文件系统状态</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ df -h</div></pre></td></tr></table></figure>
+<ul>
+<li>Fs_spec: 定义希望加载的文件系统所在的设备或远程文件系统，对于nfs则设为IP:/共享目录</li>
+<li>Fs_file: 本地挂载点</li>
+<li>Fs_type: 挂载类型</li>
+<li>Fs_options: 挂载参数</li>
+<li>Fs_dump: 该选项被“dump”命令使用来检查一个文件系统该以多快频率进行转储，若不需转储即为0</li>
+<li>Fs_pass: 该字段被fsck命令使用来决定在启动时需要被扫描的文件系统的顺序，根文件系统“/”对应该字段值为1,其他文件系统为2,若该文件系统无需在启动时被扫描则为0</li>
+</ul>
+<blockquote>
+<p>挂载参数的说明</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>代表意义</th>
+<th>系统默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>suid/nosuid</td>
+<td></td>
+<td>suid</td>
+</tr>
+<tr>
+<td>rw/ro</td>
+<td>读写，只读</td>
+<td>rw</td>
+</tr>
+<tr>
+<td>dev/nodev</td>
+<td>是否保留装置档案的特殊功能, 一般只有/dev这个目录才会有特殊的装置</td>
+<td>dev</td>
+</tr>
+<tr>
+<td>exec/noexec</td>
+<td>是否具有执行binary file的权限</td>
+<td>exec</td>
+</tr>
+<tr>
+<td>user/nouser</td>
+<td>是否允许使用者进行档案的挂载与卸除功能</td>
+<td>nouser</td>
+</tr>
+<tr>
+<td>auto/noauto</td>
+<td>mount -a时，会不会被挂载. 若不需要这个 partition 随时被挂载, 可设定为noauto</td>
+<td>auto</td>
+</tr>
+<tr>
+<td>fg/bg</td>
+<td>执行挂载时,挂载的行为会在前景(fg)还是在背景(bg)执行.若fg时,则mount会持续尝试挂载,直到成功或timeout为止;若bg时,则 mount会在背景持续多次进行mount,而不会影响到前景的程序操作</td>
+<td>fg</td>
+</tr>
+<tr>
+<td>soft/hard</td>
+<td>若hard,则当两者之间有任何一部脱机,则RPC会持续的呼叫,直到对方恢复联机为止;若soft,RPC会在timeout后<strong>重复</strong>呼叫,而非<strong>持续</strong>呼叫,系统延迟会比较不明显</td>
+<td>hard</td>
+</tr>
+<tr>
+<td>intr</td>
+<td>当使用hard方式挂载,intr表示当RPC持续呼叫中,呼叫是可以被中断的(interrupted)</td>
+<td>没有</td>
+</tr>
+<tr>
+<td>rsize/wsize</td>
+<td>读出(rsize)与写入(wsize)的区块大小(block size)</td>
+<td>rsize=1024,wsize=1024</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># 编辑/etc/fstab，10.3.92.2添加如下内容</div><div class="line">10.3.92.1:/data0/dir1 /data/localdir1 nfs auto,soft,bg,intr,rw,rsize=32768,wsize=32768 0 0</div><div class="line">10.3.92.1:/data0/dir2 /data/localdir2 nfs auto,soft,bg,intr,rw,rsize=32768,wsize=32768 0 0</div><div class="line"># 注意，由于server的配置的两个目录均可接受10.3.92.2读写，在10.3.92.3上不可读写/data0/dir1，特别注意</div></pre></td></tr></table></figure>
+<h5 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ mount -a</div></pre></td></tr></table></figure>
+<h5 id="查看挂载装填"><a href="#查看挂载装填" class="headerlink" title="查看挂载装填"></a>查看挂载装填</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ df -h -T</div></pre></td></tr></table></figure>
 <h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><ul>
-<li><a href="https://help.aliyun.com/document_detail/34377.html" target="_blank" rel="external">阿里云大硬盘分区</a></li>
-<li><a href="https://help.aliyun.com/document_detail/25426.html" target="_blank" rel="external">格式化和挂载</a></li>
+<li><a href="http://wiki.jikexueyuan.com/project/linux/nfs.html" target="_blank" rel="external">http://wiki.jikexueyuan.com/project/linux/nfs.html</a></li>
+<li><a href="http://vinny.cc/2017/02/how-to-use-nfs-in-centos7/" target="_blank" rel="external">http://vinny.cc/2017/02/how-to-use-nfs-in-centos7/</a></li>
+<li><a href="http://cn.linux.vbird.org/linux_server/0330nfs.php" target="_blank" rel="external">http://cn.linux.vbird.org/linux_server/0330nfs.php</a></li>
+<li><a href="http://www.oicto.com/unix-nfs-mount/" target="_blank" rel="external">http://www.oicto.com/unix-nfs-mount/</a></li>
+<li><a href="http://www.cnblogs.com/rootq/articles/1310888.html" target="_blank" rel="external">http://www.cnblogs.com/rootq/articles/1310888.html</a></li>
 </ul>
 
       
@@ -447,7 +534,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Linux/" rel="tag"># Linux</a>
+            <a href="/tags/Centos/" rel="tag"># Centos</a>
+          
+            <a href="/tags/Nfs/" rel="tag"># Nfs</a>
           
         </div>
       
@@ -460,8 +549,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/14/yum小记/" rel="next" title="yum小记">
-                <i class="fa fa-chevron-left"></i> yum小记
+              <a href="/2017/09/14/挂载大硬盘/" rel="next" title="挂载大硬盘">
+                <i class="fa fa-chevron-left"></i> 挂载大硬盘
               </a>
             
           </div>
@@ -469,10 +558,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/16/nfs挂载/" rel="prev" title="nfs挂载">
-                nfs挂载 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -641,7 +726,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#挂载大硬盘步骤"><span class="nav-number">1.</span> <span class="nav-text">挂载大硬盘步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看磁盘"><span class="nav-number">2.</span> <span class="nav-text">查看磁盘</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分区"><span class="nav-number">3.</span> <span class="nav-text">分区</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#大硬盘分区"><span class="nav-number">3.1.</span> <span class="nav-text">大硬盘分区</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#小硬盘分区示例"><span class="nav-number">3.2.</span> <span class="nav-text">小硬盘分区示例</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#大硬盘分区示例"><span class="nav-number">3.3.</span> <span class="nav-text">大硬盘分区示例</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#格式化"><span class="nav-number">4.</span> <span class="nav-text">格式化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#挂载"><span class="nav-number">5.</span> <span class="nav-text">挂载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看文件系统状态"><span class="nav-number">6.</span> <span class="nav-text">查看文件系统状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考文献"><span class="nav-number">7.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装nfs"><span class="nav-number">1.</span> <span class="nav-text">安装nfs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开启nfs服务端"><span class="nav-number">2.</span> <span class="nav-text">开启nfs服务端</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#nfs-server设置nfs卷输出"><span class="nav-number">2.1.</span> <span class="nav-text">nfs server设置nfs卷输出</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#生效配置"><span class="nav-number">2.2.</span> <span class="nav-text">生效配置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nfs-client配置nfs挂载"><span class="nav-number">3.</span> <span class="nav-text">nfs client配置nfs挂载</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#查看可挂载的server目录"><span class="nav-number">3.1.</span> <span class="nav-text">查看可挂载的server目录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#挂载nfs目录"><span class="nav-number">3.2.</span> <span class="nav-text">挂载nfs目录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#挂载"><span class="nav-number">3.3.</span> <span class="nav-text">挂载</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查看挂载装填"><span class="nav-number">3.4.</span> <span class="nav-text">查看挂载装填</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考文献"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
             
 
           </div>
