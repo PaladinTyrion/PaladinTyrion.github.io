@@ -106,18 +106,18 @@
 
 
 
-<meta name="description" content="Elk多机部署小结 Elasticsearchelasticsearch一般多机部署性能好，另外节点也不宜过多，因为需要在多机之间维持心跳。 elasticsearch多机也遵循quorum，一般需要在每个节点创建*.yml文件进行配置。 elasticsearch主要配置文件也就elasticsearch.yml,jvm.options,log4j2.properties这三样。 下面详解几个重">
+<meta name="description" content="Elk多机部署小结 Elasticsearchelasticsearch一般多机部署性能好，另外节点也不宜过多，因为需要在多机之间维持心跳。 elasticsearch多机也遵循quorum，一般需要在每个节点创建*.yml文件进行配置。 elasticsearch主要配置文件也就elasticsearch.yml,jvm.options,log4j2.properties这三样。">
 <meta name="keywords" content="elk">
 <meta property="og:type" content="article">
 <meta property="og:title" content="elk小结">
 <meta property="og:url" content="https://paladintyrion.github.io/2017/10/31/elk小结/index.html">
 <meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
-<meta property="og:description" content="Elk多机部署小结 Elasticsearchelasticsearch一般多机部署性能好，另外节点也不宜过多，因为需要在多机之间维持心跳。 elasticsearch多机也遵循quorum，一般需要在每个节点创建*.yml文件进行配置。 elasticsearch主要配置文件也就elasticsearch.yml,jvm.options,log4j2.properties这三样。 下面详解几个重">
+<meta property="og:description" content="Elk多机部署小结 Elasticsearchelasticsearch一般多机部署性能好，另外节点也不宜过多，因为需要在多机之间维持心跳。 elasticsearch多机也遵循quorum，一般需要在每个节点创建*.yml文件进行配置。 elasticsearch主要配置文件也就elasticsearch.yml,jvm.options,log4j2.properties这三样。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-30T18:36:35.000Z">
+<meta property="og:updated_time" content="2017-10-30T18:41:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="elk小结">
-<meta name="twitter:description" content="Elk多机部署小结 Elasticsearchelasticsearch一般多机部署性能好，另外节点也不宜过多，因为需要在多机之间维持心跳。 elasticsearch多机也遵循quorum，一般需要在每个节点创建*.yml文件进行配置。 elasticsearch主要配置文件也就elasticsearch.yml,jvm.options,log4j2.properties这三样。 下面详解几个重">
+<meta name="twitter:description" content="Elk多机部署小结 Elasticsearchelasticsearch一般多机部署性能好，另外节点也不宜过多，因为需要在多机之间维持心跳。 elasticsearch多机也遵循quorum，一般需要在每个节点创建*.yml文件进行配置。 elasticsearch主要配置文件也就elasticsearch.yml,jvm.options,log4j2.properties这三样。">
 
 
 
@@ -388,6 +388,7 @@
 <h4 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h4><p>elasticsearch一般多机部署性能好，另外节点也不宜过多，因为需要在多机之间维持心跳。</p>
 <p>elasticsearch多机也遵循quorum，一般需要在每个节点创建*.yml文件进行配置。</p>
 <p>elasticsearch主要配置文件也就<strong>elasticsearch.yml,jvm.options,log4j2.properties</strong>这三样。</p>
+<a id="more"></a>
 <p>下面详解几个重要的配置：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">cluster.name: 多节点时，此项必须配置，并且要保证多机的clustername一致;</div><div class="line"></div><div class="line"># 此四项决定了node的作用，参考[1]</div><div class="line">node.master: true</div><div class="line">node.data: true</div><div class="line">node.ingest: false</div><div class="line">tribe.*</div><div class="line"></div><div class="line">discovery.zen.ping.unicast.hosts: 配合cluster.name，这项也需要设置，列出所有的节点hosts,例如[&quot;192.168.10.10:9300&quot;],9300为tcp通信端口，可通过transport.tcp.port进行设置</div><div class="line">discovery.zen.minimum_master_nodes: 配合上一项设置，需要满足quorum</div><div class="line"></div><div class="line"># 此两项防止内存交换，会很好的提速。需要配合ulimit设置项</div><div class="line">bootstrap.memory_lock: true</div><div class="line">bootstrap.system_call_filter: true</div><div class="line"></div><div class="line">node.max_local_storage_nodes: 可设置单机启动elasticsearch的上限</div><div class="line"></div><div class="line"># threadpool配置要满足文档，参考[2]</div><div class="line">thread_pool.index.size &lt;= 1 + # of available processors</div><div class="line"></div><div class="line"># GC需要设置为CMSGC</div><div class="line">-XX:+UseConcMarkSweepGC</div><div class="line"></div><div class="line"># 程序启动时区设置可适当修改，否则默认为UTC</div><div class="line">-Duser.timezone=GMT+8</div><div class="line"></div><div class="line"># Xmx不要超过一半儿的物理内存，也不要超过32g，设置更多也没有意义，参考[3]</div><div class="line">-Xms32g</div><div class="line">-Xmx32g</div><div class="line"></div><div class="line"># maximum map count至少262144</div><div class="line">sysctl -w vm.max_map_count=262144</div><div class="line"></div><div class="line"># ulimit设置</div><div class="line">ulimit -l unlimited</div><div class="line">ulimit -n 65536</div><div class="line"></div><div class="line"># 另外plugins值得研究，参考[4]</div></pre></td></tr></table></figure>
 <p><strong>特别重要：elaticsearch在5.0之后不再支持root用户权限！</strong></p>
