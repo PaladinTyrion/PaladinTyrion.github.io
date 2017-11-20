@@ -387,66 +387,16 @@
 
       
         
-          
-            <h3 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h3><ul>
+          <h3 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h3><ul>
 <li>Elasticsearch Arch:</li>
 </ul>
-<p><img src="/2017/11/20/elk技术要点/Users/paladintyrion/workplace/hexo/source/_posts/elk技术要点/elasticsearch.jpeg" alt="Elasticsearch Arch"></p>
-<ul>
-<li>Logstash:</li>
-</ul>
-<p>每个logstash都是独立的进程，每机可开多个logstash运行，logstash之间没有需要协同工作的状态，属于单机运行程序。</p>
-<p><img src="/2017/11/20/elk技术要点/./elk技术要点/logstash.jpeg" alt="Logstash RUN"></p>
-<ul>
-<li>Kibana:</li>
-</ul>
-<p>Kibana是用nodejs开发的web界面，其中如果开启Kibana，kibana会在elasticsearch中生成一个指定名配置的名的索引，因而如果多个kibana连接多台es_master机器，所图标等的保存也会被记录下来。</p>
-<p>工作图：kibana =&gt; elasticsearch</p>
-<ul>
-<li>Elk Arch</li>
-</ul>
-<p><img src="/2017/11/20/elk技术要点/./elk技术要点/arch.jpeg" alt="Arch"></p>
-<p>机器限制，所以对elk的部署做了四件主要工作：</p>
-<ol>
-<li><p>将elk制作了imgae，为了支持多节点部署，需要相应名字的指定环境变量来传递集群成员的信息，启动时讲修改elasticsearch和logstash配置，另外image启动之后将都是使用宿主机的ip</p>
-</li>
-<li><p>限制了ES container运行机host的5601端口，防止被注入脚本攻击，只开放了对若干ip的访问权限，另外单独部署了nginx-proxy负载均衡地访问master group的kibana界面，加了登陆验证功能</p>
-</li>
-<li><p>单独部署了多台机器的kafka集群，接收数据作为logstash的message输入端。kafka集群单独运维，单独调参，container可通过环境变量传入来进行启动设置。另外kafka也有单独的监控，制作了image。</p>
-</li>
-<li><p>多台机器制作了nfs文件映射。kafka的数据和日志，elk的数据和日志，都通过-v卷映射到nfs server的相应目录。由于es不再支持root启动，nfs的映射采用匿名映射方式。</p>
-</li>
-</ol>
-<p><strong>Note</strong>：nfs是此套系统最失败的一点，是性能瓶颈杀手。</p>
-<hr>
-<h3 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h3><p>配置项(摘了主要):</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">cluster.name: logging</div><div class="line">node.name: ES_$&#123;HOSTNAME&#125;</div><div class="line">node.master: true</div><div class="line">node.data: true</div><div class="line">node.ingest: false</div><div class="line">bootstrap.memory_lock: true</div><div class="line">network.host: 0.0.0.0</div><div class="line">discovery.zen.ping.unicast.hosts: [&quot;0.0.0.0:9300&quot;]</div><div class="line">discovery.zen.minimum_master_nodes: 1</div><div class="line">discovery.zen.ping_timeout: 20s</div><div class="line"></div><div class="line">thread_pool:</div><div class="line">    generic:</div><div class="line">        keep_alive: 2m</div><div class="line">    index:</div><div class="line">        size: 9</div><div class="line">        queue_size: 3000</div></pre></td></tr></table></figure>
-<p><a href="http://10.85.10.21:9200/_cluster/health?pretty" target="_blank" rel="external">http://10.85.10.21:9200/_cluster/health?pretty</a><br>可以读取集群状态</p>
-<p>Elasticsearch不再支持root权限，需要使用自定义用户启动。</p>
-<hr>
-<h3 id="Logstash"><a href="#Logstash" class="headerlink" title="Logstash"></a>Logstash</h3><p>配置项(摘了主要):</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">node.name: &quot;logstash&quot;</div><div class="line">pipeline.workers: 6</div><div class="line">pipeline.batch.size: 1500</div><div class="line">pipeline.batch.delay: 5  #ms</div><div class="line">path.config: /etc/logstash/conf.d/</div><div class="line">config.reload.automatic: true</div><div class="line">queue.type: memory</div><div class="line">http.host: &quot;0.0.0.0&quot;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">input &#123;</div><div class="line">  kafka &#123;</div><div class="line">    bootstrap_servers =&gt; &quot;0.0.0.0:9092&quot;</div><div class="line">    topics =&gt; [&quot;servlogging&quot;]</div><div class="line">    auto_commit_interval_ms =&gt; &quot;5000&quot;</div><div class="line">    session_timeout_ms =&gt; &quot;15000&quot;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">filter &#123;</div><div class="line">  ……</div><div class="line">  date &#123;</div><div class="line">    match =&gt; [ &quot;logtime&quot;, &quot;dd/MMM/yyyy:HH:mm:ss Z&quot; ]</div><div class="line">  &#125;</div><div class="line">  mutate &#123;</div><div class="line">    remove_field =&gt; [ &quot;message&quot; ]</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">output &#123;</div><div class="line">  elasticsearch &#123;</div><div class="line">    hosts =&gt; [&quot;0.0.0.0:9200&quot;]</div><div class="line">    action =&gt; &quot;index&quot;</div><div class="line">    manage_template =&gt; false</div><div class="line">    index =&gt; &quot;servlogging-%&#123;+YYYY-MM-dd&#125;&quot;</div><div class="line">    document_type =&gt; &quot;servlogging&quot;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="Kibana"><a href="#Kibana" class="headerlink" title="Kibana"></a>Kibana</h3><p>配置项(摘了主要):</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">server.host: &quot;0.0.0.0&quot;</div><div class="line">elasticsearch.url: &quot;http://0.0.0.0:9200&quot;</div><div class="line">kibana.index: &quot;.kibana&quot;</div><div class="line">elasticsearch.pingTimeout: 1500   #ms</div><div class="line">elasticsearch.requestTimeout: 30000  #ms</div></pre></td></tr></table></figure>
-<p><a href="http://${kibana_ip}:5601/status" target="_blank" rel="external">http://${kibana_ip}:5601/status</a> 可以读本机状态。</p>
-<hr>
-<h3 id="Improvement"><a href="#Improvement" class="headerlink" title="Improvement"></a>Improvement</h3><p>优化主要需要在五方面上下功夫：操作系统limit，内存，Cpu(为处理开多线程)，IO，JVM</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">## 操作系统limit</div><div class="line"># elasticsearch</div><div class="line">sysctl -w vm.max_map_count=262144</div><div class="line">ulimit -l unlimited  #(locked memory)</div><div class="line">ulimit -n 65536</div><div class="line"># logstash</div><div class="line">ulimit -n 16384</div><div class="line"># kibana</div><div class="line">没有</div><div class="line"></div><div class="line">## 内存</div><div class="line"># elasticsearch</div><div class="line">-Xms10g</div><div class="line">-Xmx10g</div><div class="line"># logstash</div><div class="line">-Xms4g</div><div class="line">-Xmx4g</div><div class="line"># kibana</div><div class="line">留空1g内存左右，会缓存查询的数据记录，防止访问es过频繁</div><div class="line"></div><div class="line">## Cpu</div><div class="line"># elasticsearch</div><div class="line">thread_pool.index.size &lt;= available cores + 1</div><div class="line"># logstash</div><div class="line">pipeline.workers: 3  #为pipeline开多进程</div><div class="line">input=&gt;kafka:</div><div class="line">auto_commit_interval_ms要设，保证断了重连可以offset继续读</div><div class="line">reconnect_backoff_ms要设，防止超时read rebalance</div><div class="line">client_id尽量设，可以保证多个logstash不会产生冲突，好查错</div><div class="line"># kibana</div><div class="line">界面配置</div><div class="line"></div><div class="line">## JVM</div><div class="line"># elasticsearch</div><div class="line">-XX:+UseConcMarkSweepGC</div><div class="line">-XX:+DisableExplicitGC  #禁掉系统调用gc</div><div class="line">-Duser.timezone=GMT+8  #启动时需要加时区，es默认UTC标准时间</div><div class="line"># logstash</div><div class="line">同上设置</div><div class="line"># kibana</div><div class="line">没有要求，不走JVM</div><div class="line"></div><div class="line">## 日志</div><div class="line">使用rotate作业</div><div class="line">保留5天，不压缩，触发bg压缩耗费计算</div><div class="line">关掉不需要的print，level高于warn再输出</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h3><ol>
-<li><p>参考官网： <a href="https://www.elastic.co/guide/index.html" target="_blank" rel="external">elastic</a></p>
-</li>
-<li><p>主要使用kibana和elasticsearch API</p>
-</li>
-</ol>
-<p>kibana作图：<a href="https://www.elastic.co/guide/en/kibana/current/dashboard.html" target="_blank" rel="external">kibana dashboard</a></p>
-<p>elasticsearch query：<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-filter-context.html" target="_blank" rel="external">elasticsearch query</a></p>
-<hr>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p><a href="https://www.elastic.co/guide/index.html" target="_blank" rel="external">elastic官网</a><br><a href="https://github.com/PaladinTyrion/elk-docker" target="_blank" rel="external">elk-docker</a></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/11/20/elk技术要点/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
