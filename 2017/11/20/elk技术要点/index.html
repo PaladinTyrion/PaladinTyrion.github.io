@@ -117,7 +117,7 @@
 <meta property="og:image" content="https://paladintyrion.github.io/2017/11/20/elk技术要点/elasticsearch.jpeg">
 <meta property="og:image" content="https://paladintyrion.github.io/2017/11/20/elk技术要点/logstash.jpeg">
 <meta property="og:image" content="https://paladintyrion.github.io/2017/11/20/elk技术要点/arch.jpeg">
-<meta property="og:updated_time" content="2017-11-20T09:40:32.000Z">
+<meta property="og:updated_time" content="2017-11-20T09:43:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="elk技术要点">
 <meta name="twitter:description" content="Architecture Elasticsearch Arch:">
@@ -418,11 +418,11 @@
 <li><p>多台机器制作了nfs文件映射。kafka的数据和日志，elk的数据和日志，都通过-v卷映射到nfs server的相应目录。由于es不再支持root启动，nfs的映射采用匿名映射方式。</p>
 </li>
 </ol>
-<p><strong>Note</strong>：nfs是此套系统最失败的一点，是性能瓶颈杀手。</p>
+<p><strong>Note</strong>：nfs是此套系统最失败的一点，是io瓶颈, 性能杀手，高负载率的罪魁祸首。</p>
 <hr>
 <h3 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h3><p>配置项(摘了主要):</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">cluster.name: logging</div><div class="line">node.name: ES_$&#123;HOSTNAME&#125;</div><div class="line">node.master: true</div><div class="line">node.data: true</div><div class="line">node.ingest: false</div><div class="line">bootstrap.memory_lock: true</div><div class="line">network.host: 0.0.0.0</div><div class="line">discovery.zen.ping.unicast.hosts: [&quot;0.0.0.0:9300&quot;]</div><div class="line">discovery.zen.minimum_master_nodes: 1</div><div class="line">discovery.zen.ping_timeout: 20s</div><div class="line"></div><div class="line">thread_pool:</div><div class="line">    generic:</div><div class="line">        keep_alive: 2m</div><div class="line">    index:</div><div class="line">        size: 9</div><div class="line">        queue_size: 3000</div></pre></td></tr></table></figure>
-<p><a href="http://10.85.10.21:9200/_cluster/health?pretty" target="_blank" rel="external">http://10.85.10.21:9200/_cluster/health?pretty</a><br>可以读取集群状态</p>
+<p><a href="http://${elasticsearch_ip}:9200/_cluster/health?pretty" target="_blank" rel="external">http://${elasticsearch_ip}:9200/_cluster/health?pretty</a><br>可以读取集群状态</p>
 <p>Elasticsearch不再支持root权限，需要使用自定义用户启动。</p>
 <hr>
 <h3 id="Logstash"><a href="#Logstash" class="headerlink" title="Logstash"></a>Logstash</h3><p>配置项(摘了主要):</p>
