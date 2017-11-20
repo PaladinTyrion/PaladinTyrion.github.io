@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="elk," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="Architecture Elasticsearch Arch:">
+<meta name="keywords" content="elk">
+<meta property="og:type" content="article">
+<meta property="og:title" content="elk技术要点">
+<meta property="og:url" content="https://paladintyrion.github.io/2017/11/20/elk技术要点/index.html">
+<meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
+<meta property="og:description" content="Architecture Elasticsearch Arch:">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://paladintyrion.github.io/2017/11/20/elk技术要点/elasticsearch.jpeg">
+<meta property="og:image" content="https://paladintyrion.github.io/2017/11/20/elk技术要点/logstash.jpeg">
+<meta property="og:image" content="https://paladintyrion.github.io/2017/11/20/elk技术要点/arch.jpeg">
+<meta property="og:updated_time" content="2017-11-20T09:15:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="elk技术要点">
+<meta name="twitter:description" content="Architecture Elasticsearch Arch:">
+<meta name="twitter:image" content="https://paladintyrion.github.io/2017/11/20/elk技术要点/elasticsearch.jpeg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://paladintyrion.github.io/2017/11/20/elk技术要点/"/>
+
+
+
+
+
+  <title>elk技术要点 | PaladinTyrion's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">PaladinTyrion's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">小恶魔提利昂</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://paladintyrion.github.io/2017/11/20/elk技术要点/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="paladintyrion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/4528356?v=4&s=120">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PaladinTyrion's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">elk技术要点</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-20T11:28:32+08:00">
+                2017-11-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/framework/" itemprop="url" rel="index">
+                    <span itemprop="name">framework</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h3><ul>
+<li>Elasticsearch Arch:</li>
+</ul>
+<p><img src="/2017/11/20/elk技术要点/elasticsearch.jpeg" alt="Elasticsearch Arch"></p>
+<a id="more"></a>
+<ul>
+<li>Logstash:</li>
+</ul>
+<p>每个logstash都是独立的进程，每机可开多个logstash运行，logstash之间没有需要协同工作的状态，属于单机运行程序。</p>
+<p><img src="/2017/11/20/elk技术要点/logstash.jpeg" alt="Logstash RUN"></p>
+<ul>
+<li>Kibana:</li>
+</ul>
+<p>Kibana是用nodejs开发的web界面，其中如果开启Kibana，kibana会在elasticsearch中生成一个指定名配置的名的索引，因而如果多个kibana连接多台es_master机器，所图标等的保存也会被记录下来。</p>
+<p>工作图：kibana =&gt; elasticsearch</p>
+<ul>
+<li>Elk Arch</li>
+</ul>
+<p><img src="/2017/11/20/elk技术要点/arch.jpeg" alt="Arch"></p>
+<p>机器限制，所以对elk的部署做了四件主要工作：</p>
+<ol>
+<li><p>将elk制作了imgae，为了支持多节点部署，需要相应名字的指定环境变量来传递集群成员的信息，启动时讲修改elasticsearch和logstash配置，另外image启动之后将都是使用宿主机的ip</p>
+</li>
+<li><p>限制了ES container运行机host的5601端口，防止被注入脚本攻击，只开放了对若干ip的访问权限，另外单独部署了nginx-proxy负载均衡地访问master group的kibana界面，加了登陆验证功能</p>
+</li>
+<li><p>单独部署了多台机器的kafka集群，接收数据作为logstash的message输入端。kafka集群单独运维，单独调参，container可通过环境变量传入来进行启动设置。另外kafka也有单独的监控，制作了image。</p>
+</li>
+<li><p>多台机器制作了nfs文件映射。kafka的数据和日志，elk的数据和日志，都通过-v卷映射到nfs server的相应目录。由于es不再支持root启动，nfs的映射采用匿名映射方式。</p>
+</li>
+</ol>
+<p><strong>Note</strong>：nfs是此套系统最失败的一点，是性能瓶颈杀手。</p>
+<hr>
+<h3 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h3><p>配置项(摘了主要):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">cluster.name: logging</div><div class="line">node.name: ES_$&#123;HOSTNAME&#125;</div><div class="line">node.master: true</div><div class="line">node.data: true</div><div class="line">node.ingest: false</div><div class="line">bootstrap.memory_lock: true</div><div class="line">network.host: 0.0.0.0</div><div class="line">discovery.zen.ping.unicast.hosts: [&quot;0.0.0.0:9300&quot;]</div><div class="line">discovery.zen.minimum_master_nodes: 1</div><div class="line">discovery.zen.ping_timeout: 20s</div><div class="line"></div><div class="line">thread_pool:</div><div class="line">    generic:</div><div class="line">        keep_alive: 2m</div><div class="line">    index:</div><div class="line">        size: 9</div><div class="line">        queue_size: 3000</div></pre></td></tr></table></figure>
+<p><a href="http://10.85.10.21:9200/_cluster/health?pretty" target="_blank" rel="external">http://10.85.10.21:9200/_cluster/health?pretty</a><br>可以读取集群状态</p>
+<p>Elasticsearch不再支持root权限，需要使用自定义用户启动。</p>
+<hr>
+<h3 id="Logstash"><a href="#Logstash" class="headerlink" title="Logstash"></a>Logstash</h3><p>配置项(摘了主要):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">node.name: &quot;logstash&quot;</div><div class="line">pipeline.workers: 6</div><div class="line">pipeline.batch.size: 1500</div><div class="line">pipeline.batch.delay: 5  #ms</div><div class="line">path.config: /etc/logstash/conf.d/</div><div class="line">config.reload.automatic: true</div><div class="line">queue.type: memory</div><div class="line">http.host: &quot;0.0.0.0&quot;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">input &#123;</div><div class="line">  kafka &#123;</div><div class="line">    bootstrap_servers =&gt; &quot;0.0.0.0:9092&quot;</div><div class="line">    topics =&gt; [&quot;servlogging&quot;]</div><div class="line">    auto_commit_interval_ms =&gt; &quot;5000&quot;</div><div class="line">    session_timeout_ms =&gt; &quot;15000&quot;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">filter &#123;</div><div class="line">  ……</div><div class="line">  date &#123;</div><div class="line">    match =&gt; [ &quot;logtime&quot;, &quot;dd/MMM/yyyy:HH:mm:ss Z&quot; ]</div><div class="line">  &#125;</div><div class="line">  mutate &#123;</div><div class="line">    remove_field =&gt; [ &quot;message&quot; ]</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">output &#123;</div><div class="line">  elasticsearch &#123;</div><div class="line">    hosts =&gt; [&quot;0.0.0.0:9200&quot;]</div><div class="line">    action =&gt; &quot;index&quot;</div><div class="line">    manage_template =&gt; false</div><div class="line">    index =&gt; &quot;servlogging-%&#123;+YYYY-MM-dd&#125;&quot;</div><div class="line">    document_type =&gt; &quot;servlogging&quot;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="Kibana"><a href="#Kibana" class="headerlink" title="Kibana"></a>Kibana</h3><p>配置项(摘了主要):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">server.host: &quot;0.0.0.0&quot;</div><div class="line">elasticsearch.url: &quot;http://0.0.0.0:9200&quot;</div><div class="line">kibana.index: &quot;.kibana&quot;</div><div class="line">elasticsearch.pingTimeout: 1500   #ms</div><div class="line">elasticsearch.requestTimeout: 30000  #ms</div></pre></td></tr></table></figure>
+<p><a href="http://${kibana_ip}:5601/status" target="_blank" rel="external">http://${kibana_ip}:5601/status</a> 可以读本机状态。</p>
+<hr>
+<h3 id="Improvement"><a href="#Improvement" class="headerlink" title="Improvement"></a>Improvement</h3><p>优化主要需要在五方面上下功夫：操作系统limit，内存，Cpu(为处理开多线程)，IO，JVM</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">## 操作系统limit</div><div class="line"># elasticsearch</div><div class="line">sysctl -w vm.max_map_count=262144</div><div class="line">ulimit -l unlimited  #(locked memory)</div><div class="line">ulimit -n 65536</div><div class="line"># logstash</div><div class="line">ulimit -n 16384</div><div class="line"># kibana</div><div class="line">没有</div><div class="line"></div><div class="line">## 内存</div><div class="line"># elasticsearch</div><div class="line">-Xms10g</div><div class="line">-Xmx10g</div><div class="line"># logstash</div><div class="line">-Xms4g</div><div class="line">-Xmx4g</div><div class="line"># kibana</div><div class="line">留空1g内存左右，会缓存查询的数据记录，防止访问es过频繁</div><div class="line"></div><div class="line">## Cpu</div><div class="line"># elasticsearch</div><div class="line">thread_pool.index.size &lt;= available cores + 1</div><div class="line"># logstash</div><div class="line">pipeline.workers: 3  #为pipeline开多进程</div><div class="line">input=&gt;kafka:</div><div class="line">auto_commit_interval_ms要设，保证断了重连可以offset继续读</div><div class="line">reconnect_backoff_ms要设，防止超时read rebalance</div><div class="line">client_id尽量设，可以保证多个logstash不会产生冲突，好查错</div><div class="line"># kibana</div><div class="line">界面配置</div><div class="line"></div><div class="line">## JVM</div><div class="line"># elasticsearch</div><div class="line">-XX:+UseConcMarkSweepGC</div><div class="line">-XX:+DisableExplicitGC  #禁掉系统调用gc</div><div class="line">-Duser.timezone=GMT+8  #启动时需要加时区，es默认UTC标准时间</div><div class="line"># logstash</div><div class="line">同上设置</div><div class="line"># kibana</div><div class="line">没有要求，不走JVM</div><div class="line"></div><div class="line">## 日志</div><div class="line">使用rotate作业</div><div class="line">保留5天，不压缩，触发bg压缩耗费计算</div><div class="line">关掉不需要的print，level高于warn再输出</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h3><ol>
+<li><p>参考官网： <a href="https://www.elastic.co/guide/index.html" target="_blank" rel="external">elastic</a></p>
+</li>
+<li><p>主要使用kibana和elasticsearch API</p>
+</li>
+</ol>
+<p>kibana作图：<a href="https://www.elastic.co/guide/en/kibana/current/dashboard.html" target="_blank" rel="external">kibana dashboard</a></p>
+<p>elasticsearch query：<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-filter-context.html" target="_blank" rel="external">elasticsearch query</a></p>
+<hr>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p><a href="https://www.elastic.co/guide/index.html" target="_blank" rel="external">elastic官网</a><br><a href="https://github.com/PaladinTyrion/elk-docker" target="_blank" rel="external">elk-docker</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/elk/" rel="tag"># elk</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/13/HHKB使用体验/" rel="next" title="HHKB使用体验">
+                <i class="fa fa-chevron-left"></i> HHKB使用体验
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars0.githubusercontent.com/u/4528356?v=4&s=120"
+               alt="paladintyrion" />
+          <p class="site-author-name" itemprop="name">paladintyrion</p>
+           
+              <p class="site-description motion-element" itemprop="description">小白的笑容若琼花飞舞</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/1085583241/" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/paladintyrion/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.xiami.com/u/4029126/" target="_blank" title="虾米">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      虾米
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Architecture"><span class="nav-number">1.</span> <span class="nav-text">Architecture</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Elasticsearch"><span class="nav-number">2.</span> <span class="nav-text">Elasticsearch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logstash"><span class="nav-number">3.</span> <span class="nav-text">Logstash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kibana"><span class="nav-number">4.</span> <span class="nav-text">Kibana</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Improvement"><span class="nav-number">5.</span> <span class="nav-text">Improvement</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Usage"><span class="nav-number">6.</span> <span class="nav-text">Usage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#References"><span class="nav-number">7.</span> <span class="nav-text">References</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">paladintyrion</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
