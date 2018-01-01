@@ -115,7 +115,7 @@
 <meta property="og:description" content="MacOS/Linux下的小知识  Tip.1 更新Locate的数据库    12$ sudo /usr/libexec/locate.updatedb    #MacOS$ sudo updatedb    #Linux  Tip.2 当使用源文件编译安装，configure默认–prefix=/Applications/Xcode.app/**下面时，make失败大部分因为没有安装comma">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://paladintyrion.github.io/2017/09/10/MacOS-Tips/zsh-env-order.jpeg">
-<meta property="og:updated_time" content="2017-10-12T06:57:58.000Z">
+<meta property="og:updated_time" content="2018-01-01T19:24:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MacOS_Tips">
 <meta name="twitter:description" content="MacOS/Linux下的小知识  Tip.1 更新Locate的数据库    12$ sudo /usr/libexec/locate.updatedb    #MacOS$ sudo updatedb    #Linux  Tip.2 当使用源文件编译安装，configure默认–prefix=/Applications/Xcode.app/**下面时，make失败大部分因为没有安装comma">
@@ -451,6 +451,17 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo spctl --master-disale</div><div class="line"># 完事之后再切回来</div><div class="line">$ sudo spctl --master-enable</div></pre></td></tr></table></figure>
 <p>-Tip.15 查看Cpu相关</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># 查看物理CPU个数</div><div class="line">$ cat /proc/cpuinfo| grep &quot;physical id&quot;| sort| uniq| wc -l</div><div class="line"># 查看每个物理CPU中core的个数(即核数)</div><div class="line">$ cat /proc/cpuinfo| grep &quot;cpu cores&quot;| uniq</div><div class="line"># 查看逻辑CPU的个数</div><div class="line">$ cat /proc/cpuinfo| grep &quot;processor&quot;| wc -l</div></pre></td></tr></table></figure>
+<p>-Tip.16 MySql的my.cnf的加载顺序</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># 以下命令可以查看加载顺序</div><div class="line">$ mysqld --verbose --help | grep -A 1 &apos;Default options&apos;</div></pre></td></tr></table></figure>
+<p>一般顺序如下:</p>
+<ul>
+<li>/etc/my.cnf</li>
+<li>/etc/mysql/my.cnf</li>
+<li>SYSCONFDIR/my.cnf<br>basedir/my.cnf</li>
+<li>$MYSQL_HOME/my.cnf<br>datadir/my.cnf</li>
+<li>加启动指定参数<br>-defaults-file=#， 只读取指定的文件(不再读取其他配置文件)<br>-defaults-extra-file=#，从其他优先级更高的配置文件中读取全局配置后，再读取指定的配置文件  </li>
+<li>~/my.cnf</li>
+</ul>
 
       
     </div>
@@ -680,8 +691,8 @@
       <div class="footer-inner">
         <div class="copyright" >
   
-  &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
