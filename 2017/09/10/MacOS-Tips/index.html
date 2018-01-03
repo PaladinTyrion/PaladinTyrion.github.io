@@ -115,7 +115,7 @@
 <meta property="og:description" content="MacOS/Linux下的小知识  Tip.1 更新Locate的数据库    12$ sudo /usr/libexec/locate.updatedb    #MacOS$ sudo updatedb    #Linux  Tip.2 当使用源文件编译安装，configure默认–prefix=/Applications/Xcode.app/**下面时，make失败大部分因为没有安装comma">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://paladintyrion.github.io/2017/09/10/MacOS-Tips/zsh-env-order.jpeg">
-<meta property="og:updated_time" content="2018-01-01T19:24:56.000Z">
+<meta property="og:updated_time" content="2018-01-03T20:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MacOS_Tips">
 <meta name="twitter:description" content="MacOS/Linux下的小知识  Tip.1 更新Locate的数据库    12$ sudo /usr/libexec/locate.updatedb    #MacOS$ sudo updatedb    #Linux  Tip.2 当使用源文件编译安装，configure默认–prefix=/Applications/Xcode.app/**下面时，make失败大部分因为没有安装comma">
@@ -453,6 +453,44 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># 查看物理CPU个数</div><div class="line">$ cat /proc/cpuinfo| grep &quot;physical id&quot;| sort| uniq| wc -l</div><div class="line"># 查看每个物理CPU中core的个数(即核数)</div><div class="line">$ cat /proc/cpuinfo| grep &quot;cpu cores&quot;| uniq</div><div class="line"># 查看逻辑CPU的个数</div><div class="line">$ cat /proc/cpuinfo| grep &quot;processor&quot;| wc -l</div></pre></td></tr></table></figure>
 <p>-Tip.16 MySql的my.cnf的加载顺序</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># 以下命令可以查看加载顺序</div><div class="line">$ mysqld --verbose --help | grep -A 1 &apos;Default options&apos;</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>文件名</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/etc/my.cnf</td>
+<td>全局选项</td>
+</tr>
+<tr>
+<td>/etc/mysql/my.cnf</td>
+<td>全局选项</td>
+</tr>
+<tr>
+<td>SYSCONFDIR/my.cnf</td>
+<td>全局选项</td>
+</tr>
+<tr>
+<td>$MYSQL_HOME/my.cnf</td>
+<td>服务器特定选项（仅限服务器）</td>
+</tr>
+<tr>
+<td>defaults-extra-file</td>
+<td>指定的文件 –defaults-extra-file，如果有的话</td>
+</tr>
+<tr>
+<td>~/.my.cnf</td>
+<td>用户特定选项</td>
+</tr>
+<tr>
+<td>~/.mylogin.cnf</td>
+<td>用户特定的登录路径选项（仅限客户端）</td>
+</tr>
+</tbody>
+</table>
 <p>一般顺序如下:</p>
 <ul>
 <li>/etc/my.cnf</li>
