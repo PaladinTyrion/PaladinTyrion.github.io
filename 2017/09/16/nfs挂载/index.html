@@ -385,12 +385,12 @@
 
       
         <p>假设三台机器10.3.92.1，10.3.92.2，10.3.92.3，其中10.3.92.1是nfs的server，另外两台机来挂载</p>
-<h4 id="安装nfs"><a href="#安装nfs" class="headerlink" title="安装nfs"></a>安装nfs</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># 三台机子分别安装，挂载机如果不做nfs server服务，可只安装rpcbind</div><div class="line">$ yum install rpcbind nfs-utils</div></pre></td></tr></table></figure>
+<h4 id="安装nfs"><a href="#安装nfs" class="headerlink" title="安装nfs"></a>安装nfs</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 三台机子分别安装，挂载机如果不做nfs server服务，可只安装rpcbind</span><br><span class="line">$ yum install rpcbind nfs-utils</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
 <h4 id="开启nfs服务端"><a href="#开启nfs服务端" class="headerlink" title="开启nfs服务端"></a>开启nfs服务端</h4><p>启动对应的nfs服务，rpcbind是用来做服务通信，nfs-utils包含nfs服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"># 设置开机启动</div><div class="line">$ chkconfig rpcbind on</div><div class="line">$ chkconfig nfs on</div><div class="line"># 启动相关服务</div><div class="line">$ service rpcbind start</div><div class="line">$ service nfs start</div><div class="line"></div><div class="line"># 如果上面的chkconfig命令如果失败，用下面条命令替代，</div><div class="line"># chkconfig命令命令失败，则service也不能开启服务，需用systemctl,</div><div class="line"># 在client端，只开启rpcbind服务即可</div><div class="line">$ systemctl enable rpcbind</div><div class="line">$ systemctl enable nfs 或者 systemctl enable nfs-server</div><div class="line">$ systemctl start rpcbind</div><div class="line">$ systemctl start nfs 或者 systemctl start nfs-server</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 设置开机启动</span><br><span class="line">$ chkconfig rpcbind on</span><br><span class="line">$ chkconfig nfs on</span><br><span class="line"># 启动相关服务</span><br><span class="line">$ service rpcbind start</span><br><span class="line">$ service nfs start</span><br><span class="line"></span><br><span class="line"># 如果上面的chkconfig命令如果失败，用下面条命令替代，</span><br><span class="line"># chkconfig命令命令失败，则service也不能开启服务，需用systemctl,</span><br><span class="line"># 在client端，只开启rpcbind服务即可</span><br><span class="line">$ systemctl enable rpcbind</span><br><span class="line">$ systemctl enable nfs 或者 systemctl enable nfs-server</span><br><span class="line">$ systemctl start rpcbind</span><br><span class="line">$ systemctl start nfs 或者 systemctl start nfs-server</span><br></pre></td></tr></table></figure>
 <h5 id="nfs-server设置nfs卷输出"><a href="#nfs-server设置nfs卷输出" class="headerlink" title="nfs server设置nfs卷输出"></a>nfs server设置nfs卷输出</h5><p>提前创建好目录/data0/dir1，/data0/dir2</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># 编辑/etc/exports，内容如下:</div><div class="line"># /data0/dir1目录只允许10.3.92.2读写,</div><div class="line"># /data0/dir2目录允许任何ip读写</div><div class="line">/data0/dir1	10.3.92.2(rw,sync,no_root_squash,no_subtree_check)</div><div class="line">/data0/dir2	*(rw,sync,no_root_squash,no_subtree_check)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 编辑/etc/exports，内容如下:</span><br><span class="line"># /data0/dir1目录只允许10.3.92.2读写,</span><br><span class="line"># /data0/dir2目录允许任何ip读写</span><br><span class="line">/data0/dir1	10.3.92.2(rw,sync,no_root_squash,no_subtree_check)</span><br><span class="line">/data0/dir2	*(rw,sync,no_root_squash,no_subtree_check)</span><br></pre></td></tr></table></figure>
 <p>说明:</p>
 <ul>
 <li>rw – 允许对共享目录进行读写</li>
@@ -403,7 +403,7 @@
 <li>no_subtree_check – 如果卷的一部分被输出，从客户端发出请求文件的一个常规的调用子目录检查验证卷的相应部分。如果是整个卷输出，禁止这个检查可以加速传输</li>
 <li>anonuid/anongid – 要和root_squash 以及 all_squash一同使用，用于指定使用NFS的用户限定后的uid和gid，前提是本机的/etc/passwd中存在这个uid和gid</li>
 </ul>
-<h5 id="生效配置"><a href="#生效配置" class="headerlink" title="生效配置"></a>生效配置</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ exportfs -arv    # a表示all,r表示重新加载,v表示打印输出</div></pre></td></tr></table></figure>
+<h5 id="生效配置"><a href="#生效配置" class="headerlink" title="生效配置"></a>生效配置</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ exportfs -arv    # a表示all,r表示重新加载,v表示打印输出</span><br></pre></td></tr></table></figure>
 <p>说明:</p>
 <ul>
 <li>a ：全部挂载或者卸载；</li>
@@ -411,7 +411,7 @@
 <li>u ：卸载某一个目录；</li>
 <li>v ：显示共享的目录；</li>
 </ul>
-<h4 id="nfs-client配置nfs挂载"><a href="#nfs-client配置nfs挂载" class="headerlink" title="nfs client配置nfs挂载"></a>nfs client配置nfs挂载</h4><h5 id="查看可挂载的server目录"><a href="#查看可挂载的server目录" class="headerlink" title="查看可挂载的server目录"></a>查看可挂载的server目录</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ showmount -e 10.3.92.1</div></pre></td></tr></table></figure>
+<h4 id="nfs-client配置nfs挂载"><a href="#nfs-client配置nfs挂载" class="headerlink" title="nfs client配置nfs挂载"></a>nfs client配置nfs挂载</h4><h5 id="查看可挂载的server目录"><a href="#查看可挂载的server目录" class="headerlink" title="查看可挂载的server目录"></a>查看可挂载的server目录</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ showmount -e 10.3.92.1</span><br></pre></td></tr></table></figure>
 <h5 id="挂载nfs目录"><a href="#挂载nfs目录" class="headerlink" title="挂载nfs目录"></a>挂载nfs目录</h5><p>/etc/fstab格式:</p>
 <table>
 <thead>
@@ -507,15 +507,15 @@
 </tr>
 </tbody>
 </table>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># 编辑/etc/fstab，10.3.92.2添加如下内容</div><div class="line">10.3.92.1:/data0/dir1 /data/localdir1 nfs auto,soft,bg,intr,rw,rsize=32768,wsize=32768 0 0</div><div class="line">10.3.92.1:/data0/dir2 /data/localdir2 nfs auto,soft,bg,intr,rw,rsize=32768,wsize=32768 0 0</div><div class="line"># 注意，由于server的配置的两个目录均可接受10.3.92.2读写，在10.3.92.3上不可读写/data0/dir1，特别注意</div></pre></td></tr></table></figure>
-<h5 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ mount -a</div></pre></td></tr></table></figure>
-<h5 id="查看挂载状态"><a href="#查看挂载状态" class="headerlink" title="查看挂载状态"></a>查看挂载状态</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ df -h -T</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 编辑/etc/fstab，10.3.92.2添加如下内容</span><br><span class="line">10.3.92.1:/data0/dir1 /data/localdir1 nfs auto,soft,bg,intr,rw,rsize=32768,wsize=32768 0 0</span><br><span class="line">10.3.92.1:/data0/dir2 /data/localdir2 nfs auto,soft,bg,intr,rw,rsize=32768,wsize=32768 0 0</span><br><span class="line"># 注意，由于server的配置的两个目录均可接受10.3.92.2读写，在10.3.92.3上不可读写/data0/dir1，特别注意</span><br></pre></td></tr></table></figure>
+<h5 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mount -a</span><br></pre></td></tr></table></figure>
+<h5 id="查看挂载状态"><a href="#查看挂载状态" class="headerlink" title="查看挂载状态"></a>查看挂载状态</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ df -h -T</span><br></pre></td></tr></table></figure>
 <h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><ul>
-<li><a href="http://wiki.jikexueyuan.com/project/linux/nfs.html" target="_blank" rel="external">http://wiki.jikexueyuan.com/project/linux/nfs.html</a></li>
-<li><a href="http://vinny.cc/2017/02/how-to-use-nfs-in-centos7/" target="_blank" rel="external">http://vinny.cc/2017/02/how-to-use-nfs-in-centos7/</a></li>
-<li><a href="http://cn.linux.vbird.org/linux_server/0330nfs.php" target="_blank" rel="external">http://cn.linux.vbird.org/linux_server/0330nfs.php</a></li>
-<li><a href="http://www.oicto.com/unix-nfs-mount/" target="_blank" rel="external">http://www.oicto.com/unix-nfs-mount/</a></li>
-<li><a href="http://www.cnblogs.com/rootq/articles/1310888.html" target="_blank" rel="external">http://www.cnblogs.com/rootq/articles/1310888.html</a></li>
+<li><a href="http://wiki.jikexueyuan.com/project/linux/nfs.html" target="_blank" rel="noopener">http://wiki.jikexueyuan.com/project/linux/nfs.html</a></li>
+<li><a href="http://vinny.cc/2017/02/how-to-use-nfs-in-centos7/" target="_blank" rel="noopener">http://vinny.cc/2017/02/how-to-use-nfs-in-centos7/</a></li>
+<li><a href="http://cn.linux.vbird.org/linux_server/0330nfs.php" target="_blank" rel="noopener">http://cn.linux.vbird.org/linux_server/0330nfs.php</a></li>
+<li><a href="http://www.oicto.com/unix-nfs-mount/" target="_blank" rel="noopener">http://www.oicto.com/unix-nfs-mount/</a></li>
+<li><a href="http://www.cnblogs.com/rootq/articles/1310888.html" target="_blank" rel="noopener">http://www.cnblogs.com/rootq/articles/1310888.html</a></li>
 </ul>
 
       
@@ -638,7 +638,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -649,7 +649,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -660,7 +660,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

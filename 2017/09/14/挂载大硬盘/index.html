@@ -389,7 +389,7 @@
 <li>分区后对每个区进行格式化</li>
 <li>格式化后即可用mount命令挂载</li>
 </ul>
-<h4 id="查看磁盘"><a href="#查看磁盘" class="headerlink" title="查看磁盘"></a>查看磁盘</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ fdisk -l</div></pre></td></tr></table></figure>
+<h4 id="查看磁盘"><a href="#查看磁盘" class="headerlink" title="查看磁盘"></a>查看磁盘</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fdisk -l</span><br></pre></td></tr></table></figure>
 <h4 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h4><p>分区时，小硬盘和大硬盘的分区方法有所区别</p>
 <a id="more"></a>
 <h5 id="大硬盘分区"><a href="#大硬盘分区" class="headerlink" title="大硬盘分区"></a>大硬盘分区</h5><p>大数据盘的分区和文件系统格式化和小盘都存在差异。大盘必须采用 GPT 分区格式， 不能再采用小盘使用的 MBR 分区格式。</p>
@@ -419,16 +419,16 @@
 </tr>
 </tbody>
 </table>
-<h5 id="小硬盘分区示例"><a href="#小硬盘分区示例" class="headerlink" title="小硬盘分区示例"></a>小硬盘分区示例</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ fdisk /dev/vdc   # 根据填写相应内容，分区完毕</div></pre></td></tr></table></figure>
+<h5 id="小硬盘分区示例"><a href="#小硬盘分区示例" class="headerlink" title="小硬盘分区示例"></a>小硬盘分区示例</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fdisk /dev/vdc   # 根据填写相应内容，分区完毕</span><br></pre></td></tr></table></figure>
 <h5 id="大硬盘分区示例"><a href="#大硬盘分区示例" class="headerlink" title="大硬盘分区示例"></a>大硬盘分区示例</h5><p>假设/dev/vdc需要新挂载的5T硬盘</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ parted /dev/vdc</div><div class="line">$(parted) mklabel     </div><div class="line">          gpt  # 使用gpt方式分区</div><div class="line">$(parted) p  # 查看设备状态</div><div class="line">$(parted) mkpart  # 填写相应信息</div><div class="line">$(parted) quit  #p查看分区信息正常后退出</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ parted /dev/vdc</span><br><span class="line">$(parted) mklabel     </span><br><span class="line">          gpt  # 使用gpt方式分区</span><br><span class="line">$(parted) p  # 查看设备状态</span><br><span class="line">$(parted) mkpart  # 填写相应信息</span><br><span class="line">$(parted) quit  #p查看分区信息正常后退出</span><br></pre></td></tr></table></figure>
 <p>分区之后，fdisk -l可看到创建好的分区盘/dev/vdc1</p>
-<h4 id="格式化"><a href="#格式化" class="headerlink" title="格式化"></a>格式化</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ mkfs.ext4 /dev/vdc1</div><div class="line">或者</div><div class="line">$ mkfs -t ext4 /dev/vdc1</div></pre></td></tr></table></figure>
-<h4 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ mount -t ext4 -o rw,sync,iocharset=utf8 /dev/vdc1 /data</div><div class="line">或者</div><div class="line">$ echo &quot;/dev/vdc1 /data ext4 defaults 0 0&quot; &gt;&gt; /etc/fstab</div><div class="line">$ mount -a</div></pre></td></tr></table></figure>
-<h4 id="查看文件系统状态"><a href="#查看文件系统状态" class="headerlink" title="查看文件系统状态"></a>查看文件系统状态</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ df -h</div></pre></td></tr></table></figure>
+<h4 id="格式化"><a href="#格式化" class="headerlink" title="格式化"></a>格式化</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ mkfs.ext4 /dev/vdc1</span><br><span class="line">或者</span><br><span class="line">$ mkfs -t ext4 /dev/vdc1</span><br></pre></td></tr></table></figure>
+<h4 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ mount -t ext4 -o rw,sync,iocharset=utf8 /dev/vdc1 /data</span><br><span class="line">或者</span><br><span class="line">$ echo &quot;/dev/vdc1 /data ext4 defaults 0 0&quot; &gt;&gt; /etc/fstab</span><br><span class="line">$ mount -a</span><br></pre></td></tr></table></figure>
+<h4 id="查看文件系统状态"><a href="#查看文件系统状态" class="headerlink" title="查看文件系统状态"></a>查看文件系统状态</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ df -h</span><br></pre></td></tr></table></figure>
 <h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><ul>
-<li><a href="https://help.aliyun.com/document_detail/34377.html" target="_blank" rel="external">阿里云大硬盘分区</a></li>
-<li><a href="https://help.aliyun.com/document_detail/25426.html" target="_blank" rel="external">格式化和挂载</a></li>
+<li><a href="https://help.aliyun.com/document_detail/34377.html" target="_blank" rel="noopener">阿里云大硬盘分区</a></li>
+<li><a href="https://help.aliyun.com/document_detail/25426.html" target="_blank" rel="noopener">格式化和挂载</a></li>
 </ul>
 
       
@@ -549,7 +549,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -560,7 +560,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -571,7 +571,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

@@ -385,28 +385,28 @@
 
       
         <h4 id="Spark环境搭建文档（可不依赖hadoop，1-6-2版本Spark）"><a href="#Spark环境搭建文档（可不依赖hadoop，1-6-2版本Spark）" class="headerlink" title="Spark环境搭建文档（可不依赖hadoop，1.6.2版本Spark）:"></a>Spark环境搭建文档（可不依赖hadoop，1.6.2版本Spark）:</h4><p>Spark环境依赖于Java和Scala。其中Java安装不再赘述，需要JRE 1.7+。</p>
-<h5 id="Scala下载："><a href="#Scala下载：" class="headerlink" title="Scala下载："></a>Scala下载：</h5><p>Spark需要scala环境，<a href="http://www.scala-lang.org/download/2.10.6.html" target="_blank" rel="external">http://www.scala-lang.org/download/2.10.6.html</a><br>选择2.10.6版本安装。Spark 1.6.2需要Scala 2.10版本的支持，不兼容2.11+。<br>解压下载包到指定路径:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ tar -zxvf scala-2.10.6.tgz /to/the/scala_path</div></pre></td></tr></table></figure>
+<h5 id="Scala下载："><a href="#Scala下载：" class="headerlink" title="Scala下载："></a>Scala下载：</h5><p>Spark需要scala环境，<a href="http://www.scala-lang.org/download/2.10.6.html" target="_blank" rel="noopener">http://www.scala-lang.org/download/2.10.6.html</a><br>选择2.10.6版本安装。Spark 1.6.2需要Scala 2.10版本的支持，不兼容2.11+。<br>解压下载包到指定路径:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tar -zxvf scala-2.10.6.tgz /to/the/scala_path</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
-<h5 id="Spark-下载："><a href="#Spark-下载：" class="headerlink" title="Spark 下载："></a>Spark 下载：</h5><p>进入<a href="http://spark.apache.org/downloads.html" target="_blank" rel="external">http://spark.apache.org/downloads.html</a> 官网，Spark release选择1.6.2，package type选择Pre-built for Hadoop 2.6, 下载spark-1.6.2-bin-hadoop2.6.tgz。<br>解压spark-1.6.2-bin-hadoop2.6.tgz至指定路径:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ tar -zxvf spark-1.6.2-bin-hadoop2.6.tgz /to/the/spark_path</div></pre></td></tr></table></figure>
+<h5 id="Spark-下载："><a href="#Spark-下载：" class="headerlink" title="Spark 下载："></a>Spark 下载：</h5><p>进入<a href="http://spark.apache.org/downloads.html" target="_blank" rel="noopener">http://spark.apache.org/downloads.html</a> 官网，Spark release选择1.6.2，package type选择Pre-built for Hadoop 2.6, 下载spark-1.6.2-bin-hadoop2.6.tgz。<br>解压spark-1.6.2-bin-hadoop2.6.tgz至指定路径:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tar -zxvf spark-1.6.2-bin-hadoop2.6.tgz /to/the/spark_path</span><br></pre></td></tr></table></figure>
 <h5 id="环境变量："><a href="#环境变量：" class="headerlink" title="环境变量："></a>环境变量：</h5><p>环境变量可写在/etc/profile中，也可以写在/.bashrc等配置文件中,写好后使用source命令使其生效。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim /etc/profile  #或者 vim ~/.bashrc</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vim /etc/profile  #或者 vim ~/.bashrc</span><br></pre></td></tr></table></figure>
 <p>环境变量中的添加内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#Scala Config</div><div class="line">export SCALA_HOME=/to/the/scala_path   #scala解压目录</div><div class="line">export PATH=$PATH:$SCALA_HOME/bin</div><div class="line"></div><div class="line">#Spark Config</div><div class="line">#export MAVEN_OPTS=&quot;-Xmx3g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g&quot; #可选的maven开发选项</div><div class="line">export SPARK_HOME=/to/the/spark_path  #Spark解压目录</div><div class="line">export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#Scala Config</span><br><span class="line">export SCALA_HOME=/to/the/scala_path   #scala解压目录</span><br><span class="line">export PATH=$PATH:$SCALA_HOME/bin</span><br><span class="line"></span><br><span class="line">#Spark Config</span><br><span class="line">#export MAVEN_OPTS=&quot;-Xmx3g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g&quot; #可选的maven开发选项</span><br><span class="line">export SPARK_HOME=/to/the/spark_path  #Spark解压目录</span><br><span class="line">export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin</span><br></pre></td></tr></table></figure>
 <p>环境变量添加完毕后，使其生效。注意，/etc/profile中的环境变量需要重启机器才能每次启动终端都生效，/.bashrc环境变量每次启动终端都直接生效。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ source /etc/profile  #或者 source ~/.bashrc</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ source /etc/profile  #或者 source ~/.bashrc</span><br></pre></td></tr></table></figure>
 <p>最后需要注意，需要在每台机器的/etc/hosts里面写入一份所有机器的hostname ip映射关系。以方便所有机器都可用hostname去定位ip。</p>
 <h5 id="Spark配置"><a href="#Spark配置" class="headerlink" title="Spark配置"></a>Spark配置</h5><p>Spark的配置文件在${SPARK_HOME}/conf目录下。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ cd $SPARK_HOME</div><div class="line">$ cp spark-env.sh.template spark-env.sh  </div><div class="line">$ cp log4j.properties.template log4j.properties  </div><div class="line">$ cp spark-defaults.conf.template spark-defaults.conf</div><div class="line">$ cp slaves.template slaves</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cd $SPARK_HOME</span><br><span class="line">$ cp spark-env.sh.template spark-env.sh  </span><br><span class="line">$ cp log4j.properties.template log4j.properties  </span><br><span class="line">$ cp spark-defaults.conf.template spark-defaults.conf</span><br><span class="line">$ cp slaves.template slaves</span><br></pre></td></tr></table></figure>
 <ul>
 <li>spark-env.sh配置需添加: </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">export JAVA_HOME=$&#123;JAVA_HOME&#125;</div><div class="line">export SPARK_MASTER_IP=$&#123;your_master_ip&#125;  # master ip</div><div class="line">export SPARK_MASTER_PORT=7077</div><div class="line">export SPARK_WORKER_CORES=1     #worker占用核数</div><div class="line">export SPARK_WORKER_INSTANCES=2 #worker启动实例个数</div><div class="line">export SPARK_WORKER_MEMORY=2g   #worker运行内存</div><div class="line">export SPARK_WORKER_WEBUI_PORT=8081</div><div class="line">export SPARK_EXECUTOR_CORES=1   #master调度器核数</div><div class="line">export SPARK_EXECUTOR_MEMORY=1g   #master调度器内存</div><div class="line">export SPARK_LOCAL_IP=$&#123;your_local_ip&#125;  # work运行机 ip</div><div class="line">export SPARK_SCALA_VERSION=&quot;2.10.6&quot;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=$&#123;JAVA_HOME&#125;</span><br><span class="line">export SPARK_MASTER_IP=$&#123;your_master_ip&#125;  # master ip</span><br><span class="line">export SPARK_MASTER_PORT=7077</span><br><span class="line">export SPARK_WORKER_CORES=1     #worker占用核数</span><br><span class="line">export SPARK_WORKER_INSTANCES=2 #worker启动实例个数</span><br><span class="line">export SPARK_WORKER_MEMORY=2g   #worker运行内存</span><br><span class="line">export SPARK_WORKER_WEBUI_PORT=8081</span><br><span class="line">export SPARK_EXECUTOR_CORES=1   #master调度器核数</span><br><span class="line">export SPARK_EXECUTOR_MEMORY=1g   #master调度器内存</span><br><span class="line">export SPARK_LOCAL_IP=$&#123;your_local_ip&#125;  # work运行机 ip</span><br><span class="line">export SPARK_SCALA_VERSION=&quot;2.10.6&quot;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>spark-defaults.conf配置需添加:</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">spark.master                     spark://$&#123;master_hostname&#125;:7077</div><div class="line">spark.eventLog.enabled           true</div><div class="line">spark.eventLog.dir               file:///to/the/spark/eventLogs/</div><div class="line">#spark.eventLog.dir              hdfs://hostname:9000/spark-events</div><div class="line">spark.serializer                 org.apache.spark.serializer.KryoSerializer  #默认序列化</div><div class="line">spark.driver.memory              1g   #调度器驱动</div><div class="line">spark.executor.memory            1g   #调度器运行内存</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">spark.master                     spark://$&#123;master_hostname&#125;:7077</span><br><span class="line">spark.eventLog.enabled           true</span><br><span class="line">spark.eventLog.dir               file:///to/the/spark/eventLogs/</span><br><span class="line">#spark.eventLog.dir              hdfs://hostname:9000/spark-events</span><br><span class="line">spark.serializer                 org.apache.spark.serializer.KryoSerializer  #默认序列化</span><br><span class="line">spark.driver.memory              1g   #调度器驱动</span><br><span class="line">spark.executor.memory            1g   #调度器运行内存</span><br></pre></td></tr></table></figure>
 <ul>
 <li>log4j.properties默认配置就好，需要记录在文件里再改</li>
 <li>slaves文件: slaves 跟hadoop启动一致，集群中每个worker机节点hostname都需要保存在slaves文件中。<br>注意，<strong>不包括</strong>master的hostname，如果master机也需要启动worker，则master的hostname也可写入slaves文件中。</li>
@@ -414,12 +414,12 @@
 <h5 id="Spark集群启动方式-在此只介绍不依赖于hadoop的集群的standalone启动方式"><a href="#Spark集群启动方式-在此只介绍不依赖于hadoop的集群的standalone启动方式" class="headerlink" title="Spark集群启动方式(在此只介绍不依赖于hadoop的集群的standalone启动方式):"></a>Spark集群启动方式(在此只介绍不依赖于hadoop的集群的standalone启动方式):</h5><ul>
 <li style="list-style: none"><input type="checkbox" checked> 在master机:  </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ start-master.sh</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ start-master.sh</span><br></pre></td></tr></table></figure>
 <p>即可启动。  </p>
 <ul>
 <li style="list-style: none"><input type="checkbox" checked> 在slave机:  </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># start-slave.sh &lt;master-spark-URL&gt;</div><div class="line"># 如下，这里假设master机的hostname为master</div><div class="line">$ start-slave.sh spark://master:7077</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># start-slave.sh &lt;master-spark-URL&gt;</span><br><span class="line"># 如下，这里假设master机的hostname为master</span><br><span class="line">$ start-slave.sh spark://master:7077</span><br></pre></td></tr></table></figure>
 <p>另注，在master机也可以启动slave，slave中是worker的工作环境。所有spark任务均执行在work中。<br>仅供参考。</p>
 
       
@@ -540,7 +540,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -551,7 +551,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -562,7 +562,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

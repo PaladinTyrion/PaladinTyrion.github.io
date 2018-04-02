@@ -571,9 +571,9 @@
 </ul>
 </li>
 <li>sessionTracker（session管理）：存在三份session存储<ul>
-<li>sessionById：HashMap<long, sessionimpl="">，由sessionID进行管理</long,></li>
-<li>sessionWithTimeout：ConcurrentHashMap<long, integer="">，由sessionID管理会话超时。定期持久化至快照</long,></li>
-<li>sessionSets：HashMap<long, sessionset="">，由下次会话超时时间归档会话，分桶策略进行管理</long,></li>
+<li>sessionById：HashMap&lt;Long, SessionImpl&gt;，由sessionID进行管理</li>
+<li>sessionWithTimeout：ConcurrentHashMap&lt;Long, Integer&gt;，由sessionID管理会话超时。定期持久化至快照</li>
+<li>sessionSets：HashMap&lt;Long, SessionSet&gt;，由下次会话超时时间归档会话，分桶策略进行管理</li>
 </ul>
 </li>
 <li>会话清理：<ul>
@@ -668,7 +668,7 @@
 <h4 id="（六）Zookeeper数据与存储"><a href="#（六）Zookeeper数据与存储" class="headerlink" title="（六）Zookeeper数据与存储"></a>（六）Zookeeper数据与存储</h4><ul>
 <li>DataTree：Zookeeper整棵树的数据结构，完整数据</li>
 <li>DataNode：数据存储的最小单元。包括了数据内容、ACL列表、节点状态、父节点的引用、子节点列表。</li>
-<li>nodes：DataTree内部存储实际节点的ConcurrentHashMap键值对结构。定义：private final ConcurrentHashMap<string, datanode=""> nodes. 另外，临时节点为便于实施访问和清理，有单独的定义：private final Map<long, hashset<string="">&gt; ephemerals.  其中，nodes中key为path；ephemerals中Key为sessionID</long,></string,></li>
+<li>nodes：DataTree内部存储实际节点的ConcurrentHashMap键值对结构。定义：private final ConcurrentHashMap&lt;String, DataNode&gt; nodes. 另外，临时节点为便于实施访问和清理，有单独的定义：private final Map&lt;Long, HashSet<string>&gt; ephemerals.  其中，nodes中key为path；ephemerals中Key为sessionID</string></li>
 <li>ZKDatabase：内存数据库，负责管理Zookeeper的所有会话，DataTree存储和事务日志。ZKDatabase定时向磁盘dump快照数据。</li>
 </ul>
 <h4 id="（七）日志"><a href="#（七）日志" class="headerlink" title="（七）日志"></a>（七）日志</h4><p>FileTxnLog负责维护事务日志，主要方法append(TxnHeader hdr, Record txn)</p>
@@ -823,7 +823,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -834,7 +834,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -845,7 +845,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

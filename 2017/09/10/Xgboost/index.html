@@ -396,7 +396,7 @@
 <li><p>Windows下Python的安装自行官网。</p>
 </li>
 <li><p>MinGW安装</p>
-<p> <a href="http://iweb.dl.sourceforge.net/project/mingw-w64/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe" target="_blank" rel="external">MinGW安装器下载地址</a></p>
+<p> <a href="http://iweb.dl.sourceforge.net/project/mingw-w64/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe" target="_blank" rel="noopener">MinGW安装器下载地址</a></p>
 <p> 安装时注意：</p>
 </li>
 </ol>
@@ -407,14 +407,14 @@
 </ul>
 <p>完成安装后将MinGW的bin添加到PATH环境变量中。</p>
 <p>例如，我的安装地址是</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">D:\MinGW\mingw64</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D:\MinGW\mingw64</span><br></pre></td></tr></table></figure>
 <p>将 D:\MinGW\mingw64\bin 添加到环境变量PATH中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ which mingw32-make</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ which mingw32-make</span><br></pre></td></tr></table></figure>
 <p>可查看环境变量是否添加成功。成功则MinGW安装完成。</p>
 <ol>
 <li>下载Xgboost并编译</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ git clone --recursive https://github.com/dmlc/xgboost</div><div class="line">$ cd xgboost</div><div class="line">$ git submodule init</div><div class="line">$ git submodule update</div><div class="line"></div><div class="line">$ alias make=&apos;mingw32-make&apos; # 为了在windows上使用MinGW进行编译</div><div class="line"># 以下使用MinGW在windows进行编译</div><div class="line">$ cp make/mingw64.mk config.mk</div><div class="line">$ make -j4  #不报错则编译成功</div><div class="line"></div><div class="line"># 最后安装成为python包</div><div class="line">$ cd python-package</div><div class="line">$ python setup.py install  # (或者) sudo python setup.py install</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ git clone --recursive https://github.com/dmlc/xgboost</span><br><span class="line">$ cd xgboost</span><br><span class="line">$ git submodule init</span><br><span class="line">$ git submodule update</span><br><span class="line"></span><br><span class="line">$ alias make=&apos;mingw32-make&apos; # 为了在windows上使用MinGW进行编译</span><br><span class="line"># 以下使用MinGW在windows进行编译</span><br><span class="line">$ cp make/mingw64.mk config.mk</span><br><span class="line">$ make -j4  #不报错则编译成功</span><br><span class="line"></span><br><span class="line"># 最后安装成为python包</span><br><span class="line">$ cd python-package</span><br><span class="line">$ python setup.py install  # (或者) sudo python setup.py install</span><br></pre></td></tr></table></figure>
 <p>至此Xgboost安装完成。</p>
 <h4 id="Linux-MacOS下安装Xgboost"><a href="#Linux-MacOS下安装Xgboost" class="headerlink" title="Linux/MacOS下安装Xgboost"></a>Linux/MacOS下安装Xgboost</h4><h5 id="所需的必要软件：-1"><a href="#所需的必要软件：-1" class="headerlink" title="所需的必要软件："></a>所需的必要软件：</h5><ul>
 <li>Git</li>
@@ -423,20 +423,20 @@
 <h5 id="参考Xgboost官网即可"><a href="#参考Xgboost官网即可" class="headerlink" title="参考Xgboost官网即可"></a>参考Xgboost官网即可</h5><ol>
 <li>Linux下</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ git clone --recursive https://github.com/dmlc/xgboost</div><div class="line">$ cd xgboost</div><div class="line">$ make -j4</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git clone --recursive https://github.com/dmlc/xgboost</span><br><span class="line">$ cd xgboost</span><br><span class="line">$ make -j4</span><br></pre></td></tr></table></figure>
 <ol>
 <li>MacOS下</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ git clone --recursive https://github.com/dmlc/xgboost</div><div class="line">$ cd xgboost</div><div class="line">$ cp make/minimum.mk ./config.mk</div><div class="line">$ make -j4</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git clone --recursive https://github.com/dmlc/xgboost</span><br><span class="line">$ cd xgboost</span><br><span class="line">$ cp make/minimum.mk ./config.mk</span><br><span class="line">$ make -j4</span><br></pre></td></tr></table></figure>
 <ol>
 <li>两个环境下都安装为Python包</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># path/to/xgboost</div><div class="line">$ cd python-package</div><div class="line">$ sudo python setup.py install</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># path/to/xgboost</span><br><span class="line">$ cd python-package</span><br><span class="line">$ sudo python setup.py install</span><br></pre></td></tr></table></figure>
 <p>至此Xgboost安装完成。</p>
-<h4 id="测试Xgboost的程序"><a href="#测试Xgboost的程序" class="headerlink" title="测试Xgboost的程序"></a>测试Xgboost的程序</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"># import os</div><div class="line">import xgboost as xgb</div><div class="line">import numpy as np</div><div class="line"></div><div class="line"># mingw_path = &apos;D:\MinGW\mingw64\bin&apos;</div><div class="line"># os.environ[&apos;PATH&apos;] = mingw_path + &apos;;&apos; + os.environ[&apos;PATH&apos;]</div><div class="line"></div><div class="line">if __name__ == &apos;__main__&apos;:</div><div class="line">    data = np.random.rand(5, 10)</div><div class="line">    print(&apos;data&apos;, data)</div><div class="line"></div><div class="line">    label = np.random.randint(2, size=5)</div><div class="line">    dtrain = xgb.DMatrix(data, label=label)</div><div class="line"></div><div class="line">    dtest = dtrain</div><div class="line"></div><div class="line">    param = &#123;&apos;bst:max_depth&apos;: 2, &apos;bst:eta&apos;: 1, &apos;silent&apos;: 1, &apos;objective&apos;: &apos;binary:logistic&apos;&#125;</div><div class="line">    param[&apos;nthread&apos;] = 4</div><div class="line">    param[&apos;eval_metric&apos;] = &apos;auc&apos;</div><div class="line"></div><div class="line">    evallist = [(dtest, &apos;eval&apos;), (dtrain, &apos;train&apos;)]</div><div class="line"></div><div class="line">    num_round = 10</div><div class="line">    bst = xgb.train(param, dtrain, num_round, evallist)</div><div class="line"></div><div class="line">    bst.dump_model(&apos;dump.raw.txt&apos;)</div></pre></td></tr></table></figure>
+<h4 id="测试Xgboost的程序"><a href="#测试Xgboost的程序" class="headerlink" title="测试Xgboost的程序"></a>测试Xgboost的程序</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># import os</span><br><span class="line">import xgboost as xgb</span><br><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line"># mingw_path = &apos;D:\MinGW\mingw64\bin&apos;</span><br><span class="line"># os.environ[&apos;PATH&apos;] = mingw_path + &apos;;&apos; + os.environ[&apos;PATH&apos;]</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    data = np.random.rand(5, 10)</span><br><span class="line">    print(&apos;data&apos;, data)</span><br><span class="line"></span><br><span class="line">    label = np.random.randint(2, size=5)</span><br><span class="line">    dtrain = xgb.DMatrix(data, label=label)</span><br><span class="line"></span><br><span class="line">    dtest = dtrain</span><br><span class="line"></span><br><span class="line">    param = &#123;&apos;bst:max_depth&apos;: 2, &apos;bst:eta&apos;: 1, &apos;silent&apos;: 1, &apos;objective&apos;: &apos;binary:logistic&apos;&#125;</span><br><span class="line">    param[&apos;nthread&apos;] = 4</span><br><span class="line">    param[&apos;eval_metric&apos;] = &apos;auc&apos;</span><br><span class="line"></span><br><span class="line">    evallist = [(dtest, &apos;eval&apos;), (dtrain, &apos;train&apos;)]</span><br><span class="line"></span><br><span class="line">    num_round = 10</span><br><span class="line">    bst = xgb.train(param, dtrain, num_round, evallist)</span><br><span class="line"></span><br><span class="line">    bst.dump_model(&apos;dump.raw.txt&apos;)</span><br></pre></td></tr></table></figure>
 <h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><ul>
-<li><a href="https://xgboost.readthedocs.io/en/latest/build.html" target="_blank" rel="external">https://xgboost.readthedocs.io/en/latest/build.html</a></li>
-<li><a href="http://www.jianshu.com/p/5b3e0489f1a8" target="_blank" rel="external">http://www.jianshu.com/p/5b3e0489f1a8</a></li>
+<li><a href="https://xgboost.readthedocs.io/en/latest/build.html" target="_blank" rel="noopener">https://xgboost.readthedocs.io/en/latest/build.html</a></li>
+<li><a href="http://www.jianshu.com/p/5b3e0489f1a8" target="_blank" rel="noopener">http://www.jianshu.com/p/5b3e0489f1a8</a></li>
 </ul>
 
       
@@ -557,7 +557,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -568,7 +568,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -579,7 +579,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

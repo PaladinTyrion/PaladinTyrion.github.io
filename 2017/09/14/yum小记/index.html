@@ -384,17 +384,17 @@
       
 
       
-        <h4 id="yum源更换"><a href="#yum源更换" class="headerlink" title="yum源更换"></a>yum源更换</h4><h5 id="yum的配置路径"><a href="#yum的配置路径" class="headerlink" title="yum的配置路径"></a>yum的配置路径</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># yum的配置路径如下:</div><div class="line">/etc/yum.conf</div><div class="line">/etc/yum.repos.d/</div><div class="line"></div><div class="line"># 其中,xxx.repo中配置下载url</div><div class="line">/etc/yum.repos.d/CentOS-Base.repo</div></pre></td></tr></table></figure>
+        <h4 id="yum源更换"><a href="#yum源更换" class="headerlink" title="yum源更换"></a>yum源更换</h4><h5 id="yum的配置路径"><a href="#yum的配置路径" class="headerlink" title="yum的配置路径"></a>yum的配置路径</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># yum的配置路径如下:</span><br><span class="line">/etc/yum.conf</span><br><span class="line">/etc/yum.repos.d/</span><br><span class="line"></span><br><span class="line"># 其中,xxx.repo中配置下载url</span><br><span class="line">/etc/yum.repos.d/CentOS-Base.repo</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
 <p>xxx.repo配置格式如下, 其中[]中的内容必须唯一，可设置多个不同的[]，源地址，baseurl即为源：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[base]</div><div class="line">name=CentOS-$releasever-Base</div><div class="line">failovermethod=priority</div><div class="line">baseurl=http://mirrors.aliyuncs.com/centos/$releasever/os/$basearch/</div><div class="line">        http://mirrors.cloud.aliyuncs.com/centos/$releasever/os/$basearch/  </div><div class="line">gpgcheck=1</div><div class="line">gpgkey=http://mirrors.aliyuncs.com/centos/RPM-GPG-KEY-CentOS-7</div><div class="line">       http://mirrors.cloud.aliyuncs.com/centos/RPM-GPG-KEY-CentOS-7</div></pre></td></tr></table></figure>
-<h5 id="重建yum源信息"><a href="#重建yum源信息" class="headerlink" title="重建yum源信息"></a>重建yum源信息</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ yum clean all</div><div class="line">$ yum makecache</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[base]</span><br><span class="line">name=CentOS-$releasever-Base</span><br><span class="line">failovermethod=priority</span><br><span class="line">baseurl=http://mirrors.aliyuncs.com/centos/$releasever/os/$basearch/</span><br><span class="line">        http://mirrors.cloud.aliyuncs.com/centos/$releasever/os/$basearch/  </span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=http://mirrors.aliyuncs.com/centos/RPM-GPG-KEY-CentOS-7</span><br><span class="line">       http://mirrors.cloud.aliyuncs.com/centos/RPM-GPG-KEY-CentOS-7</span><br></pre></td></tr></table></figure>
+<h5 id="重建yum源信息"><a href="#重建yum源信息" class="headerlink" title="重建yum源信息"></a>重建yum源信息</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ yum clean all</span><br><span class="line">$ yum makecache</span><br></pre></td></tr></table></figure>
 <p>可以通过下面命令查看可下载的包，如要下载policycoreutils：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yum list --showduplicates | grep policycoreutils.x86_64 | sort</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yum list --showduplicates | grep policycoreutils.x86_64 | sort</span><br></pre></td></tr></table></figure>
 <p>如返回结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">policycoreutils.x86_64                   2.2.5-15.el7               base-vault</div><div class="line">policycoreutils.x86_64                   2.5-11.el7_3               @updates</div><div class="line">policycoreutils.x86_64                   2.5-11.el7_3               updates</div><div class="line">policycoreutils.x86_64                   2.5-8.el7                  base</div><div class="line">policycoreutils.x86_64                   2.5-9.el7                  updates</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">policycoreutils.x86_64                   2.2.5-15.el7               base-vault</span><br><span class="line">policycoreutils.x86_64                   2.5-11.el7_3               @updates</span><br><span class="line">policycoreutils.x86_64                   2.5-11.el7_3               updates</span><br><span class="line">policycoreutils.x86_64                   2.5-8.el7                  base</span><br><span class="line">policycoreutils.x86_64                   2.5-9.el7                  updates</span><br></pre></td></tr></table></figure>
 <h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>下载指定版本的包通过如下命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ yum install policycoreutils-2.5-11.el7_3.x86_64</div><div class="line">或者</div><div class="line">$ yum update &amp;&amp; yum install/upgrade policycoreutils</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ yum install policycoreutils-2.5-11.el7_3.x86_64</span><br><span class="line">或者</span><br><span class="line">$ yum update &amp;&amp; yum install/upgrade policycoreutils</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -516,7 +516,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -527,7 +527,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -538,7 +538,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
