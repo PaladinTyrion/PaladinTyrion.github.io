@@ -114,7 +114,7 @@
 <meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
 <meta property="og:description" content="主要工具 AWS SSR Client  AWS AWS新用户可免费使用一年，每月流量15G，单节点流量每月1G.  AWS免费配置教程参考：AWS官网">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-02T06:18:27.000Z">
+<meta property="og:updated_time" content="2018-04-02T06:24:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Aws-ssr">
 <meta name="twitter:description" content="主要工具 AWS SSR Client  AWS AWS新用户可免费使用一年，每月流量15G，单节点流量每月1G.  AWS免费配置教程参考：AWS官网">
@@ -405,7 +405,7 @@
 <li>每次运行可安装一种版本;</li>
 <li>支持以多次运行来安装多个版本，且各个版本可以共存(注意端口号需设成不同);</li>
 <li>若已安装多个版本，则卸载时也需多次运行(每次卸载一种);</li>
-<li>Shadowsocks-Python和ShadowsocksR安装后不可同时启动(因为本质上都属Python版)。</li>
+<li>Shadowsocks-Python和ShadowsocksR安装后不可同时启动(因为本质上都属Python版).</li>
 </ol>
 <ul>
 <li>默认配置:</li>
@@ -419,12 +419,9 @@
 </ol>
 <p>备注：脚本默认创建单用户配置文件，如需配置多用户，请手动修改相应的配置文件后重启即可。</p>
 <ul>
-<li><p>其他需知：</p>
-<ul>
-<li>libev版的Shadowsocks最新版本特点是内存占用小(600k左右)，使用libev和C编写，低CPU消耗;</li>
+<li>其他需知：</li>
 </ul>
-</li>
-</ul>
+<p>libev版的Shadowsocks最新版本特点是内存占用小(600k左右)，使用libev和C编写，低CPU消耗.</p>
 <h6 id="Server安装"><a href="#Server安装" class="headerlink" title="Server安装"></a><strong>Server安装</strong></h6><p>root用户下执行:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ wget --no-check-certificate -O shadowsocks-all.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-all.sh</span><br><span class="line">$ chmod +x shadowsocks-all.sh</span><br><span class="line">$ ./shadowsocks-all.sh 2&gt;&amp;1 | tee shadowsocks-all.log</span><br></pre></td></tr></table></figure>
 <h6 id="Server卸载"><a href="#Server卸载" class="headerlink" title="Server卸载"></a><strong>Server卸载</strong></h6><p>root用户下执行:</p>
@@ -451,7 +448,6 @@
 <li>同时支持IPv4与IPv6;</li>
 <li>启动多端口支持;</li>
 <li>多用户配置时注意: 多个端口从防火墙(iptables或firewalld)中打开.</li>
-<li></li>
 </ul>
 <p>具体配置:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    //&quot;server&quot;:&quot;0.0.0.0&quot;,</span><br><span class="line">    //&quot;server_ipv6&quot;:&quot;[::]&quot;,</span><br><span class="line">    &quot;server&quot;:[&quot;[::0]&quot;,&quot;0.0.0.0&quot;],</span><br><span class="line">    //&quot;server_port&quot;:your_server_port,</span><br><span class="line">    &quot;local_address&quot;:&quot;127.0.0.1&quot;,</span><br><span class="line">    &quot;local_port&quot;:1080</span><br><span class="line">    //&quot;password&quot;:&quot;your_password&quot;,</span><br><span class="line">    &quot;port_password&quot;:&#123;</span><br><span class="line">         &quot;9000&quot;:&quot;password0&quot;,</span><br><span class="line">         &quot;9001&quot;:&quot;password1&quot;,</span><br><span class="line">         &quot;9002&quot;:&quot;password2&quot;,</span><br><span class="line">         &quot;9003&quot;:&quot;password3&quot;,</span><br><span class="line">         &quot;9004&quot;:&quot;password4&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;timeout&quot;:600,</span><br><span class="line">    &quot;method&quot;:&quot;aes-256-cfb&quot;,</span><br><span class="line">    //&quot;protocol&quot;: &quot;origin&quot;,</span><br><span class="line">    //&quot;protocol_param&quot;: &quot;&quot;,</span><br><span class="line">    //&quot;obfs&quot;: &quot;plain&quot;,</span><br><span class="line">    //&quot;obfs_param&quot;: &quot;&quot;,</span><br><span class="line">    //&quot;redirect&quot;: &quot;&quot;,</span><br><span class="line">    //&quot;dns_ipv6&quot;: false,</span><br><span class="line">    //&quot;fast_open&quot;: false,</span><br><span class="line">    //&quot;fast_open&quot;: true,</span><br><span class="line">    //&quot;workers&quot;: 1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
