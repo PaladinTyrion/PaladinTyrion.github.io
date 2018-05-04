@@ -390,12 +390,7 @@
           <h4 id="Opentsdb调试"><a href="#Opentsdb调试" class="headerlink" title="Opentsdb调试"></a>Opentsdb调试</h4><h5 id="生成pom-xml文件"><a href="#生成pom-xml文件" class="headerlink" title="生成pom.xml文件"></a>生成pom.xml文件</h5><p>Github上clone源码.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 项目路径下，生成pom.xml</span><br><span class="line">$ ./build.sh &amp;&amp; ./build.sh pom.xml</span><br></pre></td></tr></table></figure>
 <p>生成pom.xml文件后，有提示报错，需要修改若干位置.</p>
-<ol>
-<li><p>ph-javacc-maven-plugin参数javadocFriendlyComments报错，可修改ph-javacc-maven-plugin版本为2.8.2、3.0.0等尝试</p>
-</li>
-<li><p>profile: bigtable不生效，需要修改bigtable的配置，也可以删除</p>
-</li>
-</ol>
+<h6 id="ph-javacc-maven-plugin参数javadocFriendlyComments报错，可修改ph-javacc-maven-plugin版本为2-8-2、3-0-0等尝试"><a href="#ph-javacc-maven-plugin参数javadocFriendlyComments报错，可修改ph-javacc-maven-plugin版本为2-8-2、3-0-0等尝试" class="headerlink" title="ph-javacc-maven-plugin参数javadocFriendlyComments报错，可修改ph-javacc-maven-plugin版本为2.8.2、3.0.0等尝试"></a>ph-javacc-maven-plugin参数javadocFriendlyComments报错，可修改ph-javacc-maven-plugin版本为2.8.2、3.0.0等尝试</h6><h6 id="profile-bigtable不生效，需要修改bigtable的配置，也可以删除"><a href="#profile-bigtable不生效，需要修改bigtable的配置，也可以删除" class="headerlink" title="profile: bigtable不生效，需要修改bigtable的配置，也可以删除"></a>profile: bigtable不生效，需要修改bigtable的配置，也可以删除</h6>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/04/27/opentsdb-dev/#more" rel="contents">
