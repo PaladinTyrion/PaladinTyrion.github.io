@@ -116,7 +116,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://paladintyrion.github.io/2017/09/10/MacOS-Tips/zsh-env-order.jpeg">
 <meta property="og:image" content="https://paladintyrion.github.io/2017/09/10/MacOS-Tips/docker-cross-wall.png">
-<meta property="og:updated_time" content="2018-05-30T14:15:02.000Z">
+<meta property="og:updated_time" content="2018-05-31T13:41:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MacOS_Tips">
 <meta name="twitter:description" content="MacOS/Linux下的小知识 Tip.1 更新Locate的数据库123456$ sudo /usr/libexec/locate.updatedb    #MacOS# 如果依然报权限问题，先执行以下内容$ launchctl load -wF /System/Library/LaunchDaemons/com.apple.locate.plist$ launchctl stop com.a">
@@ -471,8 +471,8 @@
 <p>参考网站：<a href="http://blog.liudongkai.com/2017/02/11/qpress_error_isatty/" target="_blank" rel="noopener">Fix_qpress_bug</a></p>
 <p>nc传输压缩文件流：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ nc -l $&#123;dest_ip&#125; $&#123;listen_port&#125; | qpress -dio &gt; $&#123;pwd&#125;/filename</span><br><span class="line">$ qpress -o /path/$&#123;send_filename&#125; | nc $&#123;dest_ip&#125; $&#123;dest_listen_port&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="Tip-21-添加用户并分配用户权限"><a href="#Tip-21-添加用户并分配用户权限" class="headerlink" title="Tip.21 添加用户并分配用户权限"></a>Tip.21 添加用户并分配用户权限</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ groupadd [-r] -g 20999 xijia</span><br><span class="line">$ useradd [-r] -c &quot;xijia&quot; -m -g xijia -u 20999 -s /bin/bash xijia</span><br><span class="line">## 更改/etc/ssh/sshd_config中的PasswordAuthentication yes</span><br><span class="line">$ vim /etc/ssh/sshd_config</span><br><span class="line">$ service sshd restart</span><br><span class="line">## 设置密码</span><br><span class="line">$ passwd xijia</span><br><span class="line">## 添加sudo权限</span><br><span class="line">## 添加xijia ALL=(ALL) NOPASSWD: ALL到/etc/sudoers最后一行</span><br><span class="line">$ vim /etc/sudoers</span><br><span class="line">## 添加xijia所属组</span><br><span class="line">$ usermod -G root xijia</span><br><span class="line"></span><br><span class="line">## 登陆服务器</span><br><span class="line">$ ssh -l xijia -p 22 10.11.11.10</span><br></pre></td></tr></table></figure>
-<h4 id="Tip-22-python升级版本后yum失效"><a href="#Tip-22-python升级版本后yum失效" class="headerlink" title="Tip.22 python升级版本后yum失效"></a>Tip.22 python升级版本后yum失效</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">## 将#!/usr/bin/python 修改为 #!/usr/bin/python2.6</span><br><span class="line">$ vim /usr/bin/yum</span><br></pre></td></tr></table></figure>
+<h4 id="Tip-21-添加用户并分配用户权限"><a href="#Tip-21-添加用户并分配用户权限" class="headerlink" title="Tip.21 添加用户并分配用户权限"></a>Tip.21 添加用户并分配用户权限</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ groupadd [-r] -g 20999 xijia</span><br><span class="line">$ useradd [-r] -c &quot;xijia&quot; -m -g xijia -u 20999 -s /bin/bash xijia</span><br><span class="line">## 更改/etc/ssh/sshd_config中的PasswordAuthentication yes</span><br><span class="line">$ vim /etc/ssh/sshd_config</span><br><span class="line">$ service sshd restart</span><br><span class="line">## 设置密码</span><br><span class="line">$ passwd xijia</span><br><span class="line">## 添加sudo权限</span><br><span class="line">## 添加xijia ALL=(ALL) NOPASSWD: ALL到/etc/sudoers最后一行</span><br><span class="line">$ vim /etc/sudoers</span><br><span class="line">## 添加xijia所属组</span><br><span class="line">$ usermod -aG root xijia</span><br><span class="line"></span><br><span class="line">## 登陆服务器</span><br><span class="line">$ ssh -l xijia -p 22 10.11.11.10</span><br></pre></td></tr></table></figure>
+<h4 id="Tip-22-python升级版本后yum失效"><a href="#Tip-22-python升级版本后yum失效" class="headerlink" title="Tip.22 python升级版本后yum失效"></a>Tip.22 python升级版本后yum失效</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">## 将#!/usr/bin/python 修改为 #!/usr/bin/python2.6</span><br><span class="line">$ vim /usr/bin/yum</span><br><span class="line">$ vim /usr/bin/yum-config-manager</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -588,7 +588,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -599,7 +599,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -610,7 +610,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
