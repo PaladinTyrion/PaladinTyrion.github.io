@@ -90,7 +90,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Centos,Tools," />
+  <meta name="keywords" content="Tools," />
 
 
 
@@ -107,14 +107,14 @@
 
 
 <meta name="description" content="rsync简明使用rsync一般可以通过配置ssh直接使用传输文件。互相有ssh公钥之后，即可完成文件传输。 12345678# 目录上传$ rsync -avz ./datadir paladintyion@10.188.25.100:/home/paladintyion/serverdir  # 目录下载$ rsync -avz paladintyion@10.188.25.100:/home">
-<meta name="keywords" content="Centos,Tools">
+<meta name="keywords" content="Tools">
 <meta property="og:type" content="article">
 <meta property="og:title" content="rsyncd服务">
 <meta property="og:url" content="https://paladintyrion.github.io/2018/07/30/rsyncd服务/index.html">
 <meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
 <meta property="og:description" content="rsync简明使用rsync一般可以通过配置ssh直接使用传输文件。互相有ssh公钥之后，即可完成文件传输。 12345678# 目录上传$ rsync -avz ./datadir paladintyion@10.188.25.100:/home/paladintyion/serverdir  # 目录下载$ rsync -avz paladintyion@10.188.25.100:/home">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-30T08:52:59.000Z">
+<meta property="og:updated_time" content="2018-07-30T09:04:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="rsyncd服务">
 <meta name="twitter:description" content="rsync简明使用rsync一般可以通过配置ssh直接使用传输文件。互相有ssh公钥之后，即可完成文件传输。 12345678# 目录上传$ rsync -avz ./datadir paladintyion@10.188.25.100:/home/paladintyion/serverdir  # 目录下载$ rsync -avz paladintyion@10.188.25.100:/home">
@@ -398,7 +398,7 @@
 <h2 id="client命令同步rsyncd服务器路径"><a href="#client命令同步rsyncd服务器路径" class="headerlink" title="client命令同步rsyncd服务器路径"></a>client命令同步rsyncd服务器路径</h2><h3 id="配置文件-1"><a href="#配置文件-1" class="headerlink" title="配置文件"></a>配置文件</h3><p>由于rsyncd设置了密码，rsync client也需要通过密码来访问同步文件夹。</p>
 <p>假设有密码文件为/etc/rsyncd.passwd，修改为如下内容后，设置rsyncd.passwd权限为600，必须设置该权限。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1qaz2wsx</span><br></pre></td></tr></table></figure>
-<h3 id="client执行命令"><a href="#client执行命令" class="headerlink" title="client执行命令"></a>client执行命令</h3><p>通过rsyncd.passwd保存的密码即可正确访问，本机用户必须是paladintyrion或root其中之一，因为rsyncd服务器设置了只允许此两个用户访问。</p>
+<h3 id="client执行命令"><a href="#client执行命令" class="headerlink" title="client执行命令"></a>client执行命令</h3><p>通过rsyncd.passwd保存的密码即可正确访问。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 执行后，可将服务器/home/paladintyrion/rsync_recv目录下除test1/和test2/的文件全部同步至client机/home/tyrion/目录下</span><br><span class="line">$ rsync -avzP --password-file=/etc/rsyncd.passwd --port=1873 paladintyrion@10.188.25.100::data /home/tyrion/</span><br><span class="line"></span><br><span class="line"># 执行后，可将client机/home/tyrion/data/下除去test1/和test2/的文件全部同步至服务器/home/paladintyrion/rsync_recv目录下</span><br><span class="line">$ rsync -avzP --password-file=/etc/rsyncd.secret --port=1873 /home/tyrion/data paladintyrion@10.188.25.100::data</span><br></pre></td></tr></table></figure>
 
       
@@ -416,8 +416,6 @@
     <footer class="post-footer">
       
         <div class="post-tags">
-          
-            <a href="/tags/Centos/" rel="tag"># Centos</a>
           
             <a href="/tags/Tools/" rel="tag"># Tools</a>
           
