@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Centos,Tools," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="rsync简明使用rsync一般可以通过配置ssh直接使用传输文件。互相有ssh公钥之后，即可完成文件传输。 12345678# 目录上传$ rsync -avz ./datadir paladintyion@10.188.25.100:/home/paladintyion/serverdir  # 目录下载$ rsync -avz paladintyion@10.188.25.100:/home">
+<meta name="keywords" content="Centos,Tools">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rsyncd服务">
+<meta property="og:url" content="https://paladintyrion.github.io/2018/07/30/rsyncd服务/index.html">
+<meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
+<meta property="og:description" content="rsync简明使用rsync一般可以通过配置ssh直接使用传输文件。互相有ssh公钥之后，即可完成文件传输。 12345678# 目录上传$ rsync -avz ./datadir paladintyion@10.188.25.100:/home/paladintyion/serverdir  # 目录下载$ rsync -avz paladintyion@10.188.25.100:/home">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-30T08:52:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="rsyncd服务">
+<meta name="twitter:description" content="rsync简明使用rsync一般可以通过配置ssh直接使用传输文件。互相有ssh公钥之后，即可完成文件传输。 12345678# 目录上传$ rsync -avz ./datadir paladintyion@10.188.25.100:/home/paladintyion/serverdir  # 目录下载$ rsync -avz paladintyion@10.188.25.100:/home">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://paladintyrion.github.io/2018/07/30/rsyncd服务/"/>
+
+
+
+
+
+  <title>rsyncd服务 | PaladinTyrion's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">PaladinTyrion's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">小恶魔提利昂</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://paladintyrion.github.io/2018/07/30/rsyncd服务/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="paladintyrion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/4528356?v=4&s=120">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PaladinTyrion's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">rsyncd服务</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-30T15:58:39+08:00">
+                2018-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tools/" itemprop="url" rel="index">
+                    <span itemprop="name">Tools</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="rsync简明使用"><a href="#rsync简明使用" class="headerlink" title="rsync简明使用"></a>rsync简明使用</h2><p>rsync一般可以通过配置ssh直接使用传输文件。互相有ssh公钥之后，即可完成文件传输。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 目录上传</span><br><span class="line">$ rsync -avz ./datadir paladintyion@10.188.25.100:/home/paladintyion/serverdir  </span><br><span class="line"># 目录下载</span><br><span class="line">$ rsync -avz paladintyion@10.188.25.100:/home/paladintyion/serverdir ./datadir</span><br><span class="line"># 文件上传</span><br><span class="line">$ rsync -avz ./datadir/* paladintyion@10.188.25.100:/home/paladintyion/serverdir </span><br><span class="line"># 文件下载</span><br><span class="line">$ rsync -avz paladintyion@10.188.25.100:/home/paladintyion/serverdir/* ./datadir</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="rsyncd服务器配置"><a href="#rsyncd服务器配置" class="headerlink" title="rsyncd服务器配置"></a>rsyncd服务器配置</h2><p>rsyncd需要rsync使用–daemon方式启动，默认使用/etc/rsyncd.conf配置文件，或者创建/etc/rsyncd文件夹，将rsyncd.conf放于该文件夹下。少数情况下，用户可能没有root权限，因此启动时需要指定conf文件路径及密码路径等。具体配置详见下述。</p>
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><p>假设配置文件地址为/home/paladintyrion/etc/rsyncd/rsyncd.conf。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">###################################################################</span><br><span class="line">#                    ******进程相关全局配置******</span><br><span class="line">###################################################################</span><br><span class="line"># = 后面的值可根据自己的实际情况更改</span><br><span class="line">#    pid file 守护进程pid文件</span><br><span class="line">#    port 守护进程监听端口，可更改，由xinetd允许rsyncd时忽略此参数</span><br><span class="line">#    address 守护进程监听ip，由xinetd允许rsyncd时忽略此参数</span><br><span class="line">pid file = /home/paladintyrion/etc/rsyncd/pid/rsyncd.pid</span><br><span class="line">port = 1873</span><br><span class="line"># 一般配置本机对外ip地址</span><br><span class="line">address = 10.188.25.100</span><br><span class="line"># rsyncd 守护进程运行系统用户全局配置，也可在具体的块中独立配置,</span><br><span class="line">uid = paladintyrion</span><br><span class="line">gid = paladintyrion</span><br><span class="line">#允许 chroot，提升安全性，客户端连接模块，首先chroot到模块path参数指定的目录下</span><br><span class="line">#chroot为yes时必须使用root权限，且不能备份path路径外的链接文件</span><br><span class="line">use chroot = no</span><br><span class="line">#只读</span><br><span class="line">read only = no</span><br><span class="line">#只写</span><br><span class="line">write only = no</span><br><span class="line">#允许访问rsyncd服务的ip，ip端或者单独ip之间使用空格隔开</span><br><span class="line">#hosts allow = 192.168.0.1/255.255.255.0 198.162.145.1 10.0.1.0/255.255.255.0</span><br><span class="line">hosts allow = *</span><br><span class="line">#不允许访问rsyncd服务的ip，*是全部(不涵盖在hosts allow中声明的ip，注意和hosts allow的先后顺序)</span><br><span class="line">#hosts deny = *</span><br><span class="line">#客户端最大连接数</span><br><span class="line">max connections = 10</span><br><span class="line">#欢迎文件路径，可选的，尽量不配置吧</span><br><span class="line">#motd file = /etc/rsyncd/rsyncd.motd</span><br><span class="line">#日志相关</span><br><span class="line">#   log file 指定rsync发送消息日志文件，而不是发送给syslog，如果不填这个参数默认发送给syslog</span><br><span class="line">#   transfer logging 是否记录传输文件日志</span><br><span class="line">#   log format 日志文件格式，格式参数请google</span><br><span class="line">#   syslog facility rsync发送消息给syslog时的消息级别，</span><br><span class="line">#   timeout连接超时时间</span><br><span class="line">#lock file一定要配置一下</span><br><span class="line">log file = /home/paladintyrion/etc/rsyncd/log</span><br><span class="line">lock file = /home/paladintyrion/etc/rsyncd/.lock</span><br><span class="line">transfer logging = yes</span><br><span class="line">log format = %t %a %m %f %b</span><br><span class="line">timeout = 300</span><br><span class="line"></span><br><span class="line">###################################################################</span><br><span class="line">#                    ******模块配置(多个)******</span><br><span class="line">###################################################################</span><br><span class="line">#模块 模块名称必须使用[]环绕，比如要访问data1,则地址应该是data1user@192.168.1.2::data1</span><br><span class="line">[data]</span><br><span class="line">#模块根目录，必须指定，推拉文件将以跟目录进行路径寻址，从而进行文件同步</span><br><span class="line">path=/home/paladintyrion/rsync_recv</span><br><span class="line">#是否允许列出模块里的内容</span><br><span class="line">list=yes</span><br><span class="line">#忽略错误</span><br><span class="line">#ignore errors</span><br><span class="line">#模块验证用户名称，可使用空格或者逗号隔开多个用户名</span><br><span class="line">auth users = root,paladintyrion</span><br><span class="line">#模块验证密码文件 可放在全局配置里</span><br><span class="line">secrets file=/home/paladintyrion/etc/rsyncd/rsyncd.secrets</span><br><span class="line">#注释</span><br><span class="line">comment = private paladintyrion rsync deamon</span><br><span class="line">#排除目录，多个之间使用空格隔开</span><br><span class="line">exclude = test1/ test2/</span><br></pre></td></tr></table></figure>
+<h3 id="密码文件"><a href="#密码文件" class="headerlink" title="密码文件"></a>密码文件</h3><p>密码文件地址为/home/paladintyrion/etc/rsyncd/rsyncd.secrets，与配置文件中的配置一致。这里密码文件列出了远程用户允许同步文件的用户名和密码对。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root:1qaz2wsx</span><br><span class="line">paladintyrion:1qaz2wsx</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 启动前务必修改rsyncd.secrets权限为600</span><br><span class="line">$ chmod 600 /home/paladintyrion/etc/rsyncd/rsyncd.secrets</span><br></pre></td></tr></table></figure>
+<h3 id="启动命令"><a href="#启动命令" class="headerlink" title="启动命令"></a>启动命令</h3><p>命令启动后，会在/home/paladintyrion/etc/rsyncd/下创建.lock文件，跟配置中一样。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 使用paladintyrion用户开启daemon进程</span><br><span class="line"># -4表示只允许IPv4地址访问daemon，详情可以通过rsync --help查询</span><br><span class="line">$ rsync --daemon [-4] --config=/home/paladintyrion/etc/rsyncd/rsyncd.conf</span><br></pre></td></tr></table></figure>
+<h2 id="client命令同步rsyncd服务器路径"><a href="#client命令同步rsyncd服务器路径" class="headerlink" title="client命令同步rsyncd服务器路径"></a>client命令同步rsyncd服务器路径</h2><h3 id="配置文件-1"><a href="#配置文件-1" class="headerlink" title="配置文件"></a>配置文件</h3><p>由于rsyncd设置了密码，rsync client也需要通过密码来访问同步文件夹。</p>
+<p>假设有密码文件为/etc/rsyncd.passwd，修改为如下内容后，设置rsyncd.passwd权限为600，必须设置该权限。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1qaz2wsx</span><br></pre></td></tr></table></figure>
+<h3 id="client执行命令"><a href="#client执行命令" class="headerlink" title="client执行命令"></a>client执行命令</h3><p>通过rsyncd.passwd保存的密码即可正确访问，本机用户必须是paladintyrion或root其中之一，因为rsyncd服务器设置了只允许此两个用户访问。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 执行后，可将服务器/home/paladintyrion/rsync_recv目录下除test1/和test2/的文件全部同步至client机/home/tyrion/目录下</span><br><span class="line">$ rsync -avzP --password-file=/etc/rsyncd.passwd --port=1873 paladintyrion@10.188.25.100::data /home/tyrion/</span><br><span class="line"></span><br><span class="line"># 执行后，可将client机/home/tyrion/data/下除去test1/和test2/的文件全部同步至服务器/home/paladintyrion/rsync_recv目录下</span><br><span class="line">$ rsync -avzP --password-file=/etc/rsyncd.secret --port=1873 /home/tyrion/data paladintyrion@10.188.25.100::data</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Centos/" rel="tag"># Centos</a>
+          
+            <a href="/tags/Tools/" rel="tag"># Tools</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/04/centos升级docker版本/" rel="next" title="centos升级docker版本">
+                <i class="fa fa-chevron-left"></i> centos升级docker版本
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars0.githubusercontent.com/u/4528356?v=4&s=120"
+               alt="paladintyrion" />
+          <p class="site-author-name" itemprop="name">paladintyrion</p>
+           
+              <p class="site-description motion-element" itemprop="description">美好的笑容若琼花飞舞</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/1085583241/" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/paladintyrion/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.xiami.com/u/4029126/" target="_blank" title="虾米">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      虾米
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#rsync简明使用"><span class="nav-number">1.</span> <span class="nav-text">rsync简明使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rsyncd服务器配置"><span class="nav-number">2.</span> <span class="nav-text">rsyncd服务器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件"><span class="nav-number">2.1.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#密码文件"><span class="nav-number">2.2.</span> <span class="nav-text">密码文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动命令"><span class="nav-number">2.3.</span> <span class="nav-text">启动命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#client命令同步rsyncd服务器路径"><span class="nav-number">3.</span> <span class="nav-text">client命令同步rsyncd服务器路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件-1"><span class="nav-number">3.1.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#client执行命令"><span class="nav-number">3.2.</span> <span class="nav-text">client执行命令</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">paladintyrion</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
