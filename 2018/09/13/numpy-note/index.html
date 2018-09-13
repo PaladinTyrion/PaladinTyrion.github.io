@@ -90,7 +90,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="python," />
 
 
 
@@ -106,16 +106,18 @@
 
 
 
-<meta name="description" content="美好的笑容若琼花飞舞">
-<meta property="og:type" content="website">
-<meta property="og:title" content="PaladinTyrion&#39;s Blog">
-<meta property="og:url" content="https://paladintyrion.github.io/tags/opentsdb/index.html">
+<meta name="description" content="numpy知识点 构建numpy对象 从序列型对象中构造 用numpy自带函数构建 ndarray的数据类型 索引和切片 切片 多维索引 花式索引 布尔索引">
+<meta name="keywords" content="python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="numpy_note">
+<meta property="og:url" content="https://paladintyrion.github.io/2018/09/13/numpy-note/index.html">
 <meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
-<meta property="og:description" content="美好的笑容若琼花飞舞">
+<meta property="og:description" content="numpy知识点 构建numpy对象 从序列型对象中构造 用numpy自带函数构建 ndarray的数据类型 索引和切片 切片 多维索引 花式索引 布尔索引">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-09-13T08:00:12.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="PaladinTyrion&#39;s Blog">
-<meta name="twitter:description" content="美好的笑容若琼花飞舞">
+<meta name="twitter:title" content="numpy_note">
+<meta name="twitter:description" content="numpy知识点 构建numpy对象 从序列型对象中构造 用numpy自带函数构建 ndarray的数据类型 索引和切片 切片 多维索引 花式索引 布尔索引">
 
 
 
@@ -144,13 +146,13 @@
 
 
 
-  <link rel="canonical" href="https://paladintyrion.github.io/tags/opentsdb/"/>
+  <link rel="canonical" href="https://paladintyrion.github.io/2018/09/13/numpy-note/"/>
 
 
 
 
 
-  <title>标签: opentsdb | PaladinTyrion's Blog</title>
+  <title>numpy_note | PaladinTyrion's Blog</title>
   
 
 
@@ -175,7 +177,7 @@
     
   
 
-  <div class="container sidebar-position-left  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -279,54 +281,207 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>opentsdb<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-tags" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://paladintyrion.github.io/2018/09/13/numpy-note/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="paladintyrion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/4528356?v=4&s=120">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PaladinTyrion's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/04/27/opentsdb-dev/" itemprop="url">
-              
-                <span itemprop="name">opentsdb dev</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">numpy_note</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-04-27T01:16:34+08:00"
-              content="2018-04-27" >
-          04-27
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-13T15:38:26+08:00">
+                2018-09-13
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="numpy知识点"><a href="#numpy知识点" class="headerlink" title="numpy知识点"></a>numpy知识点</h4><ul>
+<li>构建numpy对象</li>
+<li>从序列型对象中构造</li>
+<li>用numpy自带函数构建</li>
+<li>ndarray的数据类型</li>
+<li>索引和切片</li>
+<li>切片</li>
+<li>多维索引</li>
+<li>花式索引</li>
+<li>布尔索引<a id="more"></a></li>
+<li>ufunc通用函数</li>
+<li>ufunc函数的定义和优势</li>
+<li>自定义ufunc</li>
+<li>numpy常用的函数: sum, mean, std, var, min, max, argmin, argmax, cumsum, cumprod</li>
+<li>数学统计函数</li>
+<li>改变numpy数据结构的函数</li>
+<li>where函数</li>
+<li>线性代数函数</li>
+<li>排序操作</li>
+<li>随机数</li>
+<li>广播机制</li>
+<li>matrix对象</li>
+<li>数据的持久化</li>
+</ul>
+<h5 id="numpy-tips"><a href="#numpy-tips" class="headerlink" title="numpy tips"></a>numpy tips</h5><ul>
+<li>astype默认是copy的, 不会改变原来的数组</li>
+<li>切片是视图, 也就是原来数据的引用, 我们对视图的修改会体现在原来的数据上</li>
+<li>高维数组的切片也是一个视图</li>
+<li>花式索引: 用整数数组进行索引</li>
+<li>花式索引不是视图, 他会拷贝数据</li>
+<li>bool索引也是copy的, 不是视图</li>
+<li>ufunc通用函数: 对ndarray执行元素级运算的函数</li>
+<li>reshape维度中出现-1可以表示自适应, 另外reshape也是视图</li>
+<li>ravel不产生副本, flattern产生副本。换句话说, ravel返回的是视图, flatten返回的是副本</li>
+<li>data.sort()是视图, np.sort()是副本</li>
+<li>广播机制: 如果两个数组的trailing dimension相同, 或者其中一方的为1, 那么广播会在缺失和长度为1的维度上进行</li>
+<li>trailing dimension就是从尾部开始计算对齐</li>
+<li><class 'numpy.matrixlib.defmatrix.matrix'="">可以完成类似<class 'numpy.ndarray'="">的高级计算</class></class></li>
+</ul>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/30/rsyncd服务/" rel="next" title="rsyncd服务">
+                <i class="fa fa-chevron-left"></i> rsyncd服务
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -334,6 +489,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -354,8 +513,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="https://avatars0.githubusercontent.com/u/4528356?v=4&s=120"
@@ -452,6 +620,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#numpy知识点"><span class="nav-number">1.</span> <span class="nav-text">numpy知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#numpy-tips"><span class="nav-number">1.1.</span> <span class="nav-text">numpy tips</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -565,10 +749,10 @@
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
 
-  
+
 
   
 
