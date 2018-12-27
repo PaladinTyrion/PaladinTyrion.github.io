@@ -114,7 +114,7 @@
 <meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
 <meta property="og:description" content="OpenMP简明使用OpenMP安装12$ brew install libomp     #最新版MacOSX只需要安装即可使用$ brew install gcc      #gcc是必须安装的 配置ClionPreferences -&amp;gt; Build,Execution,Deployment -&amp;gt; Toolchains中新建一个用户配置，设置对应的cmake，make，C/C++">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-27T05:39:50.417Z">
+<meta property="og:updated_time" content="2018-12-27T05:43:25.180Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OpenMP简明使用">
 <meta name="twitter:description" content="OpenMP简明使用OpenMP安装12$ brew install libomp     #最新版MacOSX只需要安装即可使用$ brew install gcc      #gcc是必须安装的 配置ClionPreferences -&amp;gt; Build,Execution,Deployment -&amp;gt; Toolchains中新建一个用户配置，设置对应的cmake，make，C/C++">
@@ -441,7 +441,7 @@
 <td>所有位均为1</td>
 </tr>
 <tr>
-<td>  &brvbar;</td>
+<td>  &#124;</td>
 <td>整数</td>
 <td>0</td>
 </tr>
@@ -456,7 +456,7 @@
 <td>1</td>
 </tr>
 <tr>
-<td>  &brvbar;&brvbar;</td>
+<td>  &#124;&#124;</td>
 <td>整数</td>
 <td>0</td>
 </tr>
@@ -466,7 +466,7 @@
 <p>atomic只能用于两种情况(单变量的自操作，跟for中介绍的一样)：</p>
 <ul>
 <li>自加自减：x++, x–, –x, ++x</li>
-<li>x&lt; + or <em> or - or / or &amp; or | or &lt;&lt; or &gt;&gt; &gt;=expr，(例如x &lt;&lt;= 1; or x </em>=2;)</li>
+<li>x&lt; + or &#42; or - or / or &amp; or | or &lt;&lt; or &gt;&gt; &gt;=expr，(例如x &lt;&lt;= 1; or x &#42;=2;)</li>
 </ul>
 <h4 id="线程同步critical"><a href="#线程同步critical" class="headerlink" title="线程同步critical"></a>线程同步critical</h4><p>critical用途类似java中的synchronized</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#pragma omp critical[(name)] //[]表示名字可选</span><br><span class="line">&#123;</span><br><span class="line">    //并行程序块，同时只能有一个线程能访问该并行程序块</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#pragma omp parallel for</span><br><span class="line">for (int i = 0; i &lt; 100; ++i)&#123;</span><br><span class="line">    #pragma omp critical(a)</span><br><span class="line">    &#123;</span><br><span class="line">        sum = sum + i;</span><br><span class="line">        sum = sum + i * 2;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
