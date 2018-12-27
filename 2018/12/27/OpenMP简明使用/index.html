@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="parallel," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="OpenMP简明使用OpenMP安装12$ brew install libomp     #最新版MacOSX只需要安装即可使用$ brew install gcc      #gcc是必须安装的 配置ClionPreferences -&amp;gt; Build,Execution,Deployment -&amp;gt; Toolchains中新建一个用户配置，设置对应的cmake，make，C/C++">
+<meta name="keywords" content="parallel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenMP简明使用">
+<meta property="og:url" content="https://paladintyrion.github.io/2018/12/27/OpenMP简明使用/index.html">
+<meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
+<meta property="og:description" content="OpenMP简明使用OpenMP安装12$ brew install libomp     #最新版MacOSX只需要安装即可使用$ brew install gcc      #gcc是必须安装的 配置ClionPreferences -&amp;gt; Build,Execution,Deployment -&amp;gt; Toolchains中新建一个用户配置，设置对应的cmake，make，C/C++">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-27T05:15:38.144Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenMP简明使用">
+<meta name="twitter:description" content="OpenMP简明使用OpenMP安装12$ brew install libomp     #最新版MacOSX只需要安装即可使用$ brew install gcc      #gcc是必须安装的 配置ClionPreferences -&amp;gt; Build,Execution,Deployment -&amp;gt; Toolchains中新建一个用户配置，设置对应的cmake，make，C/C++">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://paladintyrion.github.io/2018/12/27/OpenMP简明使用/"/>
+
+
+
+
+
+  <title>OpenMP简明使用 | PaladinTyrion's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">PaladinTyrion's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">小恶魔提利昂</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://paladintyrion.github.io/2018/12/27/OpenMP简明使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="paladintyrion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/4528356?v=4&s=120">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PaladinTyrion's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">OpenMP简明使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-27T11:16:32+08:00">
+                2018-12-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/parallel/" itemprop="url" rel="index">
+                    <span itemprop="name">parallel</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="OpenMP简明使用"><a href="#OpenMP简明使用" class="headerlink" title="OpenMP简明使用"></a>OpenMP简明使用</h2><h3 id="OpenMP安装"><a href="#OpenMP安装" class="headerlink" title="OpenMP安装"></a>OpenMP安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ brew install libomp     #最新版MacOSX只需要安装即可使用</span><br><span class="line">$ brew install gcc      #gcc是必须安装的</span><br></pre></td></tr></table></figure>
+<h3 id="配置Clion"><a href="#配置Clion" class="headerlink" title="配置Clion"></a>配置Clion</h3><p>Preferences -&gt; Build,Execution,Deployment -&gt; Toolchains中新建一个用户配置，设置对应的cmake，make，C/C++ compiler</p>
+<p>Preferences -&gt; Build,Execution,Deployment -&gt; CMake中Toolchain选择自己所配置的新用户</p>
+<a id="more"></a>
+<h3 id="CMakeLists-txt如何配置"><a href="#CMakeLists-txt如何配置" class="headerlink" title="CMakeLists.txt如何配置"></a>CMakeLists.txt如何配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.13.2)</span><br><span class="line">project(projName CXX)</span><br><span class="line">find_package(OpenMP REQUIRED)</span><br><span class="line">if(OPENMP_FOUND)</span><br><span class="line">    message(&quot;OPENMP FOUND&quot;)</span><br><span class="line">    set(CMAKE_CXX_FLAGS &quot;$&#123;CMAKE_CXX_FLAGS&#125; $&#123;OpenMP_CXX_FLAGS&#125;&quot;)</span><br><span class="line">endif()</span><br><span class="line">set(ignoreMe &quot;$&#123;CMAKE_C_COMPILER&#125;&quot;)</span><br><span class="line"></span><br><span class="line">set(CMAKE_CXX_FLAGS &quot;$&#123;CMAKE_CXX_FLAGS&#125; -std=c++17&quot;)</span><br><span class="line">set(SOURCE_FILES main.cpp)</span><br><span class="line">add_executable(projName $&#123;SOURCE_FILES&#125;)</span><br></pre></td></tr></table></figure>
+<p>如果只使用C++，则只配置了项目的CXX属性，并忽略C编译器的配置</p>
+<h3 id="OpenMP使用"><a href="#OpenMP使用" class="headerlink" title="OpenMP使用"></a>OpenMP使用</h3><h4 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#返回当前可用的处理器个数</span><br><span class="line">int omp_get_num_procs(void) </span><br><span class="line"></span><br><span class="line">#返回当前并行区域中的活动线程个数，如果在并行区域外部调用，返回1</span><br><span class="line">int omp_get_num_threads(void)</span><br><span class="line"></span><br><span class="line">#返回当前线程号</span><br><span class="line">int omp_get_thread_num(void) </span><br><span class="line"></span><br><span class="line">#设置进入并行区域时，将要创建的线程个数</span><br><span class="line">int omp_set_num_threads(int)</span><br></pre></td></tr></table></figure>
+<h4 id="parallel和for循环"><a href="#parallel和for循环" class="headerlink" title="parallel和for循环"></a>parallel和for循环</h4><h5 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h5><p>第二种声明方式简洁，但第一种声明方式可以在for循环以外写其他并行代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//声明方式一</span><br><span class="line">#pragma omp parallel</span><br><span class="line">&#123;</span><br><span class="line">    #pragma omp for</span><br><span class="line">    for (int i = 0; i &lt; 100; ++i)&#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//声明方式二</span><br><span class="line">#pragma omp parallel for</span><br><span class="line">for (int j = 0; j &lt; 100; ++j)&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="for循环并行化约束条件"><a href="#for循环并行化约束条件" class="headerlink" title="for循环并行化约束条件"></a>for循环并行化约束条件</h5><ul>
+<li>for循环中的循环变量必须是有符号整形</li>
+<li>for循环中比较操作符必须是&lt;, &lt;=, &gt;, &gt;=</li>
+<li>for循环中的第三个表达式，必须是整数加减，并且加减值必须是一个循环不变量，且只能是自操作，如++,–,+=,-=</li>
+<li>如果for循环中的比较操作为&lt;或&lt;=，那么循环变量只能增加；反之亦然</li>
+<li>循环必须是单入口、单出口，也就是说循环内部不允许能够达到循环以外的跳转语句，exit除外. 异常的处理也必须在循环体内处理</li>
+</ul>
+<h4 id="数据共享与私有化"><a href="#数据共享与私有化" class="headerlink" title="数据共享与私有化"></a>数据共享与私有化</h4><p>除了以下三种情况外，并行区域中的所有变量都是共享的：</p>
+<ul>
+<li>并行区域中定义的变量</li>
+<li>多个线程用来完成循环的循环变量</li>
+<li>private、firstprivate、lastprivate或reduction字句修饰的变量</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">int share_to_private_b = 1;</span><br><span class="line">#pragma omp parallel</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    #pragma omp for private(share_to_private_b)</span><br><span class="line">    for (int i = 0; i &lt; 10; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#如果使用private，无论该变量在并行区域外是否初始化，在进入并行区域后，该变量均不会初始化</span><br><span class="line">private(val1, val2, ...)</span><br><span class="line">#与private不同的是，每个线程在开始的时候都会对该变量进行一次初始化</span><br><span class="line">firstprivate(val1, val2, ...)</span><br><span class="line">#与private不同的是，并发执行的最后一次循环的私有变量将会拷贝到val</span><br><span class="line">lastprivate(val1, val2, ...)</span><br><span class="line">#共享变量，等同于加锁</span><br><span class="line">shared(val1, val2, ...)</span><br></pre></td></tr></table></figure>
+<h4 id="reduction"><a href="#reduction" class="headerlink" title="reduction"></a>reduction</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#pragma omp parallel for reduction(+:sum)</span><br></pre></td></tr></table></figure>
+<p>reduction(operator: var1, val2, …)</p>
+<p>其中operator以及约定变量的初始值如下：</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>数据类型</th>
+<th>默认初始值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>  +</td>
+<td>整数、浮点</td>
+<td>0</td>
+</tr>
+<tr>
+<td>  -</td>
+<td>整数、浮点</td>
+<td>0</td>
+</tr>
+<tr>
+<td>  *</td>
+<td>整数、浮点</td>
+<td>1</td>
+</tr>
+<tr>
+<td>  &amp;</td>
+<td>整数</td>
+<td>所有位均为1</td>
+</tr>
+<tr>
+<td>  \</td>
+<td></td>
+<td>整数</td>
+<td>0</td>
+</tr>
+<tr>
+<td>  ^</td>
+<td>整数</td>
+<td>0</td>
+</tr>
+<tr>
+<td>  &amp;&amp;</td>
+<td>整数</td>
+<td>1</td>
+</tr>
+<tr>
+<td>  \</td>
+<td>\</td>
+<td></td>
+<td>整数</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<h4 id="线程同步atomic"><a href="#线程同步atomic" class="headerlink" title="线程同步atomic"></a>线程同步atomic</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#pragma omp atomic</span><br></pre></td></tr></table></figure>
+<p>atomic只能用于两种情况(单变量的自操作，跟for中介绍的一样)：</p>
+<ul>
+<li>自加自减：x++, x–, –x, ++x</li>
+<li>x&lt; + or <em> or - or / or &amp; or | or &lt;&lt; or &gt;&gt; &gt;=expr，(例如x &lt;&lt;= 1; or x \</em>=2;)</li>
+</ul>
+<h4 id="线程同步critical"><a href="#线程同步critical" class="headerlink" title="线程同步critical"></a>线程同步critical</h4><p>critical用途类似java中的synchronized</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#pragma omp critical[(name)] //[]表示名字可选</span><br><span class="line">&#123;</span><br><span class="line">    //并行程序块，同时只能有一个线程能访问该并行程序块</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#pragma omp parallel for</span><br><span class="line">for (int i = 0; i &lt; 100; ++i)&#123;</span><br><span class="line">    #pragma omp critical(a)</span><br><span class="line">    &#123;</span><br><span class="line">        sum = sum + i;</span><br><span class="line">        sum = sum + i * 2;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="线程事件同步机制"><a href="#线程事件同步机制" class="headerlink" title="线程事件同步机制"></a>线程事件同步机制</h4><h5 id="隐式屏障"><a href="#隐式屏障" class="headerlink" title="隐式屏障"></a>隐式屏障</h5><p>barrier为隐式栅障，即并行区域中所有线程执行完毕之后，主线程才继续执行。可以显示调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//在两个for循环中添加</span><br><span class="line">#pragma omp barrier</span><br></pre></td></tr></table></figure>
+<h5 id="nowait取消栅障"><a href="#nowait取消栅障" class="headerlink" title="nowait取消栅障"></a>nowait取消栅障</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#pragma omp for nowait //不能用#pragma omp parallel for nowait</span><br><span class="line">or</span><br><span class="line">#pragma omp single nowait</span><br></pre></td></tr></table></figure>
+<h5 id="master"><a href="#master" class="headerlink" title="master"></a>master</h5><p>通过#pragma omp mater来声明对应的并行程序块只由主线程完成</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#pragma omp master</span><br><span class="line">&#123;</span><br><span class="line">    //只有一个主线程执行这个for循环</span><br><span class="line">    for (int j = 0; j &lt; 10; ++j)&#123;</span><br><span class="line">        printf(&quot;%d-\n&quot;, j);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="section"><a href="#section" class="headerlink" title="section"></a>section</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#pragma omp parallel sections</span><br><span class="line">&#123;</span><br><span class="line">    #pragma omp section //由一个线程单独完成</span><br><span class="line">    for (int i = 0; i &lt; 5; ++i)&#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #pragma omp section //由另一个线程单独完成</span><br><span class="line">    for (int j = 0; j &lt; 5; ++j)&#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><ul>
+<li><a href="https://wdxtub.com/2016/03/20/openmp-guide/" target="_blank" rel="noopener">小土刀-OpenMP入门指南</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/parallel/" rel="tag"># parallel</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/17/Pandas-Note/" rel="next" title="Pandas_Note">
+                <i class="fa fa-chevron-left"></i> Pandas_Note
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars0.githubusercontent.com/u/4528356?v=4&s=120"
+               alt="paladintyrion" />
+          <p class="site-author-name" itemprop="name">paladintyrion</p>
+           
+              <p class="site-description motion-element" itemprop="description">美好的笑容若琼花飞舞</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/1085583241/" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/paladintyrion/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.xiami.com/u/4029126/" target="_blank" title="虾米">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      虾米
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenMP简明使用"><span class="nav-number">1.</span> <span class="nav-text">OpenMP简明使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#OpenMP安装"><span class="nav-number">1.1.</span> <span class="nav-text">OpenMP安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Clion"><span class="nav-number">1.2.</span> <span class="nav-text">配置Clion</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt如何配置"><span class="nav-number">1.3.</span> <span class="nav-text">CMakeLists.txt如何配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OpenMP使用"><span class="nav-number">1.4.</span> <span class="nav-text">OpenMP使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常用函数"><span class="nav-number">1.4.1.</span> <span class="nav-text">常用函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#parallel和for循环"><span class="nav-number">1.4.2.</span> <span class="nav-text">parallel和for循环</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#声明"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">声明</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#for循环并行化约束条件"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">for循环并行化约束条件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据共享与私有化"><span class="nav-number">1.4.3.</span> <span class="nav-text">数据共享与私有化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#reduction"><span class="nav-number">1.4.4.</span> <span class="nav-text">reduction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程同步atomic"><span class="nav-number">1.4.5.</span> <span class="nav-text">线程同步atomic</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程同步critical"><span class="nav-number">1.4.6.</span> <span class="nav-text">线程同步critical</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程事件同步机制"><span class="nav-number">1.4.7.</span> <span class="nav-text">线程事件同步机制</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#隐式屏障"><span class="nav-number">1.4.7.1.</span> <span class="nav-text">隐式屏障</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nowait取消栅障"><span class="nav-number">1.4.7.2.</span> <span class="nav-text">nowait取消栅障</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#master"><span class="nav-number">1.4.7.3.</span> <span class="nav-text">master</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#section"><span class="nav-number">1.4.7.4.</span> <span class="nav-text">section</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文献"><span class="nav-number">1.5.</span> <span class="nav-text">参考文献</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">paladintyrion</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
