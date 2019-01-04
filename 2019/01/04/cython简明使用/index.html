@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="python," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="Cython目标Cython主要是针对python性能太差，解决尤其是cpu矩阵运算，循环运算的性能问题而诞生。 Cython将你的类python代码编译成c链接库，你可以自己定义哪些运算可以交给c代码去运行。如果你想使用Cython，代表你已经开始关注计算性能了，榨取性能不只是交给C来处理就应该满足的，你可能还需要关注python语句里可优化的代码。">
+<meta name="keywords" content="python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cython简明使用">
+<meta property="og:url" content="https://paladintyrion.github.io/2019/01/04/cython简明使用/index.html">
+<meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
+<meta property="og:description" content="Cython目标Cython主要是针对python性能太差，解决尤其是cpu矩阵运算，循环运算的性能问题而诞生。 Cython将你的类python代码编译成c链接库，你可以自己定义哪些运算可以交给c代码去运行。如果你想使用Cython，代表你已经开始关注计算性能了，榨取性能不只是交给C来处理就应该满足的，你可能还需要关注python语句里可优化的代码。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://paladintyrion.github.io/2019/01/04/cython简明使用/formula.png">
+<meta property="og:updated_time" content="2019-01-04T08:39:20.705Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cython简明使用">
+<meta name="twitter:description" content="Cython目标Cython主要是针对python性能太差，解决尤其是cpu矩阵运算，循环运算的性能问题而诞生。 Cython将你的类python代码编译成c链接库，你可以自己定义哪些运算可以交给c代码去运行。如果你想使用Cython，代表你已经开始关注计算性能了，榨取性能不只是交给C来处理就应该满足的，你可能还需要关注python语句里可优化的代码。">
+<meta name="twitter:image" content="https://paladintyrion.github.io/2019/01/04/cython简明使用/formula.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://paladintyrion.github.io/2019/01/04/cython简明使用/"/>
+
+
+
+
+
+  <title>cython简明使用 | PaladinTyrion's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">PaladinTyrion's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">小恶魔提利昂</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://paladintyrion.github.io/2019/01/04/cython简明使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="paladintyrion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/4528356?v=4&s=120">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PaladinTyrion's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">cython简明使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T14:11:32+08:00">
+                2019-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Cython目标"><a href="#Cython目标" class="headerlink" title="Cython目标"></a>Cython目标</h3><p>Cython主要是针对python性能太差，解决尤其是cpu矩阵运算，循环运算的性能问题而诞生。</p>
+<p>Cython将你的类python代码编译成c链接库，你可以自己定义哪些运算可以交给c代码去运行。如果你想使用Cython，代表你已经开始关注计算性能了，榨取性能不只是交给C来处理就应该满足的，你可能还需要关注python语句里可优化的代码。</p>
+<a id="more"></a>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip3 install Cython</span><br></pre></td></tr></table></figure>
+<h3 id="配置Pycharm"><a href="#配置Pycharm" class="headerlink" title="配置Pycharm"></a>配置Pycharm</h3><p>Preferences -&gt; Tools -&gt; External Tools新添加一个用户配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># $xxx$均是宏插入，本设置用于将.pyx代码编译为c时所用</span><br><span class="line">Tool Setting:</span><br><span class="line">- Program: /to/path/bin/python3</span><br><span class="line">- Arguments: $FilePath$ build_ext --inplace</span><br><span class="line">- Working directory: $FileDir$</span><br></pre></td></tr></table></figure>
+<h3 id="pxd-pyd-pyx区别"><a href="#pxd-pyd-pyx区别" class="headerlink" title=".pxd/.pyd/.pyx区别"></a>.pxd/.pyd/.pyx区别</h3><ul>
+<li>.pxd</li>
+</ul>
+<p>.pxd是扩展模块头文件，类似于C语言的.h头文件，.pxd文件中有 Cython模块要包含的Cython声明。.pxd文件还可为.pyx文件模块提供 Cython接口，以便其它Cython模块可使用比Python更高效的协议与之进行通信。</p>
+<p>可用cimport关键字将.pxd文件导入.pyx模块文件中。</p>
+<ul>
+<li>.pyx</li>
+</ul>
+<p>.pyx是扩展模块源代码文件，类似于C语言的.c源代码文件，.pyx文件中有 Cython模块的源代码。</p>
+<p>.pyx必须先被编译成.c文件，再编译成.pyd(Windows)或.so(Linux)文件，才可作为模块import导入使用。</p>
+<ul>
+<li>.pyd</li>
+</ul>
+<p>.pyd是由其它编程语言”编写-编译”生成的Python扩展模块。Python要导入.pyd文件，把它当成module来用就可以了，”import ${path}.modulename”。</p>
+<h3 id="示例一-使用c代码"><a href="#示例一-使用c代码" class="headerlink" title="示例一. 使用c代码"></a>示例一. 使用c代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+-- cfib.c</span><br><span class="line">+-- cfib.h</span><br><span class="line">+-- fib.pyx</span><br><span class="line">+-- setup.py</span><br><span class="line">+-- main.py</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//cfib.h</span><br><span class="line">#ifndef __CFIB_H__</span><br><span class="line">#define __CFIB_H__</span><br><span class="line">unsigned long fib(unsigned long n);</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//cfib.c</span><br><span class="line">#include &quot;cfib.h&quot;</span><br><span class="line">unsigned long fib(unsigned long n) &#123;</span><br><span class="line">    unsigned long a=0, b=1, i, tmp;</span><br><span class="line">    for (i=0; i&lt;n; ++i) &#123;</span><br><span class="line">        tmp = a; a = a + b; b = tmp;</span><br><span class="line">    &#125;</span><br><span class="line">    return a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">//fib.pyx</span><br><span class="line">cdef extern from &quot;cfib.h&quot;:</span><br><span class="line">    unsigned long _fib &quot;fib&quot;(unsigned long n)</span><br><span class="line"></span><br><span class="line">def fib_c(n):</span><br><span class="line">    &apos;&apos;&apos; Returns the nth Fibonacci number.&apos;&apos;&apos;</span><br><span class="line">    return _fib(n)</span><br><span class="line"></span><br><span class="line">def fib_cython(n):</span><br><span class="line">    &apos;&apos;&apos;Returns the nth Fibonacci number.&apos;&apos;&apos;</span><br><span class="line">    a, b = 0, 1</span><br><span class="line">    for i in range(n):</span><br><span class="line">        a, b = a + b, a</span><br><span class="line">    return a</span><br><span class="line"></span><br><span class="line">def fib_cython_optimized(unsigned long n):</span><br><span class="line">    &apos;&apos;&apos;Returns the nth Fibonacci number.&apos;&apos;&apos;</span><br><span class="line">    cdef unsigned long a=0, b=1, i</span><br><span class="line">    for i in range(n):</span><br><span class="line">        a, b = a + b, a</span><br><span class="line">    return a</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//setup.py</span><br><span class="line">from distutils.core import setup, Extension</span><br><span class="line">from Cython.Build import cythonize</span><br><span class="line"></span><br><span class="line">setup(ext_modules = cythonize(Extension(name=&quot;fib&quot;, sources=[&quot;cfib.c&quot;, &quot;fib.pyx&quot;])))</span><br></pre></td></tr></table></figure>
+<p>右键setup.py，External Tools -&gt; accountname编译</p>
+<p>性能测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">def fib_python(n):</span><br><span class="line">    &apos;&apos;&apos;Returns the nth Fibonacci number.&apos;&apos;&apos;</span><br><span class="line">    a, b = 0, 1</span><br><span class="line">    for i in range(n):</span><br><span class="line">        a, b = a + b, a</span><br><span class="line">    return a</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    import timeit</span><br><span class="line">    python_setup = &quot;from __main__ import fib_python&quot;</span><br><span class="line">    cython_setup = &quot;import fib&quot;</span><br><span class="line">    print(&quot;Python code: &quot;, timeit.timeit(&apos;fib_python(47)&apos;, setup=python_setup), &quot;seconds&quot;)</span><br><span class="line">    print(&quot;Cython code: &quot;, timeit.timeit(&apos;fib.fib_cython(47)&apos;, setup=cython_setup), &quot;seconds&quot;)</span><br><span class="line">    print(&quot;Optimized Cython code: &quot;, timeit.timeit(&apos;fib.fib_cython_optimized(47)&apos;, setup=cython_setup), &quot;seconds&quot;)</span><br><span class="line">    print(&quot;C code: &quot;, timeit.timeit(&apos;fib.fib_c(47)&apos;, setup=cython_setup), &quot;seconds&quot;)</span><br><span class="line">    </span><br><span class="line">##结果：</span><br><span class="line">Python code:  2.9352622053858113 seconds</span><br><span class="line">Cython code:  1.7331176511158422 seconds</span><br><span class="line">Optimized Cython code:  0.14643933094340067 seconds</span><br><span class="line">C code:  0.11884286952119272 seconds</span><br></pre></td></tr></table></figure>
+<h3 id="示例二-径向基函数的近似计算"><a href="#示例二-径向基函数的近似计算" class="headerlink" title="示例二. 径向基函数的近似计算"></a>示例二. 径向基函数的近似计算</h3><ul>
+<li>公式：<img src="/2019/01/04/cython简明使用/formula.png" alt="径向基函数"></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//fastloop.pyx</span><br><span class="line">#cython: language_level=3, boundscheck=False, wraparound=False, nonecheck=False</span><br><span class="line">from libc.math cimport exp</span><br><span class="line">def rbf_network(double[:, :] X, double[:] beta, double theta):</span><br><span class="line">    from numpy import zeros</span><br><span class="line">    cdef int N = X.shape[0]</span><br><span class="line">    cdef int D = X.shape[1]</span><br><span class="line">    cdef double[:] Y = zeros(N)</span><br><span class="line">    cdef int i, j, d</span><br><span class="line">    cdef double r = 0</span><br><span class="line">    for i in range(N):</span><br><span class="line">        for j in range(N):</span><br><span class="line">            r = 0</span><br><span class="line">            for d in range(D):</span><br><span class="line">                r += (X[j, d]-X[i, d])**2</span><br><span class="line">            r = r**0.5</span><br><span class="line">            Y[i] += beta[j] * exp(-(r*theta)**2)</span><br><span class="line"></span><br><span class="line">    return Y</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">//setup.py</span><br><span class="line">from distutils.core import setup, Extension</span><br><span class="line">from Cython.Build import cythonize</span><br><span class="line">from Cython.Distutils import build_ext</span><br><span class="line"></span><br><span class="line"># setup(</span><br><span class="line">#     ext_modules = cythonize(Extension(name=&quot;fib&quot;, sources=[&quot;cfib.c&quot;, &quot;fib.pyx&quot;]),</span><br><span class="line">#                             language_level=3</span><br><span class="line">#                             )</span><br><span class="line"># )</span><br><span class="line"></span><br><span class="line">ext_modules=[Extension(name=&quot;fastloop&quot;,</span><br><span class="line">                       sources=[&quot;fastloop.pyx&quot;],</span><br><span class="line">                       libraries=[&quot;m&quot;],</span><br><span class="line">                       extra_compile_args=[&quot;-ffast-math&quot;])]</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name=&apos;fastloop&apos;,</span><br><span class="line">    cmdclass=&#123;&quot;build_ext&quot;: build_ext&#125;,</span><br><span class="line">    ext_modules=ext_modules</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>性能测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">from math import exp</span><br><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">setup = &apos;&apos;&apos;</span><br><span class="line">import numpy as np;</span><br><span class="line">from fastloop import rbf_network;</span><br><span class="line">D = 5;</span><br><span class="line">N = 1000;</span><br><span class="line">X = np.array([np.random.rand(D) for d in range(N)]);</span><br><span class="line">beta = np.random.rand(N);</span><br><span class="line">theta = 10;&apos;&apos;&apos;</span><br><span class="line"></span><br><span class="line">setup1 = &apos;&apos;&apos;</span><br><span class="line">from __main__ import rbf_network;</span><br><span class="line">import numpy as np;</span><br><span class="line">from math import exp;</span><br><span class="line">D = 5;</span><br><span class="line">N = 1000;</span><br><span class="line">X = np.array([np.random.rand(D) for d in range(N)]);</span><br><span class="line">beta = np.random.rand(N);</span><br><span class="line">theta = 10;&apos;&apos;&apos;</span><br><span class="line"></span><br><span class="line">def rbf_network(X, beta, theta):</span><br><span class="line">    N = X.shape[0]</span><br><span class="line">    D = X.shape[1]</span><br><span class="line">    Y = np.zeros(N)</span><br><span class="line">    </span><br><span class="line">    for i in range(N):</span><br><span class="line">        for j in range(N):</span><br><span class="line">            r = 0</span><br><span class="line">            for d in range(D):</span><br><span class="line">                r += (X[j, d] - X[i, d]) ** 2</span><br><span class="line">            r = r ** 0.5</span><br><span class="line">            Y[i] += beta[j] * exp(-(r * theta) ** 2)</span><br><span class="line">    </span><br><span class="line">    return Y</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    import timeit</span><br><span class="line">    print(timeit.timeit(stmt=&apos;rbf_network(X, beta, theta)&apos;,</span><br><span class="line">                        setup=setup,</span><br><span class="line">                        number=1))</span><br><span class="line">    print(timeit.timeit(stmt=&apos;rbf_network(X, beta, theta)&apos;,</span><br><span class="line">                        setup=setup1,</span><br><span class="line">                        number=1))</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">##结果：</span><br><span class="line">0.018067925004288554</span><br><span class="line">4.64309394301381</span><br></pre></td></tr></table></figure>
+<h3 id="cython怎样找到性能优化点"><a href="#cython怎样找到性能优化点" class="headerlink" title="cython怎样找到性能优化点"></a>cython怎样找到性能优化点</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cython xxxxx.pyx -a</span><br></pre></td></tr></table></figure>
+<p>生成的html黄色部分则是可以做性能优化的点。</p>
+<p>如上例二fastloop.pyx，使用<figure class="highlight plain"><figcaption><span>libc.math cimport exp```代替```from math import exp```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 其他</span><br><span class="line"></span><br><span class="line">#### timeit</span><br></pre></td></tr></table></figure></p>
+<p>timeit.timeit(stmt=’pass’, setup=’pass’, timer=<default timer="">, number=1000000, globals=None)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### python调用c</span><br><span class="line"></span><br><span class="line">使用ctypes</span><br></pre></td></tr></table></figure></default></p>
+<p>from ctypes import cdll,c_char_p,c_int,c_double</p>
+<h1 id="libc-dylib必须在环境变量lib里，其他还有如libm-dylib等"><a href="#libc-dylib必须在环境变量lib里，其他还有如libm-dylib等" class="headerlink" title="libc.dylib必须在环境变量lib里，其他还有如libm.dylib等"></a>libc.dylib必须在环境变量lib里，其他还有如libm.dylib等</h1><p>cdll_names = ‘libc.dylib’<br>clib = cdll.LoadLibrary(cdll_names)<br>clib.printf(c_char_p(“Hello %d %f”.encode(‘utf-8’)),c_int(15),c_double(2.3))<br><code>`</code></p>
+<h4 id="python代码优化"><a href="#python代码优化" class="headerlink" title="python代码优化"></a>python代码优化</h4><ul>
+<li>减少变量公有，能<strong>的就用</strong>变为私有</li>
+<li>尽量使用函数，减少全局声明和定义</li>
+<li>尽可能去掉属性访问，减少.的使用次数，尤其是循环中</li>
+<li>更多使用局部变量，尽量少的全局变量</li>
+<li>避免不必要的抽象，可以直接访问，不要用get/set方法</li>
+<li>使用内置的数据类型，自己封装的类更慢</li>
+<li>避免创建不必要的数据结构或复制</li>
+</ul>
+<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><ul>
+<li><a href="https://charlesnord.github.io/2017/03/11/cython-tuto/" target="_blank" rel="noopener">Cython入门教程</a></li>
+<li><a href="http://chingchuan-chen.github.io/posts/201804/2018-04-15-PyCharm-and-Cython.html" target="_blank" rel="noopener">PyCharm &amp; Cython</a></li>
+<li><a href="https://coolshell.cn/articles/671.html" target="_blank" rel="noopener">Python调用C</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/20152309" target="_blank" rel="noopener">知乎-Python调用C</a></li>
+<li><a href="https://www.zybuluo.com/kingwhite/note/138504" target="_blank" rel="noopener">python基础小工具timeit</a></li>
+<li><a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c14/p14_make_your_program_run_faster.html" target="_blank" rel="noopener">加速python运行</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/27/OpenMP简明使用/" rel="next" title="OpenMP简明使用">
+                <i class="fa fa-chevron-left"></i> OpenMP简明使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars0.githubusercontent.com/u/4528356?v=4&s=120"
+               alt="paladintyrion" />
+          <p class="site-author-name" itemprop="name">paladintyrion</p>
+           
+              <p class="site-description motion-element" itemprop="description">美好的笑容若琼花飞舞</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/1085583241/" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/paladintyrion/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.xiami.com/u/4029126/" target="_blank" title="虾米">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      虾米
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Cython目标"><span class="nav-number">1.</span> <span class="nav-text">Cython目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Pycharm"><span class="nav-number">3.</span> <span class="nav-text">配置Pycharm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pxd-pyd-pyx区别"><span class="nav-number">4.</span> <span class="nav-text">.pxd/.pyd/.pyx区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例一-使用c代码"><span class="nav-number">5.</span> <span class="nav-text">示例一. 使用c代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例二-径向基函数的近似计算"><span class="nav-number">6.</span> <span class="nav-text">示例二. 径向基函数的近似计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cython怎样找到性能优化点"><span class="nav-number">7.</span> <span class="nav-text">cython怎样找到性能优化点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#libc-dylib必须在环境变量lib里，其他还有如libm-dylib等"><span class="nav-number"></span> <span class="nav-text">libc.dylib必须在环境变量lib里，其他还有如libm.dylib等</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#python代码优化"><span class="nav-number">0.1.</span> <span class="nav-text">python代码优化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文献"><span class="nav-number">1.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">paladintyrion</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
