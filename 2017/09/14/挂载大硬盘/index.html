@@ -114,7 +114,7 @@
 <meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
 <meta property="og:description" content="挂载大硬盘步骤 需要先对可以用硬盘分区 分区后对每个区进行格式化 格式化后即可用mount命令挂载  查看磁盘1$ fdisk -l 分区分区时，小硬盘和大硬盘的分区方法有所区别">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-16T09:46:50.000Z">
+<meta property="og:updated_time" content="2019-01-14T11:19:24.269Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="挂载大硬盘">
 <meta name="twitter:description" content="挂载大硬盘步骤 需要先对可以用硬盘分区 分区后对每个区进行格式化 格式化后即可用mount命令挂载  查看磁盘1$ fdisk -l 分区分区时，小硬盘和大硬盘的分区方法有所区别">
@@ -419,7 +419,7 @@
 </tr>
 </tbody>
 </table>
-<h5 id="小硬盘分区示例"><a href="#小硬盘分区示例" class="headerlink" title="小硬盘分区示例"></a>小硬盘分区示例</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fdisk /dev/vdc   # 根据填写相应内容，分区完毕</span><br></pre></td></tr></table></figure>
+<h5 id="小硬盘分区示例"><a href="#小硬盘分区示例" class="headerlink" title="小硬盘分区示例"></a>小硬盘分区示例</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ fdisk /dev/vdc   # 根据填写相应内容，分区完毕</span><br><span class="line"># 选择项</span><br><span class="line">$$ Command (m for help): n   # n代表建立一个新分区</span><br><span class="line">$$ p  # p primary partition (1-4)，选1</span><br><span class="line">$$ start   # 2048，物理地址下限，默认就好</span><br><span class="line">$$ end   # xxxxxxx, 物理地址上限，默认就好</span><br><span class="line">$$ Command (m for help): wq  # 保存退出</span><br></pre></td></tr></table></figure>
 <h5 id="大硬盘分区示例"><a href="#大硬盘分区示例" class="headerlink" title="大硬盘分区示例"></a>大硬盘分区示例</h5><p>假设/dev/vdc需要新挂载的5T硬盘</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ parted /dev/vdc</span><br><span class="line">$(parted) mklabel     </span><br><span class="line">          gpt  # 使用gpt方式分区</span><br><span class="line">$(parted) p  # 查看设备状态</span><br><span class="line">$(parted) mkpart  # 填写相应信息</span><br><span class="line">$(parted) quit  #p查看分区信息正常后退出</span><br></pre></td></tr></table></figure>
 <p>分区之后，fdisk -l可看到创建好的分区盘/dev/vdc1</p>
