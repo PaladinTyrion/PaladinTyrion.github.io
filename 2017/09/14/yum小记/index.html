@@ -114,7 +114,7 @@
 <meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
 <meta property="og:description" content="yum源更换yum的配置路径123456# yum的配置路径如下:/etc/yum.conf/etc/yum.repos.d/# 其中,xxx.repo中配置下载url/etc/yum.repos.d/CentOS-Base.repo">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-16T09:48:58.000Z">
+<meta property="og:updated_time" content="2019-02-26T11:38:43.199Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="yum小记">
 <meta name="twitter:description" content="yum源更换yum的配置路径123456# yum的配置路径如下:/etc/yum.conf/etc/yum.repos.d/# 其中,xxx.repo中配置下载url/etc/yum.repos.d/CentOS-Base.repo">
@@ -395,6 +395,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">policycoreutils.x86_64                   2.2.5-15.el7               base-vault</span><br><span class="line">policycoreutils.x86_64                   2.5-11.el7_3               @updates</span><br><span class="line">policycoreutils.x86_64                   2.5-11.el7_3               updates</span><br><span class="line">policycoreutils.x86_64                   2.5-8.el7                  base</span><br><span class="line">policycoreutils.x86_64                   2.5-9.el7                  updates</span><br></pre></td></tr></table></figure>
 <h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>下载指定版本的包通过如下命令：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ yum install policycoreutils-2.5-11.el7_3.x86_64</span><br><span class="line">或者</span><br><span class="line">$ yum update &amp;&amp; yum install/upgrade policycoreutils</span><br></pre></td></tr></table></figure>
+<h4 id="yum更新出现依赖冲突时的解决方案"><a href="#yum更新出现依赖冲突时的解决方案" class="headerlink" title="yum更新出现依赖冲突时的解决方案"></a>yum更新出现依赖冲突时的解决方案</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ yum install yum-utils</span><br><span class="line">$ package-cleanup --dupes</span><br><span class="line">$ package-cleanup --cleandupes</span><br><span class="line">$ yum clean all &amp;&amp; yum update</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -608,7 +609,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#yum源更换"><span class="nav-number">1.</span> <span class="nav-text">yum源更换</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#yum的配置路径"><span class="nav-number">1.1.</span> <span class="nav-text">yum的配置路径</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#重建yum源信息"><span class="nav-number">1.2.</span> <span class="nav-text">重建yum源信息</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#yum源更换"><span class="nav-number">1.</span> <span class="nav-text">yum源更换</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#yum的配置路径"><span class="nav-number">1.1.</span> <span class="nav-text">yum的配置路径</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#重建yum源信息"><span class="nav-number">1.2.</span> <span class="nav-text">重建yum源信息</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#yum更新出现依赖冲突时的解决方案"><span class="nav-number">3.</span> <span class="nav-text">yum更新出现依赖冲突时的解决方案</span></a></li></ol></div>
             
 
           </div>
