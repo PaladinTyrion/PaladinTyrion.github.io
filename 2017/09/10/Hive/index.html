@@ -114,7 +114,7 @@
 <meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
 <meta property="og:description" content="Hive小结首先需要搭建Hadoop，为了Hive能够使用HDFS，过程省略Hive的搭建过程1$ tar -zxvf hive-x.y.z.tar.gz 设置环境变量： 12export HIVE_HOME=/to/the/hive/pathexport PATH=$HIVE_HOME/bin:$PATH Hive配置：  hive-default.xml使用默认模板即可 hive-env.sh">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-13T08:13:36.550Z">
+<meta property="og:updated_time" content="2019-03-13T09:30:55.887Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hive">
 <meta name="twitter:description" content="Hive小结首先需要搭建Hadoop，为了Hive能够使用HDFS，过程省略Hive的搭建过程1$ tar -zxvf hive-x.y.z.tar.gz 设置环境变量： 12export HIVE_HOME=/to/the/hive/pathexport PATH=$HIVE_HOME/bin:$PATH Hive配置：  hive-default.xml使用默认模板即可 hive-env.sh">
@@ -425,7 +425,7 @@
 <ul>
 <li>JDBC连接前需要服务器开启hiveserver/hiveserver2服务才支持JDBC连接</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nohup hive --service hiveserver2 -p 10002 &gt; /dev/null 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ hive --service hiveserver2 &amp;</span><br><span class="line">$ hive --service metastore &amp;</span><br><span class="line"># 在本机访问时不填写host:port,否则应为jdbc:hive2://$ip:10000</span><br><span class="line">$ beeline -u jdbc:hive2://</span><br></pre></td></tr></table></figure>
 <ul>
 <li><p>遇到的问题，有时候jdbc连接问题:</p>
 <ol>
