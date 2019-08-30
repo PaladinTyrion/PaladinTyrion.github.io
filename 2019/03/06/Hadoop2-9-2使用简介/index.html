@@ -114,7 +114,7 @@
 <meta property="og:site_name" content="PaladinTyrion&#39;s Blog">
 <meta property="og:description" content="本文主要介绍Hadoop搭建以及若干性能参数说明。 Hadoop搭建选机器所有机器要修改/etc/hosts  10.16.10.1 hadoop1 #这台做master 10.16.10.2 hadoop2 10.16.10.3 hadoop3">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-13T11:33:10.675Z">
+<meta property="og:updated_time" content="2019-08-30T10:14:55.086Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hadoop2.9.2使用简介">
 <meta name="twitter:description" content="本文主要介绍Hadoop搭建以及若干性能参数说明。 Hadoop搭建选机器所有机器要修改/etc/hosts  10.16.10.1 hadoop1 #这台做master 10.16.10.2 hadoop2 10.16.10.3 hadoop3">
@@ -411,7 +411,7 @@
 <li>hadoop3(slave):  NodeManager(yarn), DataNode(hdfs)</li>
 </ul>
 <h4 id="启动集群及关闭集群"><a href="#启动集群及关闭集群" class="headerlink" title="启动集群及关闭集群"></a>启动集群及关闭集群</h4><p>设置过ssh免密登陆，可简单启动和关闭。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 第一次使用namenode服务，需要在NN-master作格式化</span><br><span class="line">$ hdfs namenode -format &lt;cluster_name&gt;</span><br><span class="line"># 先启hdfs再yarn</span><br><span class="line">$ start-dfs.sh &amp;&amp; start-yarn.sh</span><br><span class="line"></span><br><span class="line"># 先关yarn再hdfs</span><br><span class="line">$ stop-yarn.sh &amp;&amp; stop-dfs.sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 第一次使用namenode服务，需要在NN-master作格式化</span><br><span class="line">$ hdfs namenode -format &lt;cluster_name&gt;</span><br><span class="line"># 先启hdfs再yarn</span><br><span class="line">$ start-dfs.sh &amp;&amp; start-yarn.sh</span><br><span class="line">$ $HADOOP_HOME/sbin/mr-jobhistory-daemon.sh start historyserver</span><br><span class="line"></span><br><span class="line"># 先关yarn再hdfs</span><br><span class="line">$ stop-yarn.sh &amp;&amp; stop-dfs.sh</span><br></pre></td></tr></table></figure>
 <h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><ul>
 <li><a href="https://www.linuxidc.com/Linux/2018-11/155328.htm" target="_blank" rel="noopener">CentOS7下搭建Hadoop2.9分布式集群</a></li>
 <li><a href="http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/ClusterSetup.html" target="_blank" rel="noopener">Hadoop Cluster Setup</a></li>
@@ -539,7 +539,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-count">31</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -550,7 +550,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -561,7 +561,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">23</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
