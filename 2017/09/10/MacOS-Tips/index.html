@@ -116,7 +116,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://paladintyrion.github.io/2017/09/10/MacOS-Tips/zsh-env-order.jpeg">
 <meta property="og:image" content="https://paladintyrion.github.io/2017/09/10/MacOS-Tips/docker-cross-wall.png">
-<meta property="og:updated_time" content="2019-09-23T12:49:03.717Z">
+<meta property="og:updated_time" content="2019-10-10T15:11:38.429Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MacOS_Tips">
 <meta name="twitter:description" content="MacOS/Linux下的小知识 Tip.1 更新Locate的数据库123456$ sudo /usr/libexec/locate.updatedb    #MacOS# 如果依然报权限问题，先执行以下内容$ launchctl load -wF /System/Library/LaunchDaemons/com.apple.locate.plist$ launchctl stop com.a">
@@ -520,7 +520,12 @@
 <p>Vagrantfile添加配置内容：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vb.customize [&quot;modifyvm&quot;, :id, &quot;--usb&quot;, &quot;on&quot;]</span><br><span class="line">vb.customize [&apos;usbfilter&apos;, &apos;add&apos;, &apos;0&apos;, &apos;--target&apos;, :id, &apos;--name&apos;, &apos;usb extension&apos;, &apos;--vendorid&apos;, &apos;0x1a86&apos;, &apos;--productid&apos;, &apos;0x7523&apos;]</span><br></pre></td></tr></table></figure>
 <h4 id="Tip-55-内存-CPU监控"><a href="#Tip-55-内存-CPU监控" class="headerlink" title="Tip.55 内存/CPU监控"></a>Tip.55 内存/CPU监控</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ vmstat 2 1000     ## 每2秒执行，执行1000次</span><br><span class="line">$ vmstat -s -S M    ## 打印内存监控信息，单位MB</span><br><span class="line">$ htop    ## 用F5看到进程里面的线程，树形目录父子关系</span><br><span class="line">$ memstat -p pid   ## 查看内存</span><br><span class="line">$ memstat -w</span><br></pre></td></tr></table></figure>
-<h4 id="Tip-56-限制网卡对某端口的访问"><a href="#Tip-56-限制网卡对某端口的访问" class="headerlink" title="Tip.56 限制网卡对某端口的访问"></a>Tip.56 限制网卡对某端口的访问</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">## 假设有两个网卡eth0、eth1，我们想要限制eth0的input访问3001端口，命令后立即生效，无需重启iptables</span><br><span class="line">$ iptables -A INPUT -i eth0 -p tcp --dport=3001 -j DROP/REJECT</span><br></pre></td></tr></table></figure>
+<h4 id="Tip-56-限制网卡对某端口的访问"><a href="#Tip-56-限制网卡对某端口的访问" class="headerlink" title="Tip.56 限制网卡对某端口的访问"></a>Tip.56 限制网卡对某端口的访问</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">## 观察一下iptables状态</span><br><span class="line">$ iptables -nvL</span><br><span class="line">## 假设有两个网卡eth0、eth1，我们想要限制eth0的input访问3001端口，命令后立即生效，无需重启iptables</span><br><span class="line">$ iptables -A INPUT -i eth0 -p tcp --dport=3001 -j DROP/REJECT</span><br><span class="line">## 禁止多个端口</span><br><span class="line">$ iptables -A INPUT -i eth0 -p tcp -m multiport --dport 3001,8080 -j DROP/REJECT</span><br></pre></td></tr></table></figure>
+<p>对于打算禁止eth0访问docker映射出的外部端口，使用外部INPUT、FORWARD直接禁止端口发现都是无效的。</p>
+<p>如开启容器使用了-p 8099:8080,可以通过iptables-save观察到如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE</span><br><span class="line">-A POSTROUTING -s 172.17.0.2/32 -d 172.17.0.2/32 -p tcp -m tcp --dport 8080 -j MASQUERADE</span><br><span class="line">-A DOCKER -i docker0 -j RETURN</span><br><span class="line">-A DOCKER ! -i docker0 -p tcp -m tcp --dport 8099 -j DNAT --to-destination 172.17.0.2:8080</span><br></pre></td></tr></table></figure>
+<p>我们大概可以猜到docker是将eth0流量转发至docker0中的8099端口，又通过DNAT映射至容器8080端口，故而我们的iptables规则应书写如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">## 我们将eth0进入的转发流量关闭与docker0的连接即可</span><br><span class="line">$ iptables -I FORWARD -i eth0 -p tcp -m tcp -d 172.17.0.2/32 -j REJECT</span><br></pre></td></tr></table></figure>
 <h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><ul>
 <li><a href="https://blog.fazero.me/2015/09/15/%E8%AE%A9%E7%BB%88%E7%AB%AF%E8%B5%B0%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" target="_blank" rel="noopener">终端走代理</a></li>
 <li><a href="https://www.jianshu.com/p/9acc85d0ff16" target="_blank" rel="noopener">python3安装第三方包</a></li>
@@ -530,6 +535,7 @@
 <li><a href="https://linux.cn/article-4836-2.html" target="_blank" rel="noopener">Linux内存监控命令</a></li>
 <li><a href="https://blog.csdn.net/u012152619/article/details/51485297" target="_blank" rel="noopener">Maven配置文件详解</a></li>
 <li><a href="https://www.jianshu.com/p/e95bb29be6ef" target="_blank" rel="noopener">iptables的常用技巧</a></li>
+<li><a href="https://www.jianshu.com/p/96707d880a47" target="_blank" rel="noopener">docker网络与iptables</a></li>
 </ul>
 
       
